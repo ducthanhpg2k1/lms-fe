@@ -7,19 +7,20 @@ body {
   font-size: 14px;
   line-height: normal;
   text-rendering: optimizeSpeed;
-  font-family: "Open Sans", sans-serif;
+  font-family: 'Open Sans', sans-serif;
+  background-color: #0a0f15;
   -webkit-text-size-adjust: 100%;
 }
 
 @font-face {
-  font-family: "Rock";
-  src: url("/font/ROCK.TTF") format("truetype");
+  font-family: 'Rock';
+  src: url('/font/ROCK.TTF') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
-  font-family: "Rock";
-  src: url("/font/Rockwell-Bold.ttf") format("truetype");
+  font-family: 'Rock';
+  src: url('/font/Rockwell-Bold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
