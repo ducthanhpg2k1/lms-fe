@@ -3,9 +3,11 @@ import MainHeader from './MainHeader';
 
 const MainLayout = ({ children }: { children: ReactNode }) => {
   return (
-    <div className="w-screen h-screen overflow-auto flex flex-col relative">
+    <div className="w-screen bg-primary h-screen overflow-auto flex flex-col relative">
       <MainHeader />
-      {children}
+      <div className="w-full  py-10">
+        <div className="max-w-[1280px] mx-auto">{children}</div>
+      </div>
     </div>
   );
 };

@@ -18,13 +18,19 @@ module.exports = {
       colors: {
         primary: '#0a0f15',
         'black-10': '#262626',
+        'black-5': '#D9D9D9',
+        'black-7': '#8C8C8C',
+        'black-6': '#BFBFBF',
+        orange: '#F26F21',
+        gray: '#1F242A',
+        main: '#02A6C2',
+        green: '#09A552',
         'gray-10': '#F0F0F01A',
         'gray-20': '#F0F0F033',
-        green: '#02A6C2',
+        error: '#DF2638',
       },
     },
   },
-
   darkMode: 'class',
   plugins: [nextui()],
 };

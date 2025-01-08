@@ -57,13 +57,15 @@ const InputText = (props: InputTextProps) => {
       readOnly={readOnly}
       defaultValue={defaultValue}
       radius={radius}
-      className={clsx('rounded-full', {
+      className={clsx('rounded', {
         [className]: !!className,
       })}
       label={''}
       classNames={{
+        input:
+          'text-black-5 font-roboto-flex text-[16px] data-[has-start-content=true]:ps-2',
         inputWrapper: clsx(
-          'px-2 border-1 !border-gray-10 data-[hover=true]:!border-green group-data-[focus=true]:!border-green',
+          'px-2 border-1 rounded min-h-[40px] !border-gray-10 data-[hover=true]:!border-main group-data-[focus=true]:!border-main',
           {
             // '!border-red-500': errors?.[name]?.message || isError,
             // 'px-5 border-1 bg-[#82828240] border-solid !border-[#b4bac5] data-[hover=true]:!border-primary group-data-[focus=true]:!border-primary':

@@ -1,8 +1,10 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
+const { i18n } = require('./next-i18next.config');
 
 const nextConfig: NextConfig = {
   swcMinify: true,
-  output: "standalone",
+  i18n,
+  output: 'standalone',
   publicRuntimeConfig: {
     NODE_ENV: process.env.NODE_ENV,
     APP_API_URL: process.env.NEXT_PUBLIC_APP_API_URL,
@@ -12,15 +14,15 @@ const nextConfig: NextConfig = {
   },
   images: {
     minimumCacheTTL: 60,
-    formats: ["image/webp"],
+    formats: ['image/webp'],
     remotePatterns: [
       {
-        protocol: "http",
-        hostname: "**",
+        protocol: 'http',
+        hostname: '**',
       },
       {
-        protocol: "https",
-        hostname: "**",
+        protocol: 'https',
+        hostname: '**',
       },
     ],
   },
