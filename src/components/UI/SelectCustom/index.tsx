@@ -24,7 +24,7 @@ const SelectCustom = (props: SelectCustomProps) => {
       radius="sm"
       placeholder={placeholder}
       classNames={{
-        innerWrapper: 'text-[14px] text-black-6 font-medium',
+        value: '!text-[14px] text-black-6 font-medium',
         trigger: 'bg-white/10 rounded min-h-[36px] border-1 border-[#F0F0F01A]',
       }}
       {...rest}

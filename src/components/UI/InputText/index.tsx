@@ -19,6 +19,8 @@ interface InputTextProps extends InputProps {
   isError?: boolean;
   maxLength?: number;
   isFullName?: boolean;
+  onChange?: any;
+  isFilter?: boolean;
 }
 
 const InputText = (props: InputTextProps) => {
@@ -42,6 +44,7 @@ const InputText = (props: InputTextProps) => {
     maxLength,
     isError,
     isFullName,
+    isFilter,
     name,
     ...rest
   } = props;
@@ -53,6 +56,7 @@ const InputText = (props: InputTextProps) => {
       type={type}
       maxLength={maxLength}
       autoComplete="off"
+      onChange={onChange}
       isDisabled={isDisabled}
       readOnly={readOnly}
       defaultValue={defaultValue}
@@ -67,7 +71,7 @@ const InputText = (props: InputTextProps) => {
         inputWrapper: clsx(
           'px-2 border-1 rounded min-h-[40px] !border-gray-10 data-[hover=true]:!border-main group-data-[focus=true]:!border-main',
           {
-            // '!border-red-500': errors?.[name]?.message || isError,
+            '!px-4 !bg-primary': isFilter,
             // 'px-5 border-1 bg-[#82828240] border-solid !border-[#b4bac5] data-[hover=true]:!border-primary group-data-[focus=true]:!border-primary':
             //   isDisabled,
             // 'border-white !shadow-none': borderNone,

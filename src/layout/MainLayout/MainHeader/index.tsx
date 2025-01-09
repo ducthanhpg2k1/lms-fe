@@ -8,10 +8,28 @@ import {
 import Image from 'next/image';
 import Menubar from '../Menubar';
 import ContentProfile from './ContentProfile';
+import { useRouter } from 'next/router';
+import { ROUTE_PATH } from '@/utils/common';
+import { useState } from 'react';
 
 const MainHeader = () => {
+  const router = useRouter();
+  const [valueSearch, setValueSearch] = useState('');
+  const handleChangeSearch = (e: any) => {
+    setValueSearch(e.target.value);
+  };
+
+  const handleKeyUp = (event: any) => {
+    if (event.key === 'Enter') {
+      console.log('Enter key released');
+      router.push({
+        pathname: ROUTE_PATH.COURSE_SEARCH,
+        query: { keySearch: valueSearch },
+      });
+    }
+  };
   return (
-    <div className="w-full sticky top-0 backdrop-blur-sm border-b border-black-10 py-5">
+    <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">
       <div className="max-w-[1280px]  mx-auto flex justify-between items-center">
         <Image alt="logo" width={125} height={46} src={'/logo.png'} />
 
@@ -20,6 +38,8 @@ const MainHeader = () => {
 
           <div className="flex items-center gap-4">
             <InputText
+              onChange={handleChangeSearch}
+              onKeyUp={handleKeyUp}
               startContent={
                 <Image
                   width={20}

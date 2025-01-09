@@ -4,22 +4,14 @@ import Text from '@/components/UI/Text';
 import CardCourse from './CardCourse';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
-import { filterAtom } from '..';
-import { useAtom } from 'jotai';
 import clsx from 'clsx';
-import FilterCourse from './FilterCourse';
 
 const ListCourse = () => {
-  const [isFilter, setIsFilter] = useAtom(filterAtom);
-
   return (
     <div className="flex flex-col gap-[26px]">
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-3">
-          <div
-            onClick={() => setIsFilter(!isFilter)}
-            className="py-2 min-w-[98px] px-[10px] cursor-pointer flex items-center gap-1 bg-main/10 border-1 border-main rounded"
-          >
+          <div className="py-2 min-w-[98px] px-[10px] cursor-pointer flex items-center gap-1 bg-main/10 border-1 border-main rounded">
             <IconFilter />
             <Text className="text-main" type="font-14-500">
               All Filter
@@ -52,27 +44,9 @@ const ListCourse = () => {
           />
         </div>
       </div>
-      <div
-        className={clsx('grid grid-cols-1 gap-6', {
-          '!grid-cols-8': isFilter,
-        })}
-      >
-        {isFilter && (
-          <div className="col-span-2">
-            <FilterCourse />
-          </div>
-        )}
-
-        <div
-          className={clsx('flex flex-col items-center gap-9', {
-            'col-span-6': isFilter,
-          })}
-        >
-          <div
-            className={clsx('grid grid-cols-4 gap-6', {
-              'grid-cols-3': isFilter,
-            })}
-          >
+      <div className={clsx('grid grid-cols-1 gap-6', {})}>
+        <div className={clsx('flex flex-col items-center gap-9', {})}>
+          <div className={clsx('grid grid-cols-4 gap-6', {})}>
             {Array.from({ length: 12 }).map((_, key) => {
               return <CardCourse key={key} />;
             })}

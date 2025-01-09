@@ -71,7 +71,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
       <ProgressBar
         height="2px"
-        color="#B31E8D"
+        color="#02A6C2"
         options={{ showSpinner: false }}
         shallowRouting
       />

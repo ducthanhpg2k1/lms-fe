@@ -28,6 +28,7 @@ module.exports = {
         'gray-10': '#F0F0F01A',
         'gray-20': '#F0F0F033',
         error: '#DF2638',
+        'noti-red': '#E55151',
       },
     },
   },

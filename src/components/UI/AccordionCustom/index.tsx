@@ -1,30 +1,27 @@
 import { Accordion, AccordionItem } from '@nextui-org/react';
 import { ReactNode } from 'react';
-import Text from '../Text';
 
 export default function AccordionCustom({
   children,
   title,
 }: {
-  title: string;
+  title: string | ReactNode;
   children: ReactNode;
 }) {
   return (
     <Accordion
       defaultExpandedKeys={['1']}
       itemClasses={{
-        base: 'bg-white/5 px-4 pb-5 rounded border-1 border-[#D9D9D91A]',
+        content: ['px-4 pt-0 pb-4'],
+        heading: ['px-4'],
+        base: 'bg-white/5 rounded border-1 border-[#D9D9D91A]',
       }}
     >
       <AccordionItem
         key="1"
         indicator={<IconArrowUp />}
         aria-label="Accordion 1"
-        title={
-          <Text type="font-18-600" className="text-white">
-            {title}
-          </Text>
-        }
+        title={title}
       >
         {children}
       </AccordionItem>
