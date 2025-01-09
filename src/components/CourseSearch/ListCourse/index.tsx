@@ -93,7 +93,7 @@ const ListCourse = () => {
 
             <div className={clsx('grid grid-cols-3 gap-6', {})}>
               {Array.from({ length: 12 }).map((_, key) => {
-                return <CardCourse key={key} />;
+                return <CardCourse index={key} key={key} />;
               })}
             </div>
           </div>

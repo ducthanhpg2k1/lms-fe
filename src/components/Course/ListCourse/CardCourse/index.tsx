@@ -41,11 +41,17 @@ const CardCourse = () => {
           <Text type="font-14-400">By: Kathryn Murphy</Text>
         </div>
         <div className="flex items-center justify-between">
-          <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
-            <Text type="font-16-600" className="text-orange">
-              $89.45
+          <div className="flex items-center gap-2">
+            <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
+              <Text type="font-16-600" className="text-orange">
+                $89.45
+              </Text>
+            </div>
+            <Text type="font-14-400" className="text-black-6 line-through">
+              $ 149.00
             </Text>
           </div>
+
           <Button variant="light" radius="full">
             <div className="flex items-center gap-1">
               <Text type="font-14-500" className="text-white">

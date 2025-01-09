@@ -1,13 +1,38 @@
+import IconLikeCourse from '@/components/UI/IconLikeCourse';
 import IconDate from '@/components/UI/Icons/IconDate';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/common';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
-const CardCourse = () => {
+const CardCourse = ({ index }: { index: number }) => {
+  const router = useRouter();
+
+  const handleClickCardCourse = () => {
+    router.push(ROUTE_PATH.DETAIL_COURSE(index + 1));
+  };
   return (
-    <div className="rounded transition-all cursor-pointer duration-300 hover:opacity-80">
+    <div
+      onClick={handleClickCardCourse}
+      className="rounded transition-all relative cursor-pointer duration-300 hover:opacity-80"
+    >
+      <div className="absolute left-2 top-2 bg-orange rounded-full py-[2px] px-2 flex items-center justify-center">
+        <Text type="font-14-500" className="text-white">
+          Best seller
+        </Text>
+      </div>
+      <div className="absolute right-2 top-2">
+        <Button
+          isIconOnly
+          variant="light"
+          className="hover:!bg-white/25 rounded-full"
+        >
+          <IconLikeCourse />
+        </Button>
+      </div>
       <Image
         src={'/images/img-default.png'}
         width={302}
@@ -38,12 +63,24 @@ const CardCourse = () => {
             <RateStar rate={4} />
             <Text type="font-14-500">(230)</Text>
           </div>
-          <Text type="font-14-400">By: Kathryn Murphy</Text>
+          <div className="flex items-center gap-0.5">
+            <Text type="font-14-400" className="text-main">
+              By: 
+            </Text>
+            <Text type="font-14-400" className="text-main underline">
+              Kathryn Murphy
+            </Text>
+          </div>
         </div>
         <div className="flex items-center justify-between">
-          <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
-            <Text type="font-16-600" className="text-orange">
-              $89.45
+          <div className="flex items-center gap-2">
+            <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
+              <Text type="font-16-600" className="text-orange">
+                $89.45
+              </Text>
+            </div>
+            <Text type="font-14-400" className="text-black-6 line-through">
+              $ 149.00
             </Text>
           </div>
           <Button variant="light" radius="full">
