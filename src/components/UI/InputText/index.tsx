@@ -61,7 +61,7 @@ const InputText = (props: InputTextProps) => {
       readOnly={readOnly}
       defaultValue={defaultValue}
       radius={radius}
-      className={clsx('rounded', {
+      className={clsx('rounded ', {
         [className]: !!className,
       })}
       label={''}

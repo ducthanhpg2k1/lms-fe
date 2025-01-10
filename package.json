@@ -26,7 +26,8 @@
     "react-dom": "^19.0.0",
     "react-rater": "^6.0.5",
     "sass": "^1.83.1",
-    "umi-request": "^1.4.0"
+    "umi-request": "^1.4.0",
+    "video.js": "^8.21.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

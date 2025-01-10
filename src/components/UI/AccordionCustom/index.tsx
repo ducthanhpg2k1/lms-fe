@@ -1,12 +1,15 @@
 import { Accordion, AccordionItem } from '@nextui-org/react';
+import clsx from 'clsx';
 import { ReactNode } from 'react';
 
 export default function AccordionCustom({
   children,
   title,
+  isSection = false,
 }: {
   title: string | ReactNode;
   children: ReactNode;
+  isSection?: boolean;
 }) {
   return (
     <Accordion
@@ -14,11 +17,16 @@ export default function AccordionCustom({
       itemClasses={{
         content: ['px-4 pt-0 pb-4'],
         heading: ['px-4'],
-        base: 'bg-white/5 rounded border-1 border-[#D9D9D91A]',
+        base: clsx('bg-white/5 rounded border-1 border-[#D9D9D91A]', {
+          '!bg-transparent rounded-none': isSection,
+        }),
       }}
     >
       <AccordionItem
         key="1"
+        classNames={{
+          indicator: 'data-[open=true]:rotate-180',
+        }}
         indicator={<IconArrowUp />}
         aria-label="Accordion 1"
         title={title}
@@ -35,7 +43,7 @@ const IconArrowUp = () => {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
-      className="rotate-[90deg]"
+      className="rotate-[360deg]"
       viewBox="0 0 24 24"
       fill="none"
     >
