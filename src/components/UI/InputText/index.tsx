@@ -21,6 +21,8 @@ interface InputTextProps extends InputProps {
   isFullName?: boolean;
   onChange?: any;
   isFilter?: boolean;
+  isLesson?: boolean;
+  isInput?: boolean;
 }
 
 const InputText = (props: InputTextProps) => {
@@ -46,6 +48,8 @@ const InputText = (props: InputTextProps) => {
     isFullName,
     isFilter,
     name,
+    isLesson,
+    isInput,
     ...rest
   } = props;
   return (
@@ -72,6 +76,10 @@ const InputText = (props: InputTextProps) => {
           'px-2 border-1 rounded min-h-[40px] !border-gray-10 data-[hover=true]:!border-main group-data-[focus=true]:!border-main',
           {
             '!px-4 !bg-primary': isFilter,
+            '!bg-transparent !border-white min-h-[40px] ': isLesson,
+            '!bg-[#181F25] !py-[10px] !px-4 !border-none min-h-[44px] ':
+              isInput,
+
             // 'px-5 border-1 bg-[#82828240] border-solid !border-[#b4bac5] data-[hover=true]:!border-primary group-data-[focus=true]:!border-primary':
             //   isDisabled,
             // 'border-white !shadow-none': borderNone,

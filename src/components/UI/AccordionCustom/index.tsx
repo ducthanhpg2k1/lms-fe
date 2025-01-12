@@ -37,7 +37,7 @@ export default function AccordionCustom({
   );
 }
 
-const IconArrowUp = () => {
+export const IconArrowUp = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
