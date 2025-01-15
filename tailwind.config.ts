@@ -29,6 +29,8 @@ module.exports = {
         gray: '#1F242A',
         main: '#02A6C2',
         green: '#09A552',
+        'green-1': '#1DB78D',
+
         'gray-10': '#F0F0F01A',
         'gray-20': '#F0F0F033',
         error: '#DF2638',

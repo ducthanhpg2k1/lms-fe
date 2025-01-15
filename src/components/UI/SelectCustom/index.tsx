@@ -1,5 +1,6 @@
 import { Select, SelectItem, SelectProps } from '@nextui-org/react';
 import clsx from 'clsx';
+import { useState } from 'react';
 
 interface IOptions {
   label: string;
@@ -12,15 +13,27 @@ interface SelectCustomProps {
   className?: string;
   rest?: any;
   isLesson?: boolean;
+  isSelectSubmit?: boolean;
 }
 const SelectCustom = (props: SelectCustomProps) => {
+  const [openSelect, setOpenSelect] = useState(false);
   const {
     options,
     className = '',
     isLesson = false,
     placeholder,
+    isSelectSubmit,
     rest,
   } = props;
+  const renderSelectorIcon = (open: boolean) => {
+    if (isLesson) {
+      return <IconArrowDown openSelect={open} />;
+    }
+    if (isSelectSubmit) {
+      return <IconArrowDownSubmit openSelect={open} />;
+    }
+    return <IconSelector openSelect={open} />;
+  };
   return (
     <Select
       className={clsx('', {
@@ -29,6 +42,9 @@ const SelectCustom = (props: SelectCustomProps) => {
       label=""
       labelPlacement="outside"
       radius="sm"
+      onOpenChange={(open: boolean) => {
+        setOpenSelect(!open);
+      }}
       placeholder={placeholder}
       classNames={{
         value: '!text-[14px] text-black-6 font-medium',
@@ -37,11 +53,13 @@ const SelectCustom = (props: SelectCustomProps) => {
           {
             '!bg-transparent border-white min-h-[40px] hover:!border-main transition-all':
               isLesson,
+            '!bg-[#1D2329] data-[hover=true]:!border-main  min-h-[48px] border-black-10 group-data-[focus=true]:!border-main':
+              isSelectSubmit,
           }
         ),
       }}
       {...rest}
-      selectorIcon={isLesson ? <IconArrowDown /> : <IconSelector />}
+      selectorIcon={renderSelectorIcon(openSelect)}
     >
       {options.map((item) => (
         <SelectItem key={item.key}>{item.label}</SelectItem>
@@ -51,12 +69,15 @@ const SelectCustom = (props: SelectCustomProps) => {
 };
 export default SelectCustom;
 
-const IconArrowDown = () => {
+const IconArrowDown = ({ openSelect }: { openSelect: boolean }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="20"
       height="20"
+      className={clsx('transition-transform duration-300', {
+        ['rotate-180']: openSelect,
+      })}
       viewBox="0 0 20 20"
       fill="none"
     >
@@ -68,11 +89,33 @@ const IconArrowDown = () => {
   );
 };
 
-const IconSelector = () => {
+const IconArrowDownSubmit = ({ openSelect }: { openSelect: boolean }) => {
+  return (
+    <svg
+      className={clsx('transition-transform duration-300', {
+        ['rotate-180']: openSelect,
+      })}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+    >
+      <path
+        d="M12 13.1717L16.95 8.22168L18.364 9.63568L12 15.9997L5.63599 9.63568L7.04999 8.22168L12 13.1717Z"
+        fill="white"
+      />
+    </svg>
+  );
+};
+const IconSelector = ({ openSelect }: { openSelect: boolean }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="10"
+      className={clsx('transition-transform duration-300', {
+        ['rotate-180']: openSelect,
+      })}
       height="10"
       viewBox="0 0 10 10"
       fill="none"
