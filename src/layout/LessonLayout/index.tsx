@@ -4,15 +4,23 @@ import IconDots from '@/components/UI/Icons/IconDots';
 import ProgressCircle from '@/components/UI/ProgressCircle';
 import Text from '@/components/UI/Text';
 import { Button } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 import { ReactNode } from 'react';
 
 const LessonLayout = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
   return (
     <div className="w-screen bg-primary h-screen overflow-auto overflow-x-hidden flex flex-col relative">
       <div className="flex py-6 px-4 border-b-1 border-b-black-9 justify-between items-center">
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-1">
-            <Button isIconOnly radius="full" size="md" variant="light">
+            <Button
+              onClick={() => router.back()}
+              isIconOnly
+              radius="full"
+              size="md"
+              variant="light"
+            >
               <IconArrowLeft />
             </Button>
             <Text type="font-16-500" className="text-white">

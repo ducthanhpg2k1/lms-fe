@@ -38,7 +38,7 @@ const PlanYourCourseLeft = ({
             className={clsx(
               'flex items-center cursor-pointer border-l-4 transition-all  border-l-transparent gap-3 p-2',
               {
-                ['!border-l-4 border-l-main bgActivePlan']:
+                ['!border-l-4 !border-l-main bgActivePlan']:
                   item?.id === activePlan,
               }
             )}

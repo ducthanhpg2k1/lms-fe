@@ -5,11 +5,16 @@ import ContenStep1 from './ContenStep1';
 import ContenStep2 from './ContenStep2';
 import ContenStep3 from './ContenStep3';
 import ContenStep4 from './ContenStep4';
+import { useRouter } from 'next/router';
 
 const CreateCourse = () => {
   const [step, setStep] = useState(1);
-
+  const router = useRouter();
   const handleClickNextStep = (step: number) => {
+    if (step === 3) {
+      router.push('/create-course/1');
+      return;
+    }
     setStep(step + 1);
   };
   const handlePreviousStep = (step: number) => {

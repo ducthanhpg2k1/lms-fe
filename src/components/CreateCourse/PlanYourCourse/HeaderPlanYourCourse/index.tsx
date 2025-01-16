@@ -1,12 +1,20 @@
 import SelectCustom from '@/components/UI/SelectCustom';
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/common';
 import { Button } from '@nextui-org/react';
+import { useRouter } from 'next/router';
 
 const HeaderPlanYourCourse = () => {
+  const router = useRouter();
   return (
-    <div className="w-full p-4 flex justify-between items-center border-b border-b-black-10">
+    <div className="w-full p-4 sticky top-0 bg-primary z-[1000] shadow-2xl flex justify-between items-center border-b border-b-black-10">
       <div className="flex items-center gap-5">
-        <Button variant="light" radius="sm" size="md">
+        <Button
+          onClick={() => router.push(ROUTE_PATH.HOME)}
+          variant="light"
+          radius="sm"
+          size="md"
+        >
           <div className="flex items-center gap-1">
             <IconBlack />
             <Text type="font-16-500" className="text-white">
@@ -27,9 +35,18 @@ const HeaderPlanYourCourse = () => {
         </Button>
         <SelectCustom
           placeholder="Preview"
-          className="min-w-[96px]"
+          className="min-w-[146px]"
           isLesson
-          options={[]}
+          options={[
+            {
+              key: 1,
+              label: 'As instructor',
+            },
+            {
+              key: 2,
+              label: 'As Student',
+            },
+          ]}
         />
       </div>
     </div>
