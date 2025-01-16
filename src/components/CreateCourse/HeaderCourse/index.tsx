@@ -1,12 +1,21 @@
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/common';
 import { Button, Progress } from '@nextui-org/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const HeaderCourse = ({ currentStep = 1 }: { currentStep: number }) => {
+  const router = useRouter();
   return (
     <div>
       <div className="p-4 flex justify-between items-center">
-        <Image alt="logo" width={125} height={46} src={'/logo.png'} />
+        <Image
+          onClick={() => router.push(ROUTE_PATH.HOME)}
+          alt="logo"
+          width={125}
+          height={46}
+          src={'/logo.png'}
+        />
         <Text
           type="font-16-500"
           className="text-white"
