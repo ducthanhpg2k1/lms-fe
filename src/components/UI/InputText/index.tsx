@@ -23,6 +23,8 @@ interface InputTextProps extends InputProps {
   isFilter?: boolean;
   isLesson?: boolean;
   isInput?: boolean;
+  isInputSubmit?: boolean;
+  inputDefault?: boolean;
 }
 
 const InputText = (props: InputTextProps) => {
@@ -43,8 +45,10 @@ const InputText = (props: InputTextProps) => {
     onChange,
     onBlur,
     value,
+    inputDefault,
     maxLength,
     isError,
+    isInputSubmit,
     isFullName,
     isFilter,
     name,
@@ -70,19 +74,25 @@ const InputText = (props: InputTextProps) => {
       })}
       label={''}
       classNames={{
-        input:
+        input: clsx(
           'text-black-5 font-roboto-flex text-[16px] data-[has-start-content=true]:ps-2',
+          {
+            'placeholder:text-white/20': isInputSubmit,
+            'placeholder:!text-white/20': inputDefault,
+          }
+        ),
+
         inputWrapper: clsx(
           'px-2 border-1 rounded min-h-[40px] !border-gray-10 data-[hover=true]:!border-main group-data-[focus=true]:!border-main',
           {
             '!px-4 !bg-primary': isFilter,
             '!bg-transparent !border-white min-h-[40px] ': isLesson,
-            '!bg-[#181F25] !py-[10px] !px-4 !border-none min-h-[44px] ':
+            '!bg-[#181F25] !py-[10px] !px-4  !border-none min-h-[44px] ':
               isInput,
-
-            // 'px-5 border-1 bg-[#82828240] border-solid !border-[#b4bac5] data-[hover=true]:!border-primary group-data-[focus=true]:!border-primary':
-            //   isDisabled,
-            // 'border-white !shadow-none': borderNone,
+            '!bg-[#181F25] !py-[12px] !px-[10px]  data-[hover=true]:!border-main min-h-[48px] ':
+              isInputSubmit,
+            '!bg-[#0A0F1580] !py-[12px] !px-[10px]  data-[hover=true]:!border-main min-h-[48px] ':
+              inputDefault,
           }
         ),
       }}

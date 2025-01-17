@@ -2,12 +2,18 @@ import IconDate from '@/components/UI/Icons/IconDate';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/common';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const CardCourse = () => {
+  const router = useRouter();
   return (
-    <div className="rounded transition-all cursor-pointer duration-300 hover:opacity-80">
+    <div
+      onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(1))}
+      className="rounded transition-all cursor-pointer duration-300 hover:opacity-80"
+    >
       <Image
         src={'/images/img-default.png'}
         width={302}

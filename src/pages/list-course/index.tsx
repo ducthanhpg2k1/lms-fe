@@ -2,13 +2,13 @@ import { ReactElement } from 'react';
 
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import MainLayout from '@/layout/MainLayout';
-import Course from '@/components/Course';
+import ListCourse from '@/components/ListCourse';
 
-const HomePage = () => {
-  return <Course />;
+const ListCoursePage = () => {
+  return <ListCourse />;
 };
 
-HomePage.getLayout = function getLayout(page: ReactElement) {
+ListCoursePage.getLayout = function getLayout(page: ReactElement) {
   return (
     <MainLayout>
       <>{page}</>
@@ -25,4 +25,4 @@ export async function getStaticProps({ locale }: any) {
   };
 }
 
-export default HomePage;
+export default ListCoursePage;

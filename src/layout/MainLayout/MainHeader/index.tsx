@@ -31,7 +31,14 @@ const MainHeader = () => {
   return (
     <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">
       <div className="max-w-[1280px]  mx-auto flex justify-between items-center">
-        <Image alt="logo" width={125} height={46} src={'/logo.png'} />
+        <Image
+          onClick={() => router.push(ROUTE_PATH.HOME)}
+          alt="logo"
+          width={125}
+          height={46}
+          className="cursor-pointer"
+          src={'/logo.png'}
+        />
 
         <div className="flex items-center gap-4">
           <Menubar />

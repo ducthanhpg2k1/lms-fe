@@ -6,19 +6,24 @@ export default function AccordionCustom({
   children,
   title,
   isSection = false,
+  isCreateCourse,
 }: {
   title: string | ReactNode;
   children: ReactNode;
   isSection?: boolean;
+  isCreateCourse?: boolean;
 }) {
   return (
     <Accordion
-      defaultExpandedKeys={['1']}
+      defaultExpandedKeys={isCreateCourse ? [] : ['1']}
       itemClasses={{
         content: ['px-4 pt-0 pb-4'],
-        heading: ['px-4'],
+        heading: clsx('px-4', {
+          '!h-[40px]': isCreateCourse,
+        }),
         base: clsx('bg-white/5 rounded border-1 border-[#D9D9D91A]', {
           '!bg-transparent rounded-none': isSection,
+          '!bg-transparent !border-white/15': isCreateCourse,
         }),
       }}
     >

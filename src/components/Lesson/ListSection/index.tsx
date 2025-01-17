@@ -29,7 +29,7 @@ const ListSection = () => {
                 </div>
               }
             >
-              1
+              <></>
             </AccordionCustom>
           );
         })}
