@@ -2,6 +2,13 @@ import InputText from '@/components/UI/InputText';
 import SelectCustom from '@/components/UI/SelectCustom';
 import Text from '@/components/UI/Text';
 
+const CATEGORIES = [
+  { key: 'business', label: 'Business' },
+  { key: 'finance', label: 'Finance' },
+  { key: 'it', label: 'IT & Software' },
+  { key: 'personal', label: 'Personal Development' },
+];
+
 const ContenStep3 = () => {
   return (
     <div className="flex flex-col gap-10 items-center text-center">
@@ -17,7 +24,7 @@ const ContenStep3 = () => {
         placeholder="Choose a category"
         className="min-w-[620px]"
         isSelectSubmit
-        options={[]}
+        options={CATEGORIES}
       />
     </div>
   );

@@ -83,7 +83,11 @@ const CardCourse = ({ index }: { index: number }) => {
               $ 149.00
             </Text>
           </div>
-          <Button variant="light" radius="full">
+          <Button
+            variant="light"
+            radius="full"
+            onClick={() => router.push(ROUTE_PATH.LESSON)}
+          >
             <div className="flex items-center gap-1">
               <Text type="font-14-500" className="text-white">
                 Enroll Course

@@ -5,5 +5,6 @@ export const ROUTE_PATH = {
 
   COURSE: '/course',
   LESSON: '/lesson',
+  LIST_COURSE: '/list-course',
   DETAIL_COURSE: (id: any) => `/course/${id}`,
 };

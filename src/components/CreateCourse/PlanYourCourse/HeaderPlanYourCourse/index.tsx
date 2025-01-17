@@ -28,9 +28,9 @@ const HeaderPlanYourCourse = () => {
         </Text>
       </div>
       <div className="flex items-center gap-3">
-        <Button className="bg-white min-w-[96px] !min-h-[40px] rounded">
-          <Text type="font-16-400" className="text-black-10">
-            Lưu
+        <Button className="bg-main min-w-[96px] !min-h-[40px] rounded">
+          <Text type="font-16-600" className="text-white">
+            Save
           </Text>
         </Button>
         <SelectCustom

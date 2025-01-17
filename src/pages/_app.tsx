@@ -43,12 +43,12 @@ const config = getDefaultConfig({
 const queryClient = new QueryClient();
 
 export const SEO: DefaultSeoProps = {
-  titleTemplate: 'Title',
-  defaultTitle: 'Title',
-  description: 'Title',
+  titleTemplate: 'LMS',
+  defaultTitle: 'LMS',
+  description: 'LMS',
   openGraph: {
-    title: 'Title',
-    description: 'Title',
+    title: 'LMS',
+    description: 'LMS',
     images: [
       {
         url: 'banner-1.png',
@@ -74,8 +74,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           name="viewport"
           content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"
         />
-        <meta name="title" content="Maby Client" />
-        <meta name="description" content="Maby Client" />
+        <meta name="title" content="LMS" />
+        <meta name="description" content="LMS" />
         <link rel="shortcut icon" href="/static/logo-aeon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />

@@ -21,7 +21,10 @@ const HeaderCourse = ({ currentStep = 1 }: { currentStep: number }) => {
           className="text-white"
         >{`Step ${currentStep} Of 4`}</Text>
 
-        <Button className="py-2 px-4 bg-transparent border-1 border-black-5 rounded">
+        <Button
+          className="py-2 px-4 bg-transparent border-1 border-black-5 rounded"
+          onClick={() => router.push(ROUTE_PATH.LIST_COURSE)}
+        >
           <Text type="font-16-500" className="text-white">
             Exit
           </Text>

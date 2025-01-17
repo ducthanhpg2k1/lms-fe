@@ -16,10 +16,19 @@ enum TAB_VIEW {
   GRID = 'grid',
   LIST = 'list',
 }
-
+const SORT_BY = [
+  { key: 'newest', label: 'Newest' },
+  { key: 'oldest', label: 'Oldest' },
+  { key: 'a-z', label: 'A-Z' },
+  { key: 'z-a', label: 'Z-A' },
+];
 const ListCourse = () => {
   const router = useRouter();
   const [tab, setTab] = useState(TAB_VIEW?.GRID);
+  const [lengthCourse, setLengthCourse] = useState(12);
+  const loadMore = () => {
+    setLengthCourse(() => lengthCourse + 8);
+  };
 
   const onChangeTab = (tab: any) => {
     setTab(tab);
@@ -44,7 +53,7 @@ const ListCourse = () => {
             <SelectCustom
               placeholder="Sort by type"
               className="w-full"
-              options={[]}
+              options={SORT_BY}
             />
           </div>
           <FilterCourse />
@@ -92,13 +101,18 @@ const ListCourse = () => {
             </div>
 
             <div className={clsx('grid grid-cols-3 gap-6', {})}>
-              {Array.from({ length: 12 }).map((_, key) => {
+              {Array.from({ length: lengthCourse }).map((_, key) => {
                 return <CardCourse index={key} key={key} />;
               })}
             </div>
           </div>
 
-          <Button variant="light" radius="full" className="hover:bg-main/20">
+          <Button
+            variant="light"
+            radius="full"
+            className="hover:bg-main/20"
+            onClick={loadMore}
+          >
             <div className="flex items-center gap-[2px]">
               <Text type="font-14-500" className="text-main">
                 See More

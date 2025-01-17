@@ -6,6 +6,13 @@ import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/common';
 import Image from 'next/image';
 
+const SORT_BY = [
+  { key: 'newest', label: 'Newest' },
+  { key: 'oldest', label: 'Oldest' },
+  { key: 'a-z', label: 'A-Z' },
+  { key: 'z-a', label: 'Z-A' },
+];
+
 const ListCourse = () => {
   const router = useRouter();
   return (
@@ -26,7 +33,7 @@ const ListCourse = () => {
               placeholder="Sort by type"
               isSelectSubmit
               className="min-w-[120px] min-h-[44px]"
-              options={[]}
+              options={SORT_BY}
             />
           </div>
           <Button

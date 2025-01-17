@@ -4,6 +4,7 @@ import IconUpload from '@/components/UI/Icons/IconUpload';
 import Text from '@/components/UI/Text';
 import ByTheNumbers from './ByTheNumbers';
 import Description from './Description';
+import RateStar from '@/components/UI/RateStar';
 
 const Overview = () => {
   return (
@@ -20,7 +21,8 @@ const Overview = () => {
                 <Text className="text-white" type="font-14-700">
                   4.1
                 </Text>
-                <IconStar />
+                <RateStar rate={4} />
+                {/* <IconStar /> */}
               </div>
               <Text className="text-black-7" type="font-12-400">
                 572 rating
