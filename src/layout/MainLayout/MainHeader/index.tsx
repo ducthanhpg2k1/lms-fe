@@ -11,6 +11,7 @@ import ContentProfile from './ContentProfile';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/common';
 import { useState } from 'react';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 
 const MainHeader = () => {
   const router = useRouter();
@@ -30,7 +31,7 @@ const MainHeader = () => {
   };
   return (
     <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">
-      <div className="max-w-[1280px]  mx-auto flex justify-between items-center">
+      <div className="max-w-[1440px]  mx-auto flex justify-between items-center">
         <Image
           onClick={() => router.push(ROUTE_PATH.HOME)}
           alt="logo"
@@ -102,6 +103,9 @@ const MainHeader = () => {
                 <ContentProfile />
               </PopoverContent>
             </Popover>
+            <div className="w-full">
+              <ConnectButton />
+            </div>
           </div>
         </div>
       </div>

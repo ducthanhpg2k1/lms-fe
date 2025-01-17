@@ -1,6 +1,8 @@
 /* eslint-disable react/no-unknown-property */
 import '../styles/globals.scss';
 import '../styles/tailwind.css';
+import '@rainbow-me/rainbowkit/styles.css';
+import 'react-rater/lib/react-rater.css';
 
 import { ReactElement, ReactNode } from 'react';
 
@@ -11,7 +13,14 @@ import { PagesProgressBar as ProgressBar } from 'next-nprogress-bar';
 import { DefaultSeo, DefaultSeoProps } from 'next-seo';
 import AppLayout from '@/layout/AppLayout';
 import { appWithTranslation } from 'next-i18next';
-
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { http, WagmiProvider } from 'wagmi';
+import { mainnet, polygon, optimism, arbitrum, base } from 'wagmi/chains';
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+  darkTheme,
+} from '@rainbow-me/rainbowkit';
 import nextI18nConfig from '../../next-i18next.config';
 
 export type NextPageWithLayout = NextPage & {
@@ -20,6 +29,18 @@ export type NextPageWithLayout = NextPage & {
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
 };
+
+const config = getDefaultConfig({
+  appName: 'LMS',
+  projectId: 'fc44d249918338bb571eab6da79776df',
+  transports: {
+    [mainnet.id]: http(),
+  },
+  chains: [mainnet, polygon, optimism, arbitrum, base],
+  ssr: true,
+});
+
+const queryClient = new QueryClient();
 
 export const SEO: DefaultSeoProps = {
   titleTemplate: 'Title',
@@ -75,7 +96,20 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         options={{ showSpinner: false }}
         shallowRouting
       />
-      <AppLayout>{getLayout(<Component {...pageProps} />)}</AppLayout>
+      <AppLayout>
+        <WagmiProvider config={config}>
+          <QueryClientProvider client={queryClient}>
+            <RainbowKitProvider
+              theme={darkTheme({
+                accentColor: '#02A6C2',
+                borderRadius: 'small',
+              })}
+            >
+              {getLayout(<Component {...pageProps} />)}
+            </RainbowKitProvider>
+          </QueryClientProvider>
+        </WagmiProvider>
+      </AppLayout>
     </>
   );
 }

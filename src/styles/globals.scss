@@ -72,6 +72,12 @@ body {
   border-bottom: none !important;
 }
 
+.react-rater {
+  display: flex !important;
+  align-items: center !important;
+  gap: 2px !important;
+}
+
 .bgActivePlan {
   background: rgba(2, 166, 194, 0.1);
 }
