@@ -22,7 +22,7 @@ module.exports = {
         'black-3': '#F5F5F5',
         'black-9': '#454545',
         'black-2': '#FCFCFC',
-
+        'black-8': '#595959',
         'black-7': '#8C8C8C',
         'black-6': '#BFBFBF',
         orange: '#F26F21',

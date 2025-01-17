@@ -8,3 +8,8 @@ export const ROUTE_PATH = {
   LIST_COURSE: '/list-course',
   DETAIL_COURSE: (id: any) => `/course/${id}`,
 };
+
+export enum TYPE_COURSE {
+  LECTURE = 'LECTURE',
+  QUIZ = 'QUIZ',
+}

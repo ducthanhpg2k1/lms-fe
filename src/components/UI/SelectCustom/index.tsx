@@ -14,6 +14,7 @@ interface SelectCustomProps {
   rest?: any;
   isLesson?: boolean;
   isSelectSubmit?: boolean;
+  inputDefault?: boolean;
 }
 const SelectCustom = (props: SelectCustomProps) => {
   const [openSelect, setOpenSelect] = useState(false);
@@ -23,6 +24,7 @@ const SelectCustom = (props: SelectCustomProps) => {
     isLesson = false,
     placeholder,
     isSelectSubmit,
+    inputDefault,
     rest,
   } = props;
   const renderSelectorIcon = (open: boolean) => {
@@ -55,6 +57,8 @@ const SelectCustom = (props: SelectCustomProps) => {
               isLesson,
             '!bg-[#1D2329] data-[hover=true]:!border-main  min-h-[48px] border-black-10 group-data-[focus=true]:!border-main':
               isSelectSubmit,
+            '!bg-[#0A0F1580] data-[hover=true]:!border-main  min-h-[48px] border-black-10 group-data-[focus=true]:!border-main':
+              inputDefault,
           }
         ),
       }}

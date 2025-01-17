@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import PlanYourCourseRight from './PlanYourCourseRight';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { TYPE_COURSE } from '@/utils/common';
 
 const PlanYourCourse = () => {
   const [activePlan, setActivePlan] = useState(1);
@@ -13,11 +14,29 @@ const PlanYourCourse = () => {
       items: [{ type: '' }, { type: '' }, { type: '' }, { type: '' }],
       items1: [{ type: '' }],
       items2: [{ type: '' }],
+      referrals: [
+        { type: 'What Exchange' },
+        { type: 'Bybit' },
+        { type: 'Binance' },
+        { type: 'OKX' },
+      ],
+      referral2: [
+        { type: 'Sign up' },
+        { type: 'Deposit' },
+        { type: 'Minimum trade volume' },
+      ],
+
       sections: [
         {
           title: 'Section 1',
           introduction: 'introduction',
-          curriculums: [{ title: 'Lecture 1', introduction: 'introduction' }],
+          curriculums: [
+            {
+              title: 'Lecture 1',
+              introduction: 'introduction',
+              type: TYPE_COURSE.LECTURE,
+            },
+          ],
         },
       ],
     },

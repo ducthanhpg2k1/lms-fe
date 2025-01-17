@@ -2,10 +2,13 @@ import IconPlusMain from '@/components/UI/Icons/IconPlusMain';
 import Text from '@/components/UI/Text';
 import { Button } from '@nextui-org/react';
 import { Control, useFieldArray } from 'react-hook-form';
-import CurriculumItem from './CurriculumItem';
 import InputText from '@/components/UI/InputText';
 import { useState } from 'react';
+import dynamic from 'next/dynamic';
 
+const CurriculumItem = dynamic(() => import('./CurriculumItem'), {
+  ssr: false,
+});
 const Curriculum = ({ control }: { control: Control }) => {
   const { fields, append, remove, update } = useFieldArray({
     control,

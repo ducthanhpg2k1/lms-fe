@@ -7,7 +7,7 @@ import Image from 'next/image';
 import clsx from 'clsx';
 import { useState } from 'react';
 
-const CATEGORIES = [
+export const CATEGORIES = [
   { key: 'business', label: 'Business' },
   { key: 'finance', label: 'Finance' },
   { key: 'it', label: 'IT & Software' },

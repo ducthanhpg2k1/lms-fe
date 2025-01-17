@@ -38,7 +38,7 @@ const IntendedLearners = ({ control }: { control: Control }) => {
         These descriptions will help learners decide if your course is right for
         them.
       </Text>
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-full">
         <div className="flex flex-col gap-[10px]">
           <Text type="font-16-600" className="text-white">
             What will students learn in your course?

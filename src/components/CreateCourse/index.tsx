@@ -11,7 +11,7 @@ const CreateCourse = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
   const handleClickNextStep = (step: number) => {
-    if (step === 3) {
+    if (step === 4) {
       router.push('/create-course/1');
       return;
     }

@@ -64,6 +64,36 @@ body {
   border: 1px solid white !important;
 }
 
+.custom-quill-editor {
+  .ql-container.ql-snow {
+    border-radius: 4px !important;
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+    border: 1px solid #262626 !important;
+    background: rgba(10, 15, 21, 0.5) !important;
+  }
+  .ql-toolbar.ql-snow {
+    border-radius: 4px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border: 1px solid #262626 !important;
+    border-bottom: none !important;
+    background: rgba(10, 15, 21, 0.5) !important;
+  }
+  .ql-editor {
+    p {
+      font-size: 16px;
+    }
+  }
+  .ql-editor.ql-blank::before {
+    color: var(--Secondary-500, #767676);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 20px;
+  }
+}
+
 .ql-toolbar.ql-snow {
   border-radius: 4px !important;
   border-bottom-right-radius: 0px !important;
@@ -80,4 +110,8 @@ body {
 
 .bgActivePlan {
   background: rgba(2, 166, 194, 0.1);
+}
+
+.bgDefault {
+  background: rgba(10, 15, 21, 0.5);
 }
