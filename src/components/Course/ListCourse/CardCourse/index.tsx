@@ -7,12 +7,12 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-const CardCourse = () => {
+const CardCourse = ({ item }: { item?: any }) => {
   const router = useRouter();
   return (
     <div
-      onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(1))}
-      className="rounded transition-all cursor-pointer duration-300 hover:opacity-80"
+      onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(item?.id))}
+      className="rounded transition-all cursor-pointer  duration-300 hover:opacity-80"
     >
       <Image
         src={'/images/img-default.png'}
@@ -36,7 +36,7 @@ const CardCourse = () => {
           </div>
         </div>
         <Text type="font-16-500" className="line-clamp-2 capitalize">
-          Become a Certified Web Developer HTML, CSS and JavaScript
+          {item?.title}
         </Text>
         <div className="flex flex-col gap-[14px] border-b border-b-white/5 pb-4">
           <div className="flex items-center gap-2">

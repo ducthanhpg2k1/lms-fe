@@ -15,6 +15,8 @@ interface SelectCustomProps {
   isLesson?: boolean;
   isSelectSubmit?: boolean;
   inputDefault?: boolean;
+  onChange?: any;
+  value?: any;
 }
 const SelectCustom = (props: SelectCustomProps) => {
   const [openSelect, setOpenSelect] = useState(false);
@@ -25,6 +27,8 @@ const SelectCustom = (props: SelectCustomProps) => {
     placeholder,
     isSelectSubmit,
     inputDefault,
+    onChange,
+    value,
     rest,
   } = props;
   const renderSelectorIcon = (open: boolean) => {
@@ -44,6 +48,9 @@ const SelectCustom = (props: SelectCustomProps) => {
       label=""
       labelPlacement="outside"
       radius="sm"
+      onChange={onChange}
+      value={value}
+      selectedKeys={[value]}
       onOpenChange={(open: boolean) => {
         setOpenSelect(!open);
       }}

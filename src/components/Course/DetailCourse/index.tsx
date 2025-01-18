@@ -12,8 +12,24 @@ import { Button } from '@nextui-org/react';
 import Mentors from './Mentors';
 import MoreCourse from './MoreCourse';
 import CardEnrollNow from './CardEnrollNow';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useGetDetailCourse } from '@/components/CreateCourse/service';
+import dayjs from 'dayjs';
 
 const DetailCourse = () => {
+  const router = useRouter();
+
+  const { run: getDetailCourse, data: dataDetail } = useGetDetailCourse({});
+
+  useEffect(() => {
+    if (router.query.id) {
+      getDetailCourse(router.query.id as string);
+    }
+  }, [router.query.id]);
+
+  console.log(dataDetail, 'dataDetail');
+
   return (
     <div className="flex flex-col gap-[52px] relative">
       <BreadCrumbs />
@@ -22,7 +38,7 @@ const DetailCourse = () => {
         <div className="col-span-7 flex flex-col gap-10">
           <div className="flex flex-col border-b-1 border-b-black-10 pb-10 gap-5">
             <Text type="font-32-700" className="text-white">
-              Become a Certified Web Developer HTML, CSS and JavaScript
+              {dataDetail?.data?.title}
             </Text>
             <Text type="font-14-400" className="text-white">
               Learn: HTML | CSS | JavaScript | Web programming | Web development
@@ -51,7 +67,9 @@ const DetailCourse = () => {
               <div className="flex items-center gap-1">
                 <IconTimeNew />
                 <Text type="font-14-400" className="text-white">
-                  Last updated 12/2024
+                  {`Last updated ${dayjs(dataDetail?.data?.updatedAt).format(
+                    'MM/YYYY'
+                  )}`}
                 </Text>
               </div>
             </div>
@@ -72,9 +90,9 @@ const DetailCourse = () => {
               </Text>
             </div>
           </div>
-          <YouLearn />
-          <Requirements />
-          <About />
+          <YouLearn data={dataDetail?.data} />
+          <Requirements data={dataDetail?.data} />
+          <About data={dataDetail?.data} />
           <Mentors />
           <MoreCourse />
         </div>

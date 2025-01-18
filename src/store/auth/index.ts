@@ -19,12 +19,10 @@ export const setAuthCookies = (
     token,
     refreshToken,
     expiredTime,
-    isMsLogin,
   }: {
     token: string;
     refreshToken?: string;
     expiredTime?: number;
-    isMsLogin?: boolean;
   },
   reqOnServer?: any
 ) => {
@@ -43,7 +41,6 @@ export const setAuthCookies = (
     res: reqOnServer?.res,
     req: reqOnServer?.req,
   });
-  setCookie('isMsLogin', isMsLogin);
 };
 
 export const deleteAuthCookies = () => {

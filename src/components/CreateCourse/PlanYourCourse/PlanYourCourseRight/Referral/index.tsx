@@ -18,6 +18,8 @@ const Referral = ({ control }: { control: Control }) => {
     name: 'referral2',
   });
 
+  console.log(fields, 'fields');
+
   return (
     <div className="flex flex-col gap-8">
       <Text type="font-28-700" className="text-white">
@@ -41,7 +43,7 @@ const Referral = ({ control }: { control: Control }) => {
               <InputText
                 maxLength={160}
                 endContent
-                className="w-8/12"
+                className="min-w-[500px]"
                 placeholder={field.type}
                 inputDefault
               />
@@ -81,7 +83,7 @@ const Referral = ({ control }: { control: Control }) => {
               <InputText
                 maxLength={160}
                 endContent
-                className="w-8/12"
+                className="min-w-[500px]"
                 placeholder={field.type}
                 inputDefault
               />
@@ -100,12 +102,6 @@ const Referral = ({ control }: { control: Control }) => {
           </Text>
         </Button>
       </div>
-
-      <Button className="min-h-[44px] rounded bg-main w-max min-w-[136px]">
-        <Text type="font-16-700" className="text-white">
-          Save profile
-        </Text>
-      </Button>
     </div>
   );
 };

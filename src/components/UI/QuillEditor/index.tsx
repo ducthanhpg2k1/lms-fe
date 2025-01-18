@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import Text from '../Text';
@@ -8,13 +8,17 @@ const QuillEditor = ({
   label,
   inputDefault,
   placeholder,
+  value,
+  onChange,
 }: {
   label?: string;
   inputDefault?: boolean;
   placeholder?: string;
+  value?: string;
+  onChange?: (value: string) => void;
 }) => {
   const editorRef = useRef(null);
-
+  const [editor, setEditor] = useState<Quill | null>(null);
   useEffect(() => {
     if (editorRef.current) {
       const quill = new Quill(editorRef.current, {
@@ -29,8 +33,12 @@ const QuillEditor = ({
         },
         placeholder,
       });
+      setEditor(quill);
       quill.on('text-change', () => {
-        console.log(quill.root.innerHTML);
+        const content = quill.root.innerHTML;
+        if (onChange) {
+          onChange(content);
+        }
       });
     }
 
@@ -40,6 +48,12 @@ const QuillEditor = ({
       }
     };
   }, [placeholder]);
+
+  useEffect(() => {
+    if (editor && value !== undefined) {
+      editor.root.innerHTML = value;
+    }
+  }, [editor, value]);
 
   return (
     <div className="w-full flex flex-col gap-2">

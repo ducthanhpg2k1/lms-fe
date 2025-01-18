@@ -5,17 +5,25 @@ const Footer = ({
   currentStep,
   handleClickNextStep,
   handlePreviousStep,
+  loading,
+  watch,
 }: {
   handleClickNextStep: (step: number) => void;
   handlePreviousStep: (step: number) => void;
+  watch?: any;
+  loading?: boolean;
 
   currentStep: number;
 }) => {
+  const typeWatch = watch('type');
+  const titleWatch = watch('title');
+
   return (
     <div className="py-[26px] px-[40px] min-h-[96px] bg-[#1D2228] w-full flex justify-between items-center">
       {currentStep === 1 && (
         <div className="flex justify-center items-center w-full">
           <Button
+            isDisabled={!typeWatch}
             onClick={() => handleClickNextStep(currentStep)}
             className="bg-main rounded py-[10px] px-6"
           >
@@ -36,6 +44,8 @@ const Footer = ({
             </Text>
           </Button>
           <Button
+            isDisabled={!titleWatch}
+            isLoading={loading}
             onClick={() => handleClickNextStep(currentStep)}
             className="bg-main rounded py-[10px] px-6"
           >

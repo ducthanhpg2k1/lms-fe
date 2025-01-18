@@ -2,6 +2,7 @@ import SelectCustom from '@/components/UI/SelectCustom';
 import Text from '@/components/UI/Text';
 import { Radio, RadioGroup } from '@nextui-org/react';
 import clsx from 'clsx';
+import { Control, Controller } from 'react-hook-form';
 
 const DATA_CONTENT = [
   {
@@ -26,7 +27,7 @@ const DATA_CONTENT = [
   },
 ];
 
-const ContenStep4 = () => {
+const ContenStep4 = ({ control }: { control: Control }) => {
   return (
     <div className="flex flex-col gap-10 items-center text-center">
       <div className="flex flex-col gap-3">
@@ -38,29 +39,46 @@ const ContenStep4 = () => {
           you don't have much time.
         </Text>
       </div>
-      <RadioGroup>
-        {DATA_CONTENT?.map((item) => {
+      <Controller
+        name="timeSpent"
+        control={control}
+        render={({ field }) => {
           return (
-            <CustomRadio value={item?.id}>
-              <Text type="font-16-400" className="text-white max-w-[760px]">
-                {item?.content}
-              </Text>
-            </CustomRadio>
+            <RadioGroup
+              onValueChange={(value) => {
+                field.onChange(value);
+              }}
+              value={field.value}
+            >
+              {DATA_CONTENT?.map((item) => {
+                return (
+                  <CustomRadio key={item.id} value={item.id}>
+                    <Text
+                      type="font-16-400"
+                      className="text-white max-w-[760px]"
+                    >
+                      {item?.content}
+                    </Text>
+                  </CustomRadio>
+                );
+              })}
+            </RadioGroup>
           );
-        })}
-      </RadioGroup>
+        }}
+      />
     </div>
   );
 };
 export default ContenStep4;
 
 export const CustomRadio = (props: any) => {
-  const { children, ...otherProps } = props;
+  const { children, value, ...otherProps } = props;
 
   return (
     <Radio
       {...otherProps}
       size="md"
+      value={value}
       classNames={{
         base: clsx(
           'inline-flex min-w-[916px] m-0 bg-white/5 hover:bg-white/10 text-start items-centers',

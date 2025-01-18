@@ -15,7 +15,7 @@ const Mentors = () => {
   return (
     <div className="flex flex-col gap-6 border-b-1 border-b-black-10 pb-10">
       <Text className="text-white" type="font-20-600">
-        About This Course
+        Mentors (KOLs)
       </Text>
       <div className="flex items-center gap-5">
         <Image

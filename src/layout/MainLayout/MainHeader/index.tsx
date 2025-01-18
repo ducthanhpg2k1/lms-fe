@@ -10,15 +10,59 @@ import Menubar from '../Menubar';
 import ContentProfile from './ContentProfile';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/common';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { useAccount } from 'wagmi';
+import {
+  deleteAuthCookies,
+  getAccessToken,
+  setAuthCookies,
+} from '@/store/auth';
+import { useGetUserNonce, useLoginWeb3 } from './service';
+import { useMount } from 'ahooks';
+import { deleteCookie } from 'cookies-next';
 
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
+  const { isConnected, address } = useAccount();
+  const token = getAccessToken();
+  const [signature, setSignature] = useState<string>('');
+
   const handleChangeSearch = (e: any) => {
     setValueSearch(e.target.value);
   };
+
+  const { run: runLoginWeb3 } = useLoginWeb3({
+    onSuccess(res) {
+      setAuthCookies({
+        token: res?.data?.accessToken,
+      });
+    },
+  });
+  const { run: runGetUserNonce } = useGetUserNonce({
+    onSuccess(res) {
+      setSignature(res?.data);
+    },
+  });
+
+  useEffect(() => {
+    if (!isConnected) {
+      console.log(isConnected, 'isConnected');
+
+      deleteAuthCookies();
+    }
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (isConnected && address && !token && signature) {
+      runLoginWeb3({ address: address as string, signature });
+    }
+  }, [signature, token, isConnected, address]);
+
+  useMount(() => {
+    runGetUserNonce();
+  });
 
   const handleKeyUp = (event: any) => {
     if (event.key === 'Enter') {
@@ -29,6 +73,8 @@ const MainHeader = () => {
       });
     }
   };
+  console.log(isConnected, 'isConnected');
+
   return (
     <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">
       <div className="max-w-[1440px]  mx-auto flex justify-between items-center">
@@ -72,13 +118,13 @@ const MainHeader = () => {
                 alt=""
               />
             </Button>
-            <Button
+            {/* <Button
               isIconOnly
               className="bg-gray-10 border-1 border-gray-10 rounded-[4px] w-10 h-10"
             >
               <Image src={'/icons/ic-user.svg'} height={20} width={20} alt="" />
-            </Button>
-            <Popover
+            </Button> */}
+            {/* <Popover
               classNames={{
                 content:
                   'rounded border-1 p-0 !bg-gray border-[#F0F0F01A] shadow-dropdown',
@@ -102,7 +148,7 @@ const MainHeader = () => {
               <PopoverContent>
                 <ContentProfile />
               </PopoverContent>
-            </Popover>
+            </Popover> */}
             <div className="w-full">
               <ConnectButton />
             </div>

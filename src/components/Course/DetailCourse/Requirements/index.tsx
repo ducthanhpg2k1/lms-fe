@@ -6,14 +6,14 @@ const DATA_REQUIREMENTS = [
   `It is recommended that you download the free Komodo text editor.`,
 ];
 
-const Requirements = () => {
+const Requirements = ({ data }: { data: any }) => {
   return (
     <div className="flex flex-col gap-6 border-b-1 border-b-black-10 pb-10">
       <Text className="text-white" type="font-20-600">
         Requirements
       </Text>
       <div className="flex flex-col gap-1">
-        {DATA_REQUIREMENTS?.map((item) => {
+        {data?.requirements?.map((item: any) => {
           return (
             <div className="flex items-center py-2 gap-2">
               <div className="bg-white w-1.5 h-1.5 rounded-full" />

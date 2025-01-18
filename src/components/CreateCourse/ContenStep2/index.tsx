@@ -1,7 +1,8 @@
 import InputText from '@/components/UI/InputText';
 import Text from '@/components/UI/Text';
+import { Control, Controller } from 'react-hook-form';
 
-const ContenStep2 = () => {
+const ContenStep2 = ({ control }: { control: Control }) => {
   return (
     <div className="flex flex-col gap-10 items-center text-center">
       <div className="flex flex-col gap-3">
@@ -13,16 +14,19 @@ const ContenStep2 = () => {
           later.
         </Text>
       </div>
-      <InputText
-        maxLength={60}
-        className="min-w-[620px]"
-        placeholder="Type"
-        endContent={
-          <Text type="font-16-400" className="text-white/20">
-            60
-          </Text>
-        }
-        isInputSubmit
+      <Controller
+        name="title"
+        control={control}
+        render={({ field }) => (
+          <InputText
+            maxLength={60}
+            className="min-w-[620px]"
+            placeholder="Type"
+            value={field.value}
+            onChange={field.onChange}
+            isInputSubmit
+          />
+        )}
       />
     </div>
   );

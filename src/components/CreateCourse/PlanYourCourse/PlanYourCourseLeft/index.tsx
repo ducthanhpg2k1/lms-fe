@@ -16,10 +16,10 @@ const DATA_CONTENT = [
     id: 3,
     content: 'Course landing page',
   },
-  {
-    id: 4,
-    content: 'Referral',
-  },
+  // {
+  //   id: 4,
+  //   content: 'Referral',
+  // },
 ];
 
 const PlanYourCourseLeft = ({

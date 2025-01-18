@@ -60,7 +60,7 @@ const InputText = (props: InputTextProps) => {
     ...rest
   } = props;
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-2 relative justify-center">
       {label && (
         <Text type="font-16-600" className="text-white">
           {label}
@@ -68,11 +68,24 @@ const InputText = (props: InputTextProps) => {
       )}
       <Input
         startContent={startContent}
-        endContent={endContent}
+        endContent={
+          <>
+            {maxLength && (
+              <div className="absolute right-3">
+                <Text type="font-16-400" className="text-white/20">
+                  {value && value?.length > 0
+                    ? maxLength - Number(value?.length)
+                    : maxLength}
+                </Text>
+              </div>
+            )}
+          </>
+        }
         variant="bordered"
         type={type}
         maxLength={maxLength}
         autoComplete="off"
+        value={value}
         onChange={onChange}
         isDisabled={isDisabled}
         readOnly={readOnly}

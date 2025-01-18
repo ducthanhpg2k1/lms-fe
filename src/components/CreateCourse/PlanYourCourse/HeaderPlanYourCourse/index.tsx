@@ -4,13 +4,19 @@ import { ROUTE_PATH } from '@/utils/common';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 
-const HeaderPlanYourCourse = () => {
+const HeaderPlanYourCourse = ({
+  handleSubmitForm,
+  loading,
+}: {
+  handleSubmitForm: VoidFunction;
+  loading?: boolean;
+}) => {
   const router = useRouter();
   return (
     <div className="w-full p-4 sticky top-0 bg-primary z-[1000] shadow-2xl flex justify-between items-center border-b border-b-black-10">
       <div className="flex items-center gap-5">
         <Button
-          onClick={() => router.push(ROUTE_PATH.HOME)}
+          onClick={() => router.push(ROUTE_PATH.LIST_COURSE)}
           variant="light"
           radius="sm"
           size="md"
@@ -28,7 +34,11 @@ const HeaderPlanYourCourse = () => {
         </Text>
       </div>
       <div className="flex items-center gap-3">
-        <Button className="bg-main min-w-[96px] !min-h-[40px] rounded">
+        <Button
+          onClick={handleSubmitForm}
+          isLoading={loading}
+          className="bg-main min-w-[96px] !min-h-[40px] rounded"
+        >
           <Text type="font-16-600" className="text-white">
             Save
           </Text>

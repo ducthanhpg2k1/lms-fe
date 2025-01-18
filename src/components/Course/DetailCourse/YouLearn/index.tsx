@@ -44,19 +44,19 @@ const DATA_LEARN = [
   },
 ];
 
-const YouLearn = () => {
+const YouLearn = ({ data }: { data: any }) => {
   return (
     <div className="flex flex-col gap-6 border-b-1 border-b-black-10 pb-10">
       <Text className="text-white" type="font-20-600">
         What you'll learn
       </Text>
       <div className="grid grid-cols-2 gap-4">
-        {DATA_LEARN?.map((item) => {
+        {data?.intenedLeaners?.map((item: any) => {
           return (
             <div key={item?.id} className="py-4 flex items-center gap-4">
               <IconCheck />
               <Text type="font-14-400" className="text-white">
-                {item?.text}
+                {item}
               </Text>
             </div>
           );

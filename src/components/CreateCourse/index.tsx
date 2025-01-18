@@ -6,13 +6,31 @@ import ContenStep2 from './ContenStep2';
 import ContenStep3 from './ContenStep3';
 import ContenStep4 from './ContenStep4';
 import { useRouter } from 'next/router';
+import { useForm } from 'react-hook-form';
+import { useCreateCourse } from './service';
+import { toast } from '../UI/Toast/toast';
 
 const CreateCourse = () => {
   const [step, setStep] = useState(1);
   const router = useRouter();
+
+  const { run: runCreateCourse, loading } = useCreateCourse({
+    onSuccess(res) {
+      router.push(`/create-course/${res?.data?.id}`);
+      toast.success(res?.message);
+    },
+  });
+
   const handleClickNextStep = (step: number) => {
     if (step === 4) {
-      router.push('/create-course/1');
+      const values = getValues();
+      const body = {
+        title: values?.title,
+        categoryId: values.categoryId,
+        type: values.type,
+        timeSpent: 'im so busy',
+      };
+      runCreateCourse(body);
       return;
     }
     setStep(step + 1);
@@ -21,21 +39,32 @@ const CreateCourse = () => {
     setStep(step - 1);
   };
 
+  const {
+    control,
+    watch,
+    getValues,
+    formState: { errors },
+  } = useForm({});
+
   return (
-    <div className="bg-primary w-screen h-[100dvh] overflow-auto">
-      <HeaderCourse currentStep={step} />
-      <div className="flex justify-center min-h-[calc(100dvh-82px-96px)] pt-[92px]">
-        {step === 1 && <ContenStep1 />}
-        {step === 2 && <ContenStep2 />}
-        {step === 3 && <ContenStep3 />}
-        {step === 4 && <ContenStep4 />}
+    <form>
+      <div className="bg-primary w-screen h-[100dvh] overflow-auto">
+        <HeaderCourse currentStep={step} />
+        <div className="flex justify-center min-h-[calc(100dvh-82px-96px)] pt-[92px]">
+          {step === 1 && <ContenStep1 control={control} />}
+          {step === 2 && <ContenStep2 control={control} />}
+          {step === 3 && <ContenStep3 control={control} />}
+          {step === 4 && <ContenStep4 control={control} />}
+        </div>
+        <Footer
+          watch={watch}
+          handlePreviousStep={handlePreviousStep}
+          handleClickNextStep={handleClickNextStep}
+          currentStep={step}
+          loading={loading}
+        />
       </div>
-      <Footer
-        handlePreviousStep={handlePreviousStep}
-        handleClickNextStep={handleClickNextStep}
-        currentStep={step}
-      />
-    </div>
+    </form>
   );
 };
 export default CreateCourse;

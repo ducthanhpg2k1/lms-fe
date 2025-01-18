@@ -1,5 +1,3 @@
- 
- 
 import { injectBearer } from 'brainless-token-manager';
 import { extend } from 'umi-request';
 
@@ -10,6 +8,8 @@ const REQ_TIMEOUT = 25 * 1000;
 export const isDev = ENV.NODE_ENV === 'development';
 
 export const PREFIX_API = ENV.APP_API_URL;
+
+console.log(PREFIX_API, 'PREFIX_API');
 
 const request = extend({
   prefix: PREFIX_API,

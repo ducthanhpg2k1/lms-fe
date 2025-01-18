@@ -22,6 +22,7 @@ import {
   darkTheme,
 } from '@rainbow-me/rainbowkit';
 import nextI18nConfig from '../../next-i18next.config';
+import { Toaster } from 'sonner';
 
 export type NextPageWithLayout = NextPage & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -105,6 +106,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 borderRadius: 'small',
               })}
             >
+              <Toaster position="top-center" />
               {getLayout(<Component {...pageProps} />)}
             </RainbowKitProvider>
           </QueryClientProvider>

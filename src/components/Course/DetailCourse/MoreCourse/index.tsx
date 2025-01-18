@@ -3,8 +3,10 @@ import Comment from './Comment';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import CardCourse from '@/components/CourseSearch/ListCourse/CardCourse';
+import { getAccessToken } from '@/store/auth';
 
 const MoreCourse = () => {
+  const token = getAccessToken();
   return (
     <div className="flex flex-col gap-10 pb-10 border-b-1 border-b-black-10">
       <div className="flex flex-col gap-6">
@@ -43,11 +45,13 @@ const MoreCourse = () => {
             </div>
           </Button>
         </div>
-        <Button className="border-1 min-h-10 max-w-[185px] border-black-9 py-2 px-4 rounded bg-black-10">
-          <Text className="capitalize text-white" type="font-16-500">
-            Login to comment
-          </Text>
-        </Button>
+        {!token && (
+          <Button className="border-1 min-h-10 max-w-[185px] border-black-9 py-2 px-4 rounded bg-black-10">
+            <Text className="capitalize text-white" type="font-16-500">
+              Login to comment
+            </Text>
+          </Button>
+        )}
       </div>
     </div>
   );

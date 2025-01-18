@@ -6,6 +6,7 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import clsx from 'clsx';
 import { useState } from 'react';
+import { useGetListCourse } from './service';
 
 export const CATEGORIES = [
   { key: 'business', label: 'Business' },
@@ -38,6 +39,8 @@ const ListCourse = () => {
   const loadMore = () => {
     setLengthCourse(() => lengthCourse + 8);
   };
+  const { dataCourses } = useGetListCourse();
+
   return (
     <div className="flex flex-col gap-[26px]">
       <div className="flex justify-between items-center">
@@ -77,9 +80,9 @@ const ListCourse = () => {
       </div>
       <div className={clsx('grid grid-cols-1 gap-6', {})}>
         <div className={clsx('flex flex-col items-center gap-9', {})}>
-          <div className={clsx('grid grid-cols-4 gap-6', {})}>
-            {Array.from({ length: lengthCourse }).map((_, key) => {
-              return <CardCourse key={key} />;
+          <div className={clsx('grid grid-cols-4 gap-6 w-full', {})}>
+            {dataCourses?.data.map((item: any, key: number) => {
+              return <CardCourse item={item} key={key} />;
             })}
           </div>
           <Button
