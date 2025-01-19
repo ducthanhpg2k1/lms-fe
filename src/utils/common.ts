@@ -34,3 +34,9 @@ export const DATA_LEVEL = [
     label: 'Beginner',
   },
 ];
+
+export enum LessonContentType {
+  VIDEO = 'VIDEO',
+  VIDEO_SLIDE_MASHUP = 'VIDEO_SLIDE_MASHUP',
+  ARTICLE = 'ARTICLE',
+}

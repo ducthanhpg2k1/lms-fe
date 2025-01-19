@@ -7,11 +7,15 @@ import { useState } from 'react';
 const FormQuiz = ({
   handleCancel,
   handleAdd,
+  loading,
 }: {
-  handleAdd: (value: string) => void;
+  handleAdd: (values: { title: string; description: string }) => void;
   handleCancel: VoidFunction;
+  loading: boolean;
 }) => {
   const [valueTitle, setValueTitle] = useState('');
+  const [valueDescription, setValueDescription] = useState('');
+
   return (
     <div className="border-1 bg-transparent mx-[6px] border-white/15 rounded py-4 px-3 flex flex-col gap-4 w-full">
       <div className="flex items-start gap-2">
@@ -30,7 +34,11 @@ const FormQuiz = ({
             placeholder="Enter title"
             inputDefault
           />
-          <QuillEditor placeholder="Description..." inputDefault />
+          <QuillEditor
+            onChange={(value: any) => setValueDescription(value)}
+            placeholder="Description..."
+            inputDefault
+          />
         </div>
       </div>
       <div className="flex justify-end items-end">
@@ -39,7 +47,10 @@ const FormQuiz = ({
             <Text type="font-16-400">Cancel</Text>
           </Button>
           <Button
-            onClick={() => handleAdd(valueTitle)}
+            onClick={() =>
+              handleAdd({ title: valueTitle, description: valueDescription })
+            }
+            isLoading={loading}
             className="rounded bg-main"
           >
             <Text type="font-16-400">Add lecture</Text>

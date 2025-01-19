@@ -8,8 +8,6 @@ import { Control, Controller, useFieldArray } from 'react-hook-form';
 
 const IntendedLearners = ({
   control,
-  idDetail,
-  handleSubmit,
 }: {
   control: Control;
   idDetail: string;
@@ -114,7 +112,7 @@ const IntendedLearners = ({
         </Text>
         <Text type="font-16-400" className="text-black-6">
           {`List the required skills, experience, tools or equipment learners
-          should have prior to taking your course. If there are no requirements,
+          should have prior to taking your course.If there are no requirements,
           use this space as an opportunity to lower the barrier for beginners.`}
         </Text>
 

@@ -27,7 +27,7 @@ const PlanYourCourseRight = ({
           idDetail={idDetail}
         />
       )}
-      {activePlan === 2 && <Curriculum control={control} />}
+      {activePlan === 2 && <Curriculum />}
       {activePlan === 3 && <CourseLandingPage control={control} />}
       {activePlan === 4 && <Referral control={control} />}
     </div>

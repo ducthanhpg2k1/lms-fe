@@ -9,13 +9,17 @@ const QuillEditor = ({
   inputDefault,
   placeholder,
   value,
+  inputQuizz,
   onChange,
+  autoFocus = false,
 }: {
   label?: string;
   inputDefault?: boolean;
   placeholder?: string;
   value?: string;
+  inputQuizz?: boolean;
   onChange?: (value: string) => void;
+  autoFocus?: boolean;
 }) => {
   const editorRef = useRef(null);
   const [editor, setEditor] = useState<Quill | null>(null);
@@ -40,6 +44,13 @@ const QuillEditor = ({
           onChange(content);
         }
       });
+      // if (autoFocus) {
+      //   quill.on('editor-change', () => {
+      //     const length = quill.getLength();
+      //     quill.setSelection(length - 1, 0);
+      //     quill.focus();
+      //   });
+      // }
     }
 
     return () => {
@@ -51,7 +62,14 @@ const QuillEditor = ({
 
   useEffect(() => {
     if (editor && value !== undefined) {
-      editor.root.innerHTML = value;
+      const currentContent = editor.root.innerHTML;
+      if (currentContent !== value) {
+        const selection = editor.getSelection();
+        editor.root.innerHTML = value;
+        if (selection) {
+          editor.setSelection(selection.index, selection.length);
+        }
+      }
     }
   }, [editor, value]);
 
@@ -65,6 +83,7 @@ const QuillEditor = ({
       <div
         className={clsx('w-full', {
           ['custom-quill-editor']: inputDefault,
+          ['custom-quill-editor-quizz']: inputQuizz,
         })}
       >
         <div ref={editorRef}></div>

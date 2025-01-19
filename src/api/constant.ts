@@ -12,4 +12,16 @@ export const API_PATH = {
   EDIT_COURSE: (id: string) => `/api/courses/${id}`,
 
   LIST_COURSE: '/api/courses',
+
+  SECTIONS: '/api/sections',
+
+  LECTURE: '/api/lessons',
+
+  QUIZZ: '/api/quizzes',
+
+  UPLOAD_FILE: '/api/storage/upload',
+
+  QUESTION_QUIZZ: (id: string) => `/api/quizzes/${id}/question`,
+
+  EDIT_QUESTION_QUIZZ: (id: string) => `/api/quizzes/questions/${id}`,
 };

@@ -1,27 +1,81 @@
 import IconPlusMain from '@/components/UI/Icons/IconPlusMain';
 import Text from '@/components/UI/Text';
 import { Button } from '@nextui-org/react';
-import { Control, useFieldArray } from 'react-hook-form';
+import { Control, useFieldArray, useForm } from 'react-hook-form';
 import InputText from '@/components/UI/InputText';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
+import {
+  useCreateSesson,
+  useDeleteSesson,
+  useGetListSession,
+} from '@/components/CreateCourse/service';
+import { useRouter } from 'next/router';
 
 const CurriculumItem = dynamic(() => import('./CurriculumItem'), {
   ssr: false,
 });
-const Curriculum = ({ control }: { control: Control }) => {
-  const { fields, append, remove, update } = useFieldArray({
+const Curriculum = () => {
+  const { control, reset } = useForm<any>({});
+
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'sections',
   });
-  const [valueIntroduction, setValueIntroduction] = useState('');
+  const [valueTitle, setValueTitle] = useState('');
+  const [valueLearningObjective, setValueLearningObjective] = useState('');
+
+  const router = useRouter();
+
+  const { run: runGetListSession, data: dataListSession } = useGetListSession({
+    onSuccess: (res) => {
+      const newData = res?.data?.map((item: any) => {
+        return {
+          ...item,
+          idSection: item?.id,
+        };
+      });
+      reset({
+        sections: newData.sort(
+          (a: any, b: any) => a.ordinalNumber - b.ordinalNumber
+        ),
+      });
+    },
+  });
+
+  useEffect(() => {
+    if (router.query.id) {
+      runGetListSession(router.query.id as string);
+    }
+  }, [router.query.id]);
+
+  const { run: runCreateSesson, loading } = useCreateSesson({
+    onSuccess(res) {
+      const newData = [...dataListSession?.data, res?.data];
+      setValueTitle('');
+      setValueLearningObjective('');
+      reset({
+        sections: newData,
+      });
+    },
+  });
+  const { run: runDeleteSesson } = useDeleteSesson({
+    onSuccess(res) {},
+  });
 
   const handleSaveSection = (index: number) => {
-    const newValue = {
-      title: 'Unpublished part',
-      introduction: valueIntroduction,
+    const body = {
+      title: valueTitle,
+      learningObjective: valueLearningObjective,
+      courseId: router.query.id as string,
+      ordinalNumber: index + 1,
     };
-    update(index, newValue);
+    runCreateSesson(body);
+  };
+
+  const handleRemoveSection = (index: number, id: string) => {
+    remove(index);
+    runDeleteSesson(id);
   };
   return (
     <div className="flex flex-col gap-8">
@@ -46,12 +100,14 @@ const Curriculum = ({ control }: { control: Control }) => {
         and lectures clearly. If you’re intending to offer your course for free,
         the total length of video content must be less than 2 hours.
       </Text>
-      {fields?.map((field: any, index) => {
+      {fields?.map((field: any, index: number) => {
+        console.log(field, 'field');
+
         return (
           <div className="flex flex-col gap-1">
             {index !== 0 && (
               <Button
-                onClick={() => remove(index)}
+                onClick={() => handleRemoveSection(index, field.idSection)}
                 isIconOnly
                 variant="light"
                 radius="full"
@@ -64,18 +120,16 @@ const Curriculum = ({ control }: { control: Control }) => {
             {field?.title ? (
               <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-6">
                 <div className="flex items-center gap-2">
-                  <Text type="font-16-700">{`${field?.title}:`}</Text>
+                  <Text type="font-16-700">{`Part ${index + 1}:`}</Text>
                   <div className="flex items-center gap-1">
                     <IconFile />
-                    <Text
-                      type="font-16-400"
-                      className="text-black-7"
-                    >{`${field?.introduction}`}</Text>
+                    <Text type="font-16-400" className="text-black-7">
+                      {field.title}
+                    </Text>
                   </div>
                 </div>
-                <div className="pl-[52px] pr-[12px]">
-                  <CurriculumItem index={index} control={control} />
-                </div>
+
+                <CurriculumItem item={field} index={index} control={control} />
               </div>
             ) : (
               <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-4">
@@ -89,9 +143,8 @@ const Curriculum = ({ control }: { control: Control }) => {
                     <InputText
                       maxLength={160}
                       endContent
-                      onChange={(e: any) =>
-                        setValueIntroduction(e.target.value)
-                      }
+                      onChange={(e: any) => setValueTitle(e.target.value)}
+                      value={valueTitle}
                       className="w-full"
                       placeholder="Type"
                       inputDefault
@@ -104,6 +157,10 @@ const Curriculum = ({ control }: { control: Control }) => {
                       <InputText
                         maxLength={160}
                         endContent
+                        onChange={(e: any) =>
+                          setValueLearningObjective(e.target.value)
+                        }
+                        value={valueLearningObjective}
                         className="w-full"
                         placeholder="Type"
                         inputDefault
@@ -124,6 +181,7 @@ const Curriculum = ({ control }: { control: Control }) => {
                     <Button
                       onClick={() => handleSaveSection(index)}
                       className="bg-main rounded"
+                      isLoading={loading}
                     >
                       <Text type="font-16-400" className="text-white">
                         Save
