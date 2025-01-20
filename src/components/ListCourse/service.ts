@@ -4,7 +4,7 @@ import { privateRequest, request } from '@/api/request';
 import { useRequest } from 'ahooks';
 
 const getListCourse = async () => {
-  return await privateRequest(request.get, API_PATH.LIST_COURSE);
+  return await privateRequest(request.get, API_PATH.MY_COURSE);
 };
 
 export const useGetListCourse = () => {

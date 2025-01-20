@@ -20,7 +20,6 @@ import {
 } from '@/store/auth';
 import { useGetUserNonce, useLoginWeb3 } from './service';
 import { useMount } from 'ahooks';
-import { deleteCookie } from 'cookies-next';
 
 const MainHeader = () => {
   const router = useRouter();
@@ -66,14 +65,12 @@ const MainHeader = () => {
 
   const handleKeyUp = (event: any) => {
     if (event.key === 'Enter') {
-      console.log('Enter key released');
       router.push({
         pathname: ROUTE_PATH.COURSE_SEARCH,
         query: { keySearch: valueSearch },
       });
     }
   };
-  console.log(isConnected, 'isConnected');
 
   return (
     <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">

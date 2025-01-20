@@ -11,6 +11,7 @@ import {
   useGetListSession,
 } from '@/components/CreateCourse/service';
 import { useRouter } from 'next/router';
+import LoadingScreen from '@/components/UI/LoadingScreen';
 
 const CurriculumItem = dynamic(() => import('./CurriculumItem'), {
   ssr: false,
@@ -27,7 +28,11 @@ const Curriculum = () => {
 
   const router = useRouter();
 
-  const { run: runGetListSession, data: dataListSession } = useGetListSession({
+  const {
+    run: runGetListSession,
+    data: dataListSession,
+    loading: loadingListSession,
+  } = useGetListSession({
     onSuccess: (res) => {
       const newData = res?.data?.map((item: any) => {
         return {
@@ -51,7 +56,11 @@ const Curriculum = () => {
 
   const { run: runCreateSesson, loading } = useCreateSesson({
     onSuccess(res) {
-      const newData = [...dataListSession?.data, res?.data];
+      const newDataSesson = {
+        ...res?.data,
+        idSection: res?.data?.id,
+      };
+      const newData = [...dataListSession?.data, newDataSesson];
       setValueTitle('');
       setValueLearningObjective('');
       reset({
@@ -78,134 +87,140 @@ const Curriculum = () => {
     runDeleteSesson(id);
   };
   return (
-    <div className="flex flex-col gap-8">
-      <div className="flex justify-between items-center">
-        <Text type="font-28-700" className="text-white">
-          Curriculum item
-        </Text>
-        <Button className="rounded border-1 bg-transparent border-main min-h-[44px] w-max min-w-[154px]">
-          <Text type="font-16-700" className="text-white">
-            Bulk Uploader
+    <LoadingScreen isLoading={loadingListSession}>
+      <div className="flex flex-col gap-8">
+        <div className="flex justify-between items-center">
+          <Text type="font-28-700" className="text-white">
+            Curriculum item
           </Text>
-        </Button>
-      </div>
-      <Text type="font-16-400" className="text-black-6">
-        Start putting together your course by creating sections, lectures and
-        practice (quizzes, coding exercises and assignments).
-      </Text>
-      <Text type="font-16-400" className="text-black-6">
-        Start putting together your course by creating sections, lectures and
-        practice activities (quizzes, coding exercises and assignments). Use
-        your course outline to structure your content and label your sections
-        and lectures clearly. If you’re intending to offer your course for free,
-        the total length of video content must be less than 2 hours.
-      </Text>
-      {fields?.map((field: any, index: number) => {
-        console.log(field, 'field');
+          <Button className="rounded border-1 bg-transparent border-main min-h-[44px] w-max min-w-[154px]">
+            <Text type="font-16-700" className="text-white">
+              Bulk Uploader
+            </Text>
+          </Button>
+        </div>
+        <Text type="font-16-400" className="text-black-6">
+          Start putting together your course by creating sections, lectures and
+          practice (quizzes, coding exercises and assignments).
+        </Text>
+        <Text type="font-16-400" className="text-black-6">
+          Start putting together your course by creating sections, lectures and
+          practice activities (quizzes, coding exercises and assignments). Use
+          your course outline to structure your content and label your sections
+          and lectures clearly. If you’re intending to offer your course for
+          free, the total length of video content must be less than 2 hours.
+        </Text>
+        {fields?.map((field: any, index: number) => {
+          console.log(field, 'field');
 
-        return (
-          <div className="flex flex-col gap-1">
-            {index !== 0 && (
-              <Button
-                onClick={() => handleRemoveSection(index, field.idSection)}
-                isIconOnly
-                variant="light"
-                radius="full"
-                size="sm"
-              >
-                <IconClose />
-              </Button>
-            )}
+          return (
+            <div className="flex flex-col gap-1">
+              {index !== 0 && (
+                <Button
+                  onClick={() => handleRemoveSection(index, field.idSection)}
+                  isIconOnly
+                  variant="light"
+                  radius="full"
+                  size="sm"
+                >
+                  <IconClose />
+                </Button>
+              )}
 
-            {field?.title ? (
-              <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-6">
-                <div className="flex items-center gap-2">
-                  <Text type="font-16-700">{`Part ${index + 1}:`}</Text>
-                  <div className="flex items-center gap-1">
-                    <IconFile />
-                    <Text type="font-16-400" className="text-black-7">
-                      {field.title}
-                    </Text>
-                  </div>
-                </div>
-
-                <CurriculumItem item={field} index={index} control={control} />
-              </div>
-            ) : (
-              <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-4">
-                <div className="flex items-start gap-2">
-                  <div className="min-w-[100px] pt-3">
-                    <Text type="font-16-700" className="text-white">
-                      New Section:
-                    </Text>
-                  </div>
-                  <div className="flex flex-col gap-4 w-full">
-                    <InputText
-                      maxLength={160}
-                      endContent
-                      onChange={(e: any) => setValueTitle(e.target.value)}
-                      value={valueTitle}
-                      className="w-full"
-                      placeholder="Type"
-                      inputDefault
-                    />
-                    <div className="flex flex-col gap-2">
-                      <Text type="font-16-700" className="text-white">
-                        What will students be able to do at the end of this
-                        section?
+              {field?.title ? (
+                <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-6">
+                  <div className="flex items-center gap-2">
+                    <Text type="font-16-700">{`Part ${index + 1}:`}</Text>
+                    <div className="flex items-center gap-1">
+                      <IconFile />
+                      <Text type="font-16-400" className="text-black-7">
+                        {field.title}
                       </Text>
+                    </div>
+                  </div>
+
+                  <CurriculumItem
+                    item={field}
+                    index={index}
+                    control={control}
+                  />
+                </div>
+              ) : (
+                <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-4">
+                  <div className="flex items-start gap-2">
+                    <div className="min-w-[100px] pt-3">
+                      <Text type="font-16-700" className="text-white">
+                        New Section:
+                      </Text>
+                    </div>
+                    <div className="flex flex-col gap-4 w-full">
                       <InputText
                         maxLength={160}
                         endContent
-                        onChange={(e: any) =>
-                          setValueLearningObjective(e.target.value)
-                        }
-                        value={valueLearningObjective}
+                        onChange={(e: any) => setValueTitle(e.target.value)}
+                        value={valueTitle}
                         className="w-full"
                         placeholder="Type"
                         inputDefault
                       />
+                      <div className="flex flex-col gap-2">
+                        <Text type="font-16-700" className="text-white">
+                          What will students be able to do at the end of this
+                          section?
+                        </Text>
+                        <InputText
+                          maxLength={160}
+                          endContent
+                          onChange={(e: any) =>
+                            setValueLearningObjective(e.target.value)
+                          }
+                          value={valueLearningObjective}
+                          className="w-full"
+                          placeholder="Type"
+                          inputDefault
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex justify-end items-center">
+                    <div className="flex items-center gap-3">
+                      <Button
+                        onClick={() => remove(index)}
+                        className="bg-transparent border-1 rounded border-white"
+                      >
+                        <Text type="font-16-400" className="text-white">
+                          Cancel
+                        </Text>
+                      </Button>
+                      <Button
+                        onClick={() => handleSaveSection(index)}
+                        className="bg-main rounded"
+                        isLoading={loading}
+                      >
+                        <Text type="font-16-400" className="text-white">
+                          Save
+                        </Text>
+                      </Button>
                     </div>
                   </div>
                 </div>
-                <div className="flex justify-end items-center">
-                  <div className="flex items-center gap-3">
-                    <Button
-                      onClick={() => remove(index)}
-                      className="bg-transparent border-1 rounded border-white"
-                    >
-                      <Text type="font-16-400" className="text-white">
-                        Cancel
-                      </Text>
-                    </Button>
-                    <Button
-                      onClick={() => handleSaveSection(index)}
-                      className="bg-main rounded"
-                      isLoading={loading}
-                    >
-                      <Text type="font-16-400" className="text-white">
-                        Save
-                      </Text>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+          );
+        })}
+        <Button
+          onClick={() => append({ title: '', introduction: '' })}
+          className="bg-transparent rounded w-max min-h-9 py-2 px-3 border-1 border-main"
+        >
+          <div className="flex items-center gap-1">
+            <IconPlusMain />
+            <Text type="font-16-400" className="text-main">
+              Section
+            </Text>
           </div>
-        );
-      })}
-      <Button
-        onClick={() => append({ title: '', introduction: '' })}
-        className="bg-transparent rounded w-max min-h-9 py-2 px-3 border-1 border-main"
-      >
-        <div className="flex items-center gap-1">
-          <IconPlusMain />
-          <Text type="font-16-400" className="text-main">
-            Section
-          </Text>
-        </div>
-      </Button>
-    </div>
+        </Button>
+      </div>
+    </LoadingScreen>
   );
 };
 export default Curriculum;

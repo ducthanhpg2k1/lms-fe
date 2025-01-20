@@ -7,6 +7,7 @@ import { ROUTE_PATH } from '@/utils/common';
 import Image from 'next/image';
 import { useGetListCourse } from './service';
 import { useState } from 'react';
+import NoData from './NoData';
 
 const SORT_BY = [
   { key: 'newest', label: 'Newest' },
@@ -18,8 +19,6 @@ const SORT_BY = [
 const ListCourse = () => {
   const router = useRouter();
   const { dataCourses } = useGetListCourse();
-
-  console.log(dataCourses, 'dataCourses');
 
   const [idHovered, setIdHovered] = useState<string>('');
 
@@ -60,64 +59,66 @@ const ListCourse = () => {
           </Button>
         </div>
       </div>
-      {dataCourses?.data?.map((item: any) => {
-        return (
-          <div
-            key={item?.id}
-            onMouseEnter={() => handleMouseEnter(item?.id)}
-            onMouseLeave={handleMouseLeave}
-            onClick={() =>
-              router.push(`${ROUTE_PATH.CREATE_COURSE}/${item?.id}`)
-            }
-            className="rounded hover:bg-black/80 hover:backdrop-blur-lg cursor-pointer flex gap-2 w-full min-h-[202px] border-1 border-[#F0F0F01A] bg-[#181F25]"
-          >
-            <Image
-              alt=""
-              src={'/img-course.png'}
-              width={200}
-              height={202}
-              className="w-[200px] h-full"
-            />
-            <div className="p-4 flex flex-col relative justify-between w-full">
-              {idHovered === item?.id && (
-                <div className="flex gap-2 absolute justify-center items-center left-1/2 top-[45%] z-[1000]">
-                  <IconEdit />
-                  <Text className="text-[20px] font-bold text-white">
-                    Edit Courses
+      {dataCourses?.data?.length > 0 &&
+        dataCourses?.data?.map((item: any) => {
+          return (
+            <div
+              key={item?.id}
+              onMouseEnter={() => handleMouseEnter(item?.id)}
+              onMouseLeave={handleMouseLeave}
+              onClick={() =>
+                router.push(`${ROUTE_PATH.CREATE_COURSE}/${item?.id}`)
+              }
+              className="rounded hover:bg-black/80 hover:backdrop-blur-lg cursor-pointer flex gap-2 w-full min-h-[202px] border-1 border-[#F0F0F01A] bg-[#181F25]"
+            >
+              <Image
+                alt=""
+                src={'/img-course.png'}
+                width={200}
+                height={202}
+                className="w-[200px] h-full"
+              />
+              <div className="p-4 flex flex-col relative justify-between w-full">
+                {idHovered === item?.id && (
+                  <div className="flex gap-2 absolute justify-center items-center left-1/2 top-[45%] z-[1000]">
+                    <IconEdit />
+                    <Text className="text-[20px] font-bold text-white">
+                      Edit Courses
+                    </Text>
+                  </div>
+                )}
+                <Text className="text-[20px] font-bold">{item?.title}</Text>
+                <div className="flex justify-end items-end">
+                  <div className="flex items-center w-8/12 gap-4">
+                    <Text className="text-[20px] font-bold w-[270px]">
+                      Finish your courses
+                    </Text>
+                    <Progress
+                      maxValue={6}
+                      classNames={{
+                        indicator: 'bg-main',
+                        track: 'max-h-[8px]',
+                      }}
+                      className="w-full"
+                      value={2}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-[30px]">
+                  <Text type="font-16-700" className="text-white">
+                    Draft
+                  </Text>
+
+                  <Text type="font-16-400" className="text-white">
+                    Public
                   </Text>
                 </div>
-              )}
-              <Text className="text-[20px] font-bold">{item?.title}</Text>
-              <div className="flex justify-end items-end">
-                <div className="flex items-center w-8/12 gap-4">
-                  <Text className="text-[20px] font-bold w-[270px]">
-                    Finish your courses
-                  </Text>
-                  <Progress
-                    maxValue={6}
-                    classNames={{
-                      indicator: 'bg-main',
-                      track: 'max-h-[8px]',
-                    }}
-                    className="w-full"
-                    value={2}
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center gap-[30px]">
-                <Text type="font-16-700" className="text-white">
-                  Draft
-                </Text>
-
-                <Text type="font-16-400" className="text-white">
-                  Public
-                </Text>
               </div>
             </div>
-          </div>
-        );
-      })}
+          );
+        })}
+      {dataCourses?.data?.length === 0 && <NoData />}
     </div>
   );
 };

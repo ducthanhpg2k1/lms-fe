@@ -8,7 +8,7 @@ const FormAddQuizz = ({
   loading,
   valueQuestion,
 }: {
-  handleSaveAddQuestion: (values: any, isEdit: boolean) => void;
+  handleSaveAddQuestion: (values: any, idEdit: string) => void;
   loading: boolean;
   valueQuestion: any;
 }) => {
@@ -22,6 +22,8 @@ const FormAddQuizz = ({
       setIsAddFormQuestion(true);
     }
   }, [valueQuestion?.question]);
+  console.log(valueQuestion, 'valueQuestion');
+
   return (
     <>
       {isAddFormQuestion ? (
@@ -29,10 +31,7 @@ const FormAddQuizz = ({
           loading={loading}
           valueQuestion={valueQuestion}
           handleSaveAddQuestion={(values) =>
-            handleSaveAddQuestion(
-              values,
-              valueQuestion?.question ? true : false
-            )
+            handleSaveAddQuestion(values, valueQuestion?.id)
           }
         />
       ) : (

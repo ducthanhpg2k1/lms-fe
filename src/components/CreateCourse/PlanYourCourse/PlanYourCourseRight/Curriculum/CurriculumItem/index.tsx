@@ -25,15 +25,7 @@ import { Question } from '@phosphor-icons/react';
 import Content from './Content';
 import ContentQuestions from './ContentQuestions';
 
-const CurriculumItem = ({
-  index,
-  control,
-  item,
-}: {
-  index: number;
-  control: Control;
-  item: any;
-}) => {
+const CurriculumItem = ({ item }: { item: any }) => {
   const [dataCurriculum, setDataCurriculum] = useState<any>([]);
   const [isAddCurriculum, setIsAddCurriculum] = useState<boolean>(false);
   const [formAdd, setFormAdd] = useState<string>('');
@@ -80,13 +72,15 @@ const CurriculumItem = ({
 
   const { run: runCreateLecture, loading: loadingLecture } = useCreateLecture({
     onSuccess(res) {
-      const dataQuizz = dataCurriculum?.filter(
-        (item: any) => item?.type === TYPE_COURSE.QUIZ
-      );
+      const dataQuizz =
+        dataCurriculum?.filter(
+          (item: any) => item?.type === TYPE_COURSE.QUIZ
+        ) || [];
       const dataLesson = dataCurriculum?.filter(
         (item: any) => item?.type === TYPE_COURSE.LECTURE
       );
-      const newDataLesson = [...dataLesson, res?.data];
+      const newDataLesson =
+        dataLesson?.length > 0 ? [...dataLesson, res?.data] : [res.data];
       const formatSttData = newDataLesson?.map((item, indexLesson: number) => {
         return {
           ...item,
@@ -124,10 +118,17 @@ const CurriculumItem = ({
         );
 
         if (index !== -1) {
-          dataCurriculum[index] = {
-            ...dataCurriculum[index],
-            questions: [...dataCurriculum[index].questions, res?.data],
-          };
+          if (dataCurriculum[index].questions?.length > 0) {
+            dataCurriculum[index] = {
+              ...dataCurriculum[index],
+              questions: [...dataCurriculum[index].questions, res?.data],
+            };
+          } else {
+            dataCurriculum[index] = {
+              ...dataCurriculum[index],
+              questions: [res?.data],
+            };
+          }
         }
       },
     });
@@ -201,7 +202,7 @@ const CurriculumItem = ({
     id: string,
     index: number,
     quizzes: any,
-    isEdit?: boolean
+    idEdit?: string
   ) => {
     const newData = indexAddQuestion?.filter((item: any) => item !== index);
     setIndexAddQuestion(newData);
@@ -212,8 +213,8 @@ const CurriculumItem = ({
       answers: values?.answers,
       ordinalNumber: quizzes?.length > 0 ? quizzes?.length : 1,
     };
-    if (isEdit) {
-      runEditQuestionQuizz(body, id);
+    if (idEdit) {
+      runEditQuestionQuizz(body, idEdit);
     } else {
       runCreateQuestionQuizz(body, id);
     }
@@ -420,13 +421,13 @@ const CurriculumItem = ({
                   loading={
                     loadingCreateQuestionQuizz || loadingEditQuestionQuizz
                   }
-                  handleSaveAddQuestion={(values, isEdit) =>
+                  handleSaveAddQuestion={(values, idEdit) =>
                     handleSaveAddQuestion(
                       values,
                       item?.id,
                       indexCurriculum,
                       item?.quizzes,
-                      isEdit
+                      idEdit
                     )
                   }
                 />

@@ -53,7 +53,7 @@ const FormQuiz = ({
             isLoading={loading}
             className="rounded bg-main"
           >
-            <Text type="font-16-400">Add lecture</Text>
+            <Text type="font-16-400">Add quizz</Text>
           </Button>
         </div>
       </div>

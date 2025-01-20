@@ -13,6 +13,8 @@ export const API_PATH = {
 
   LIST_COURSE: '/api/courses',
 
+  MY_COURSE: '/api/courses/my-courses',
+
   SECTIONS: '/api/sections',
 
   LECTURE: '/api/lessons',
