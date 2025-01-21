@@ -74,7 +74,7 @@ const ListCourse = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 pt-[45px] px-10">
+    <div className="flex flex-col gap-8 pt-[36px] px-10">
       <Text
         type="font-32-700"
         className="text-white"
