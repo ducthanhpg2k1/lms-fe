@@ -30,6 +30,13 @@ const DetailCourse = () => {
 
   console.log(dataDetail, 'dataDetail');
 
+  const lessonCount = dataDetail?.sections?.reduce(
+    (total: number, section: any) => {
+      return total + (section.lessons?.length || 0);
+    },
+    0
+  );
+
   return (
     <div className="flex flex-col gap-[52px] relative">
       <BreadCrumbs />
@@ -53,7 +60,7 @@ const DetailCourse = () => {
               <div className="flex items-center gap-1">
                 <IconBookMark />
                 <Text type="font-14-400" className="text-white">
-                  11 Lessons
+                  {lessonCount} Lessons
                 </Text>
               </div>
               <div className="w-[1px] h-5 bg-[#BFBFBF]" />
