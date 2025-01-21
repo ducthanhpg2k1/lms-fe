@@ -1,5 +1,5 @@
 import Text from '@/components/UI/Text';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button, Progress } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

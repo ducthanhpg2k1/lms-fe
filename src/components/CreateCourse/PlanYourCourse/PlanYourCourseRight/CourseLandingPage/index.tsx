@@ -6,7 +6,7 @@ import Text from '@/components/UI/Text';
 import { Control, Controller } from 'react-hook-form';
 import UploadImage from './UploadImage';
 import PromotionalVideo from './PromotionalVideo';
-import { DATA_LANGUAGE, DATA_LEVEL } from '@/utils/common';
+import { DATA_LANGUAGE, DATA_LEVEL } from '@/utils/const';
 
 const CourseLandingPage = ({ control }: { control: Control }) => {
   return (

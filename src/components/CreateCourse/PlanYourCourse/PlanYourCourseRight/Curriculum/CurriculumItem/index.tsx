@@ -4,7 +4,7 @@ import { Button } from '@nextui-org/react';
 import { IconClose, IconFile } from '..';
 import { Control, useFieldArray } from 'react-hook-form';
 import { useEffect, useState } from 'react';
-import { LessonContentType, TYPE_COURSE } from '@/utils/common';
+import { LessonContentType, TYPE_COURSE } from '@/utils/const';
 import FormLecture from './FormLecture';
 import FormQuiz from './FormQuiz';
 import IconPlusMain from '@/components/UI/Icons/IconPlusMain';

@@ -2,7 +2,7 @@ import IconDate from '@/components/UI/Icons/IconDate';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';

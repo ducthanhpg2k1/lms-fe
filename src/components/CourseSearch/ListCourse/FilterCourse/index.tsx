@@ -3,6 +3,16 @@ import InputText from '@/components/UI/InputText';
 import TagCount from '@/components/UI/TagCount';
 import Text from '@/components/UI/Text';
 import {
+  useGetCategories,
+  useGetFeatures,
+  useGetLanguages,
+  useGetLevels,
+  useGetPrices,
+  useGetRatings,
+  useGetTopics,
+} from '@/services/filter.service';
+import { mapRatingData } from '@/utils/common';
+import {
   Button,
   Checkbox,
   CheckboxGroup,
@@ -11,32 +21,38 @@ import {
 } from '@nextui-org/react';
 import clsx from 'clsx';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 import Rater from 'react-rater';
 import 'react-rater/lib/react-rater.css';
 
 const DATA_RATE = [
   {
     id: '1',
-    from_rate: 'From 4.5',
+    label: 'From 4.5',
     total: '(1657)',
     value: 4.5,
   },
   {
     id: '2',
-    from_rate: 'From 4.0',
+    label: 'From 4.0',
     total: '(960)',
     value: 4,
   },
   {
     id: '3',
-    from_rate: 'From 3.5',
+    label: 'From 3.5',
     total: '(350)',
     value: 3.5,
   },
   {
     id: '4',
-    from_rate: 'From 3.0',
+    label: 'From 3.0',
     total: '(142)',
     value: 3,
   },
@@ -83,15 +99,38 @@ const DATA_LANGUAGE = [
 ];
 const initialItemsLanguage = 5;
 
-const FilterCourse = () => {
+const FilterCourse = (props: any) => {
+  const { params, setParams } = props;
   const [expanded, setExpanded] = useState(false);
   const contentRef: any = useRef(null);
   const [contentHeight, setContentHeight] = useState(0);
+  const { data: ratingsData } = useGetRatings();
+  const { data: languagesData } = useGetLanguages();
+  const { data: featuresData } = useGetFeatures();
+  const { data: topicsData } = useGetTopics();
+  const { data: levelsData } = useGetLevels();
+  const { data: prices } = useGetPrices();
+  const [ratings, setRatings] = useState([]);
+
+  useEffect(() => {
+    if (ratingsData?.data) {
+      const items = ratingsData.data.map((r: any) => {
+        return {
+          id: r.value,
+          total: r.count,
+          ...mapRatingData(r),
+        };
+      });
+      setRatings(items);
+    }
+  }, [ratingsData]);
+
   useEffect(() => {
     if (contentRef.current) {
       setContentHeight(contentRef.current.scrollHeight);
     }
   }, [expanded, DATA_LANGUAGE]);
+
   return (
     <div className="flex flex-col gap-5 mx-[-8px]">
       <AccordionCustom
@@ -105,8 +144,9 @@ const FilterCourse = () => {
           classNames={{
             wrapper: 'gap-4',
           }}
+          value={params.ratings}
         >
-          {DATA_RATE?.map((item) => {
+          {ratings.map((item: any) => {
             return (
               <Radio
                 classNames={{
@@ -116,11 +156,18 @@ const FilterCourse = () => {
                     '!border-1 !border-black-7 group-data-[selected=true]:!bg-main group-data-[selected=true]:!border-main',
                 }}
                 value={item?.id}
+                onChange={(e: any) => {
+                  console.log('target', e.target);
+                  setParams({
+                    ...params,
+                    ratings: e.target.value,
+                  });
+                }}
               >
                 <div className="flex items-center gap-2">
                   <Rater total={5} rating={item?.value} />
                   <Text className="text-white" type="font-14-400">
-                    {item?.from_rate}
+                    {item?.label}
                   </Text>
                   <Text className="text-black-7" type="font-14-400">
                     {item?.total}
@@ -137,22 +184,45 @@ const FilterCourse = () => {
             <Text type="font-18-600" className="text-white">
               Language
             </Text>
-            <TagCount count={2} />
+            {/* <TagCount count={2} /> */}
           </div>
         }
       >
         <div className="flex flex-col gap-4">
           <InputText isFilter placeholder="Search..." />
           <div className="flex flex-col gap-2">
-            <CheckboxGroup size="lg" radius="sm">
-              {DATA_LANGUAGE?.slice(0, initialItemsLanguage)?.map((item) => {
+            <CheckboxGroup size="lg" radius="sm" value={params.langs}>
+              {languagesData?.data?.map((item: any) => {
                 return (
                   <Checkbox
                     classNames={{
                       wrapper: 'me-3 after:!bg-main before:!border-black-7',
                       base: '',
                     }}
-                    value={item?.id}
+                    value={item?.value}
+                    onChange={(e: any) => {
+                      console.log('TTTTTT', e.target.value);
+
+                      {
+                        const idx = params.langs.findIndex(
+                          (p: any) => p === e.target.value
+                        );
+                        if (idx >= 0) {
+                          const newItems = params.langs.filter(
+                            (p: any) => p !== e.target.value
+                          );
+                          setParams({
+                            ...params,
+                            langs: [...newItems],
+                          });
+                        } else {
+                          setParams({
+                            ...params,
+                            langs: [...params.langs, e.target.value],
+                          });
+                        }
+                      }
+                    }}
                   >
                     <Text type="font-15-500" className="text-white">
                       {item?.label}
@@ -199,7 +269,7 @@ const FilterCourse = () => {
             </div>
           </div>
 
-          <Button
+          {/* <Button
             variant="light"
             size="sm"
             onClick={() => setExpanded(!expanded)}
@@ -222,30 +292,99 @@ const FilterCourse = () => {
                 alt=""
               />
             </div>
-          </Button>
+          </Button> */}
         </div>
       </AccordionCustom>
       <AccordionCustom
         title={
           <div className="flex items-center gap-2">
             <Text type="font-18-600" className="text-white">
-              Practical
+              Hands-on Practice
             </Text>
-            <TagCount count={1} />
+            {/* <TagCount count={1} /> */}
           </div>
         }
       >
         <div className="flex flex-col gap-4">
           <InputText isFilter placeholder="Search..." />
-          <CheckboxGroup size="lg" radius="sm">
-            {DATA_PRACTICAL?.map((item) => {
+          <CheckboxGroup size="lg" radius="sm" value={params.features}>
+            {featuresData?.data?.map((item: any) => {
               return (
                 <Checkbox
                   classNames={{
                     wrapper: 'me-3 after:!bg-main before:!border-black-7',
                     base: '',
                   }}
-                  value={item?.id}
+                  value={item?.value}
+                  onChange={(e: any) => {
+                    console.log('TTTTTT', e.target.value);
+                    {
+                      const idx = params.features.findIndex(
+                        (p: any) => p === e.target.value
+                      );
+                      if (idx >= 0) {
+                        const newItems = params.features.filter(
+                          (p: any) => p !== e.target.value
+                        );
+                        setParams({
+                          ...params,
+                          features: [...newItems],
+                        });
+                      } else {
+                        setParams({
+                          ...params,
+                          features: [...params.features, e.target.value],
+                        });
+                      }
+                    }
+                  }}
+                >
+                  <Text type="font-15-500" className="text-white capitalize">
+                    {item?.label}
+                  </Text>
+                </Checkbox>
+              );
+            })}
+          </CheckboxGroup>
+        </div>
+      </AccordionCustom>
+      <AccordionCustom
+        title={
+          <Text type="font-18-600" className="text-white">
+            Topic
+          </Text>
+        }
+      >
+        <div className="flex flex-col gap-4">
+          <InputText isFilter placeholder="Search..." />
+          <CheckboxGroup size="lg" radius="sm" value={params.topics}>
+            {topicsData?.data?.map((item: any) => {
+              return (
+                <Checkbox
+                  classNames={{
+                    wrapper: 'me-3 after:!bg-main before:!border-black-7',
+                    base: '',
+                  }}
+                  value={item?.value}
+                  onChange={(e: any) => {
+                    const idx = params.topics.findIndex(
+                      (p: any) => p === e.target.value
+                    );
+                    if (idx >= 0) {
+                      const newItems = params.topics.filter(
+                        (p: any) => p !== e.target.value
+                      );
+                      setParams({
+                        ...params,
+                        topics: [...newItems],
+                      });
+                    } else {
+                      setParams({
+                        ...params,
+                        topics: [...params.topics, e.target.value],
+                      });
+                    }
+                  }}
                 >
                   <Text type="font-15-500" className="text-white">
                     {item?.label}
@@ -259,21 +398,87 @@ const FilterCourse = () => {
       <AccordionCustom
         title={
           <Text type="font-18-600" className="text-white">
-            Video duration
+            Level
           </Text>
         }
       >
         <div className="flex flex-col gap-4">
           <InputText isFilter placeholder="Search..." />
-          <CheckboxGroup size="lg" radius="sm">
-            {DATA_PRACTICAL?.map((item) => {
+          <CheckboxGroup size="lg" radius="sm" value={params.levels}>
+            {levelsData?.data?.map((item: any) => {
               return (
                 <Checkbox
                   classNames={{
                     wrapper: 'me-3 after:!bg-main before:!border-black-7',
                     base: '',
                   }}
-                  value={item?.id}
+                  value={item?.value}
+                  onChange={(e: any) => {
+                    const idx = params.levels.findIndex(
+                      (p: any) => p === e.target.value
+                    );
+                    if (idx >= 0) {
+                      const newItems = params.levels.filter(
+                        (p: any) => p !== e.target.value
+                      );
+                      setParams({
+                        ...params,
+                        levels: [...newItems],
+                      });
+                    } else {
+                      setParams({
+                        ...params,
+                        levels: [...params.levels, e.target.value],
+                      });
+                    }
+                  }}
+                >
+                  <Text type="font-15-500" className="text-white">
+                    {item?.label}
+                  </Text>
+                </Checkbox>
+              );
+            })}
+          </CheckboxGroup>
+        </div>
+      </AccordionCustom>
+      <AccordionCustom
+        title={
+          <Text type="font-18-600" className="text-white">
+            Price
+          </Text>
+        }
+      >
+        <div className="flex flex-col gap-4">
+          <InputText isFilter placeholder="Search..." />
+          <CheckboxGroup size="lg" radius="sm" value={params.prices}>
+            {prices?.data?.map((item: any) => {
+              return (
+                <Checkbox
+                  classNames={{
+                    wrapper: 'me-3 after:!bg-main before:!border-black-7',
+                    base: '',
+                  }}
+                  value={item?.value}
+                  onChange={(e: any) => {
+                    const idx = params.prices.findIndex(
+                      (p: any) => p === e.target.value
+                    );
+                    if (idx >= 0) {
+                      const newPrices = params.prices.filter(
+                        (p: any) => p !== e.target.value
+                      );
+                      setParams({
+                        ...params,
+                        prices: [...newPrices],
+                      });
+                    } else {
+                      setParams({
+                        ...params,
+                        prices: [...params.prices, e.target.value],
+                      });
+                    }
+                  }}
                 >
                   <Text type="font-15-500" className="text-white">
                     {item?.label}

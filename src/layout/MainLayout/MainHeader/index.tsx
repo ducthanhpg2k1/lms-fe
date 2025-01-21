@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Menubar from '../Menubar';
 import ContentProfile from './ContentProfile';
 import { useRouter } from 'next/router';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { useEffect, useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount } from 'wagmi';

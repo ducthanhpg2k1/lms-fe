@@ -3,7 +3,7 @@ import PlanYourCourseLeft from './PlanYourCourseLeft';
 import PlanYourCourseRight from './PlanYourCourseRight';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TYPE_COURSE } from '@/utils/common';
+import { TYPE_COURSE } from '@/utils/const';
 import { useRouter } from 'next/router';
 import { useEditCourse, useGetDetailCourse } from '../service';
 import { toast } from '@/components/UI/Toast/toast';

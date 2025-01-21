@@ -3,17 +3,20 @@ import IconDate from '@/components/UI/Icons/IconDate';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-const CardCourse = ({ index }: { index: number }) => {
+const CardCourse = ({ item }: { item: any }) => {
   const router = useRouter();
 
   const handleClickCardCourse = () => {
-    router.push(ROUTE_PATH.DETAIL_COURSE(index + 1));
+    router.push(ROUTE_PATH.DETAIL_COURSE(item.id));
   };
+  const lessonCount = item?.sections?.reduce((total: number, section: any) => {
+    return total + (section.lessons?.length || 0);
+  }, 0);
   return (
     <div
       onClick={handleClickCardCourse}
@@ -44,7 +47,7 @@ const CardCourse = ({ index }: { index: number }) => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <IconDate />
-            <Text type="font-12-500">11 Lessons</Text>
+            <Text type="font-12-500">{lessonCount} Lessons</Text>
           </div>
 
           <div className="w-[1px] h-3 bg-white" />
@@ -55,7 +58,7 @@ const CardCourse = ({ index }: { index: number }) => {
           </div>
         </div>
         <Text type="font-16-500" className="line-clamp-2 capitalize">
-          Become a Certified Web Developer HTML, CSS and JavaScript
+          {item?.title}
         </Text>
         <div className="flex flex-col gap-[14px] border-b border-b-white/5 pb-4">
           <div className="flex items-center gap-2">
@@ -63,25 +66,33 @@ const CardCourse = ({ index }: { index: number }) => {
             <RateStar rate={4} />
             <Text type="font-14-500">(230)</Text>
           </div>
-          <div className="flex items-center gap-0.5">
-            <Text type="font-14-400" className="text-main">
-              By: 
-            </Text>
-            <Text type="font-14-400" className="text-main underline">
-              Kathryn Murphy
-            </Text>
-          </div>
+          {item?.author?.walletAddress && (
+            <div className="flex gap-0.5 break-words">
+              <Text type="font-14-400" className="text-main break-words">
+                By: 
+              </Text>
+              <Text
+                type="font-14-400"
+                className="text-main underline break-all"
+              >
+                {item?.author?.walletAddress}
+              </Text>
+            </div>
+          )}
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
               <Text type="font-16-600" className="text-orange">
-                $89.45
+                {/* $89.45 */}
+                {item?.price ? `$${item?.price}` : 'Free'}
               </Text>
             </div>
-            <Text type="font-14-400" className="text-black-6 line-through">
-              $ 149.00
-            </Text>
+            {item?.price && (
+              <Text type="font-14-400" className="text-black-6 line-through">
+                $ {item.price * 1.5}
+              </Text>
+            )}
           </div>
           <Button
             variant="light"

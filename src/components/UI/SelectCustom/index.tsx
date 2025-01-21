@@ -56,7 +56,7 @@ const SelectCustom = (props: SelectCustomProps) => {
       }}
       placeholder={placeholder}
       classNames={{
-        value: '!text-[14px] text-black-6 font-medium',
+        value: '!text-[14px] text-black-6 font-medium capitalize',
         trigger: clsx(
           'bg-white/10 rounded min-h-[36px] border-1 border-[#F0F0F01A] group-data-[focus=true]:!border-main',
           {
@@ -73,7 +73,9 @@ const SelectCustom = (props: SelectCustomProps) => {
       selectorIcon={renderSelectorIcon(openSelect)}
     >
       {options.map((item) => (
-        <SelectItem key={item.key}>{item.label}</SelectItem>
+        <SelectItem key={item.key} className="capitalize">
+          {item.label}
+        </SelectItem>
       ))}
     </Select>
   );

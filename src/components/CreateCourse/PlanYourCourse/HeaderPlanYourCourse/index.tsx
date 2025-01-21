@@ -1,6 +1,6 @@
 import SelectCustom from '@/components/UI/SelectCustom';
 import Text from '@/components/UI/Text';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import { useRouter } from 'next/router';
 

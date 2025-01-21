@@ -1,5 +1,5 @@
 import Text from '@/components/UI/Text';
-import { LessonContentType, TYPE_COURSE } from '@/utils/common';
+import { LessonContentType, TYPE_COURSE } from '@/utils/const';
 import { File, PlayCircle } from '@phosphor-icons/react';
 import { useEffect, useState } from 'react';
 import FormAddArticle from '../FormAddArticle';

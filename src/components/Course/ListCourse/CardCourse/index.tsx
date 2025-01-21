@@ -2,13 +2,16 @@ import IconDate from '@/components/UI/Icons/IconDate';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 const CardCourse = ({ item }: { item?: any }) => {
   const router = useRouter();
+  const lessonCount = item?.sections?.reduce((total: number, section: any) => {
+    return total + (section.lessons?.length || 0);
+  }, 0);
   return (
     <div
       onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(item?.id))}
@@ -25,7 +28,7 @@ const CardCourse = ({ item }: { item?: any }) => {
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <IconDate />
-            <Text type="font-12-500">11 Lessons</Text>
+            <Text type="font-12-500">{lessonCount} Lessons</Text>
           </div>
 
           <div className="w-[1px] h-3 bg-white" />
@@ -44,18 +47,24 @@ const CardCourse = ({ item }: { item?: any }) => {
             <RateStar rate={4} />
             <Text type="font-14-500">(230)</Text>
           </div>
-          <Text type="font-14-400">By: Kathryn Murphy</Text>
+          {item?.author?.walletAddress && (
+            <Text type="font-14-400" className="break-words">
+              By:  {item?.author?.walletAddress}
+            </Text>
+          )}
         </div>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
               <Text type="font-16-600" className="text-orange">
-                $89.45
+                {item?.price ? `$${item?.price}` : 'Free'}
               </Text>
             </div>
-            <Text type="font-14-400" className="text-black-6 line-through">
-              $ 149.00
-            </Text>
+            {item?.price && (
+              <Text type="font-14-400" className="text-black-6 line-through">
+                $ {item.price * 1.5}
+              </Text>
+            )}
           </div>
 
           <Button

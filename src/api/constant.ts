@@ -23,6 +23,20 @@ export const API_PATH = {
 
   UPLOAD_FILE: '/api/storage/upload',
 
+  FILTER_PRICE: '/api/filters/price',
+
+  FILTER_TOPIC: '/api/filters/topic',
+
+  FILTER_LEVEL: '/api/filters/level',
+
+  FILTER_LANGUAGE: '/api/filters/language',
+
+  FILTER_VIDEO_DURATION: '/api/filters/video-duration',
+
+  FILTER_RATING: '/api/filters/rating',
+
+  FILTER_FEATURES: '/api/filters/features',
+
   QUESTION_QUIZZ: (id: string) => `/api/quizzes/${id}/question`,
 
   EDIT_QUESTION_QUIZZ: (id: string) => `/api/quizzes/questions/${id}`,

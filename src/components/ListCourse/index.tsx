@@ -3,7 +3,7 @@ import InputText from '../UI/InputText';
 import SelectCustom from '../UI/SelectCustom';
 import Text from '../UI/Text';
 import { useRouter } from 'next/router';
-import { ROUTE_PATH } from '@/utils/common';
+import { ROUTE_PATH } from '@/utils/const';
 import Image from 'next/image';
 import { useGetListCourse } from './service';
 import { useState } from 'react';

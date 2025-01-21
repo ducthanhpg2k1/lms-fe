@@ -1,5 +1,5 @@
 import Text from '@/components/UI/Text';
-import { TYPE_COURSE } from '@/utils/common';
+import { TYPE_COURSE } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 
 const FormSelectItem = ({
