@@ -8,11 +8,17 @@ import FormAddVideo from '../FormAddVideo';
 const FormAddLecture = ({
   handleSaveArticle,
   loading,
+  handleSaveVideo,
+  typeAddContent,
   valueContent,
+  valueInfo,
 }: {
   handleSaveArticle: (value: string) => void;
+  handleSaveVideo: (urlVideo: string) => void;
   loading: boolean;
   valueContent?: string;
+  typeAddContent: string;
+  valueInfo: any;
 }) => {
   const [typeAddAction, setTypeAddAction] = useState<string>('');
 
@@ -25,10 +31,16 @@ const FormAddLecture = ({
   };
 
   useEffect(() => {
-    if (valueContent) {
+    if (typeAddContent === LessonContentType.ARTICLE && valueContent) {
       setTypeAddAction(LessonContentType.ARTICLE);
+    } else {
+      if (valueContent || valueInfo?.duration) {
+        setTypeAddAction(LessonContentType.VIDEO);
+      } else {
+        setTypeAddAction('');
+      }
     }
-  }, [valueContent]);
+  }, [typeAddContent, valueContent, valueInfo?.duration]);
   return (
     <>
       {typeAddAction ? (
@@ -40,7 +52,12 @@ const FormAddLecture = ({
               handleSaveArticle={(value) => handleSaveArticle(value)}
             />
           )}
-          {typeAddAction === LessonContentType.VIDEO && <FormAddVideo />}
+          {typeAddAction === LessonContentType.VIDEO && (
+            <FormAddVideo
+              valueInfo={valueInfo}
+              handleSaveVideo={handleSaveVideo}
+            />
+          )}
         </>
       ) : (
         <div className="flex text-center justify-center py-3 flex-col border-1 border-t-0 border-white/15 items-center gap-3">

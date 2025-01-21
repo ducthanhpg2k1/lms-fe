@@ -111,8 +111,6 @@ const Curriculum = () => {
           free, the total length of video content must be less than 2 hours.
         </Text>
         {fields?.map((field: any, index: number) => {
-          console.log(field, 'field');
-
           return (
             <div className="flex flex-col gap-1">
               {index !== 0 && (
@@ -139,11 +137,7 @@ const Curriculum = () => {
                     </div>
                   </div>
 
-                  <CurriculumItem
-                    item={field}
-                    index={index}
-                    control={control}
-                  />
+                  <CurriculumItem item={field} />
                 </div>
               ) : (
                 <div className="border-1 bg-[#0A0F1580] border-black-10 rounded py-4 px-3 flex flex-col gap-4">

@@ -17,9 +17,12 @@ export default function AccordionCustom({
     <Accordion
       defaultExpandedKeys={isCreateCourse ? [] : ['1']}
       itemClasses={{
-        content: ['px-4 pt-0 pb-4'],
+        content: clsx('px-4 pt-0 pb-4', {
+          '!px-0 !pb-0 !py-0': isSection,
+        }),
         heading: clsx('px-4', {
           '!h-[50px]': isCreateCourse,
+          '!bg-black-10 !border-b-1 border-b-black-9': isSection,
         }),
         base: clsx('bg-white/5 rounded border-1 relative border-[#D9D9D91A]', {
           '!bg-transparent rounded-none': isSection,

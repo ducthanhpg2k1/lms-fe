@@ -5,6 +5,7 @@ export const ROUTE_PATH = {
 
   COURSE: '/course',
   LESSON: '/lesson',
+  DETAIL_LESSON: (id: any) => `/lesson/${id}`,
   LIST_COURSE: '/list-course',
   DETAIL_COURSE: (id: any) => `/course/${id}`,
 };
@@ -15,7 +16,7 @@ export enum TYPE_COURSE {
 }
 
 export enum Language {
-  EN = 'en',
+  EN = 'EN',
 }
 
 export const DATA_LANGUAGE = [
@@ -25,7 +26,7 @@ export const DATA_LANGUAGE = [
   },
 ];
 export enum Level {
-  BEGINNER = 'beginner',
+  BEGINNER = 'BEGINNER',
 }
 
 export const DATA_LEVEL = [
@@ -34,6 +35,15 @@ export const DATA_LEVEL = [
     label: 'Beginner',
   },
 ];
+
+export enum Topic {
+  WEB_DEVELOPMENT = 'WEB_DEVELOPMENT',
+  JAVASCRIPT = 'JAVASCRIPT',
+  HTML = 'HTML',
+  REACTJS = 'REACTJS',
+  WORDPRESS = 'WORDPRESS',
+  PHP = 'PHP',
+}
 
 export enum LessonContentType {
   VIDEO = 'VIDEO',

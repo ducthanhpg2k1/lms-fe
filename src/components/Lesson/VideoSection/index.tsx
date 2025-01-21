@@ -1,50 +1,99 @@
 import { useEffect, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
-import 'videojs-hls-quality-selector';
 
-const VideoSection = () => {
+const VideoSection = ({ info }: { info: any }) => {
   const videoRef: any = useRef(null);
   const playerRef: any = useRef(null);
 
-  const options = {
-    controls: true,
-    autoplay: false,
-    preload: 'auto',
-    playbackRates: [0.5, 1, 1.5, 2],
-    poster: 'https://picsum.photos/600/400',
-    sources: [
-      {
-        src: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
-        type: 'application/x-mpegURL',
-      },
-    ],
-  };
-
   useEffect(() => {
-    if (videoRef.current && !playerRef.current) {
-      const videoElement = videoRef.current;
-      playerRef.current = videojs(videoElement, options, () => {
-        console.log('Player is ready');
-      });
+    if (info?.urlVideo && videoRef.current && !playerRef.current) {
+      // Log URL để debug
+      console.log('Video URL:', info.urlVideo);
 
-      playerRef.current.hlsQualitySelector({
-        displayCurrentQuality: true,
-      });
+      const options = {
+        controls: true,
+        responsive: true,
+        fluid: true,
+        autoplay: false,
+        preload: 'auto',
+        html5: {
+          hls: {
+            enableLowInitialPlaylist: true,
+            smoothQualityChange: true,
+            overrideNative: true,
+          },
+          nativeVideoTracks: false,
+          nativeAudioTracks: false,
+          nativeTextTracks: false,
+        },
+        sources: [
+          {
+            src: info.urlVideo,
+            type: determineVideoType(info.urlVideo),
+          },
+        ],
+      };
+
+      // Khởi tạo player với error handling
+      try {
+        playerRef.current = videojs(
+          videoRef.current,
+          options,
+          function onPlayerReady() {
+            console.log('Player is ready');
+
+            // Kiểm tra source loaded
+            this.on('loadedmetadata', function () {
+              console.log('Video metadata loaded');
+            });
+
+            // Log tất cả các events
+            this.on('all', function (event: string) {
+              console.log('Player event:', event);
+            });
+          }
+        );
+
+        // Error handling
+        playerRef.current.on('error', function (error: any) {});
+      } catch (error) {
+        console.error('Player initialization error:', error);
+      }
     }
 
     return () => {
       if (playerRef.current) {
-        playerRef.current.dispose();
+        try {
+          playerRef.current.dispose();
+        } catch (error) {
+          console.error('Error disposing player:', error);
+        }
         playerRef.current = null;
       }
     };
-  }, [options]);
+  }, [info?.urlVideo]);
+
+  // Hàm xác định loại video
+  const determineVideoType = (url: string): string => {
+    if (url.includes('.m3u8')) return 'application/x-mpegURL';
+    if (url.includes('.mp4')) return 'video/mp4';
+    if (url.includes('.webm')) return 'video/webm';
+    // Mặc định return mp4 nếu không xác định được
+    return 'video/mp4';
+  };
 
   return (
     <div className="video-container">
-      <video ref={videoRef} className="video-js" />
+      <video
+        ref={videoRef}
+        className="video-js vjs-big-play-centered"
+        controls
+        preload="auto"
+        crossOrigin="anonymous" // Thêm CORS attribute
+      />
     </div>
   );
 };
+
 export default VideoSection;

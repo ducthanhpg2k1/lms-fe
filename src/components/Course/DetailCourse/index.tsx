@@ -105,7 +105,7 @@ const DetailCourse = () => {
         </div>
         <div className="col-span-3">
           <div className="sticky top-32 z-[100000]">
-            <CardEnrollNow />
+            <CardEnrollNow idCourse={dataDetail?.data?.id} />
           </div>
         </div>
       </div>
