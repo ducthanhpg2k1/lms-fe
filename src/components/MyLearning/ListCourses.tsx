@@ -108,9 +108,9 @@ export default function ListCourses() {
           <CourseCard
             key={item.id}
             name={item?.course?.title}
-            authorName={item?.course?.authorId}
+            authorName={item?.course?.author?.walletAddress || ''}
             image={item?.course?.image}
-            progress={50}
+            progress={item?.course?.progress || 0}
             rating={4}
           />
         ))}
