@@ -4,8 +4,11 @@ import { IOptions } from '@/api/interface';
 import { privateRequest, request } from '@/api/request';
 import { useRequest } from 'ahooks';
 
-const serviceGetUserNonce = async () => {
-  return privateRequest(request.get, API_PATH.GET_NONCE);
+const serviceGetUserNonce = async (address: string) => {
+  const params = {
+    address,
+  };
+  return privateRequest(request.get, API_PATH.GET_NONCE, { params });
 };
 
 export const useGetUserNonce = (options?: IOptions) => {

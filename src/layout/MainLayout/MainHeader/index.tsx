@@ -12,21 +12,19 @@ import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/const';
 import { useEffect, useState } from 'react';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 import {
   deleteAuthCookies,
   getAccessToken,
   setAuthCookies,
 } from '@/store/auth';
 import { useGetUserNonce, useLoginWeb3 } from './service';
-import { useMount } from 'ahooks';
-
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
   const { isConnected, address } = useAccount();
   const token = getAccessToken();
-  const [signature, setSignature] = useState<string>('');
+  const { signMessageAsync } = useSignMessage();
 
   const handleChangeSearch = (e: any) => {
     setValueSearch(e.target.value);
@@ -41,27 +39,30 @@ const MainHeader = () => {
   });
   const { run: runGetUserNonce } = useGetUserNonce({
     onSuccess(res) {
-      setSignature(res?.data);
+      handleSignMessage(res?.data);
     },
   });
 
+  const handleSignMessage = async (messageNonce: string) => {
+    try {
+      const sig = await signMessageAsync({ message: messageNonce });
+      runLoginWeb3({ address: address as string, signature: sig });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     if (!isConnected) {
-      console.log(isConnected, 'isConnected');
-
       deleteAuthCookies();
     }
   }, [isConnected]);
 
   useEffect(() => {
-    if (isConnected && address && !token && signature) {
-      runLoginWeb3({ address: address as string, signature });
+    if (isConnected && address && !token) {
+      runGetUserNonce(address);
     }
-  }, [signature, token, isConnected, address]);
-
-  useMount(() => {
-    runGetUserNonce();
-  });
+  }, [token, isConnected, address]);
 
   const handleKeyUp = (event: any) => {
     if (event.key === 'Enter') {
