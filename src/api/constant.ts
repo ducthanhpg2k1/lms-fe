@@ -17,6 +17,8 @@ export const API_PATH = {
 
   MY_COURSE: '/api/courses/my-courses',
 
+  MY_LEARNINGS: '/api/courses/my-learnings',
+
   SECTIONS: '/api/sections',
 
   LECTURE: '/api/lessons',
