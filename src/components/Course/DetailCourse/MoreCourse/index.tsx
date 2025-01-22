@@ -13,11 +13,11 @@ const MoreCourse = () => {
         <Text className="text-white" type="font-20-600">
           More Course By Theresa Edin
         </Text>
-        <div className="grid grid-cols-3 gap-6">
+        {/* <div className="grid grid-cols-3 gap-6">
           {Array.from({ length: 3 }).map((_, key) => {
             return <CardCourse index={key} key={key} />;
           })}
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col gap-10">
         <Text className="text-white" type="font-20-600">
