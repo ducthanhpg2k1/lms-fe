@@ -28,11 +28,11 @@ const itemsTab = [
     label: 'Overview',
     children: <Overview />,
   },
-  {
-    key: '3',
-    label: 'Q&A',
-    children: <QA />,
-  },
+  // {
+  //   key: '3',
+  //   label: 'Q&A',
+  //   children: <QA />,
+  // },
   {
     key: '4',
     label: 'Notes',

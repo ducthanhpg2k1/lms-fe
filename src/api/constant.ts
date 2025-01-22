@@ -42,4 +42,6 @@ export const API_PATH = {
   QUESTION_QUIZZ: (id: string) => `/api/quizzes/${id}/question`,
 
   EDIT_QUESTION_QUIZZ: (id: string) => `/api/quizzes/questions/${id}`,
+
+  ENROLL_COURSE: (id: string) => `/api/courses/${id}/enroll`,
 };

@@ -6,6 +6,7 @@ import { ROUTE_PATH } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import { useEnrollCourse } from './service';
 
 const DATA_NOTE = [
   '12 hours of on-demand video',
@@ -16,17 +17,34 @@ const DATA_NOTE = [
   'Certificate of completion',
 ];
 
-const CardEnrollNow = ({ idCourse }: { idCourse: string }) => {
+const CardEnrollNow = ({
+  idCourse,
+  course,
+}: {
+  idCourse: string;
+  course: any;
+}) => {
   const router = useRouter();
+  const { run, loading } = useEnrollCourse({
+    onSuccess: (res) => {
+      console.log('ressssss', res);
+      if (res?.data?.courseId) {
+        router.push(ROUTE_PATH.DETAIL_LESSON(res?.data?.courseId));
+      }
+    },
+  });
   return (
     <div className="rounded transition-all cursor-pointer duration-300">
       <div className="relative flex justify-center items-center">
         <Image
-          src={'/images/img-default.png'}
+          src={course?.image || '/images/img-default.png'}
           width={302}
           height={200}
           alt=""
           className="w-full h-[200px] rounded rounded-b-none opacity-80"
+          onError={(e: any) => {
+            e.target.srcset = '/images/img-default.png';
+          }}
         />
         <Image
           src={'/images/img-youtube.png'}
@@ -43,34 +61,51 @@ const CardEnrollNow = ({ idCourse }: { idCourse: string }) => {
             <div className="flex items-center gap-2">
               <div className="py-[2px] px-2 flex justify-center items-center border-1 border-orange/50 bg-orange/10 rounded-full">
                 <Text type="font-16-600" className="text-orange">
-                  $89.45
+                  {course?.price ? `$${course?.price}` : 'Free'}
                 </Text>
               </div>
-              <Text type="font-14-400" className="text-black-6 line-through">
-                $ 149.00
-              </Text>
+              {course?.price && (
+                <Text type="font-14-400" className="text-black-6 line-through">
+                  $ ${course?.price * 1.5}
+                </Text>
+              )}
             </div>
 
-            <Button variant="light" radius="full">
-              <div className="flex items-center gap-1">
-                <Text type="font-14-500" className="text-white">
-                  Enroll Course
-                </Text>
-                <Image
-                  src={'/icons/ic-arrow-right-up-line.svg'}
-                  width={20}
-                  height={20}
-                  alt=""
-                />
-              </div>
-            </Button>
+            {!course?.isOnwer && (
+              <Button
+                variant="light"
+                radius="full"
+                onClick={() => {
+                  if (course?.isOnwer) return;
+                  run(course.id);
+                }}
+              >
+                <div className="flex items-center gap-1">
+                  <Text type="font-14-500" className="text-white">
+                    Enroll Course
+                  </Text>
+                  <Image
+                    src={'/icons/ic-arrow-right-up-line.svg'}
+                    width={20}
+                    height={20}
+                    alt=""
+                  />
+                </div>
+              </Button>
+            )}
           </div>
           <Button
-            onClick={() => router.push(ROUTE_PATH.DETAIL_LESSON(idCourse))}
+            onClick={() => {
+              if (course?.isOnwer) {
+                router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
+              } else {
+                run(course.id);
+              }
+            }}
             className="bg-main min-h-[40px] rounded"
           >
             <Text className="text-white" type="font-16-600">
-              Enroll Now
+              {course?.isOnwer ? 'Go to course' : 'Enroll Now'}
             </Text>
           </Button>
           <div className="flex flex-col gap-2">

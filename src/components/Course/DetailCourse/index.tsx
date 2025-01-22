@@ -82,17 +82,15 @@ const DetailCourse = () => {
                   <div className="w-[1px] h-5 bg-[#BFBFBF]" />
                 </>
               )}
-              {dataDetail?.data?.userCourses?.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-1">
-                    <IconStudent />
-                    <Text type="font-14-400" className="text-white">
-                      {dataDetail?.data?.userCourses.length} Students
-                    </Text>
-                  </div>
-                  <div className="w-[1px] h-5 bg-[#BFBFBF]" />
-                </div>
-              )}
+              <div className="flex items-center gap-1">
+                <IconStudent />
+                <Text type="font-14-400" className="text-white">
+                  {dataDetail?.data?.userCourses?.length ||
+                    dataDetail?.data?.countStudents}{' '}
+                  Students
+                </Text>
+              </div>
+              <div className="w-[1px] h-5 bg-[#BFBFBF]" />
 
               <div className="flex items-center gap-1">
                 <IconTimeNew />
@@ -124,11 +122,17 @@ const DetailCourse = () => {
           <Requirements data={dataDetail?.data} />
           <About data={dataDetail?.data} />
           <Mentors />
-          <MoreCourse author={dataDetail?.data?.author} />
+          <MoreCourse
+            author={dataDetail?.data?.author}
+            courseId={router?.query?.id}
+          />
         </div>
         <div className="col-span-3">
           <div className="sticky top-32 z-[100000]">
-            <CardEnrollNow idCourse={dataDetail?.data?.id} />
+            <CardEnrollNow
+              idCourse={dataDetail?.data?.id}
+              course={dataDetail?.data}
+            />
           </div>
         </div>
       </div>

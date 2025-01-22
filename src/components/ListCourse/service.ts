@@ -1,5 +1,6 @@
 /* eslint-disable require-await */
 import { API_PATH } from '@/api/constant';
+import { IOptions } from '@/api/interface';
 import { privateRequest, request } from '@/api/request';
 import { useRequest } from 'ahooks';
 

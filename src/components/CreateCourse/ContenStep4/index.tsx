@@ -6,28 +6,30 @@ import { Control, Controller } from 'react-hook-form';
 
 const DATA_CONTENT = [
   {
-    id: 1,
-    content:
-      'Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum.',
+    id: '0-2',
+    content: 'I’m very busy right now (0-2 hours)',
   },
   {
-    id: 2,
-    content:
-      'Excepteur sint occaecat cupidatat non proident sunt in culpa qui officia deserunt mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.',
+    id: '2-4',
+    content: 'I’ll work on this on the side (2-4 hours)',
   },
   {
-    id: 3,
-    content:
-      'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium totam rem aperiam.',
+    id: '5+',
+    content: 'I have lots of flexibility (5+ hours)',
   },
   {
-    id: 4,
-    content:
-      'Excepteur sint occaecat cupidatat non proident sunt in culpa quit',
+    id: 'no-time',
+    content: 'I haven’t yet decided if I have time',
   },
 ];
 
-const ContenStep4 = ({ control }: { control: Control }) => {
+const ContenStep4 = ({
+  control,
+  setValue,
+}: {
+  control: Control;
+  setValue: any;
+}) => {
   return (
     <div className="flex flex-col gap-10 items-center text-center">
       <div className="flex flex-col gap-3">
@@ -52,7 +54,14 @@ const ContenStep4 = ({ control }: { control: Control }) => {
             >
               {DATA_CONTENT?.map((item) => {
                 return (
-                  <CustomRadio key={item.id} value={item.id}>
+                  <CustomRadio
+                    key={item.id}
+                    value={item.id}
+                    onChange={(e: any) => {
+                      console.log('eeeeee', e.target.value);
+                      setValue(e.target.value);
+                    }}
+                  >
                     <Text
                       type="font-16-400"
                       className="text-white max-w-[760px]"

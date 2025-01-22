@@ -8,19 +8,20 @@ import { useGetListCourse } from '../../ListCourse/service';
 import { useEffect } from 'react';
 
 const MoreCourse = (props: any) => {
-  const { author } = props;
+  const { author, courseId } = props;
   const token = getAccessToken();
 
   const { dataCourses, loadMore, noMore, reload } = useGetListCourse({
     pageSize: 3,
     authors: author?.id,
+    externalIds: courseId,
   });
 
   useEffect(() => {
-    if (author?.id) {
+    if (author?.id && courseId) {
       reload();
     }
-  }, [author]);
+  }, [author, courseId]);
 
   console.log('author', author);
 

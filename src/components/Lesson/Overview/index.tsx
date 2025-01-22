@@ -5,13 +5,26 @@ import Text from '@/components/UI/Text';
 import ByTheNumbers from './ByTheNumbers';
 import Description from './Description';
 import RateStar from '@/components/UI/RateStar';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import { useGetDetailCourse } from '@/components/CreateCourse/service';
+import dayjs from 'dayjs';
 
 const Overview = () => {
+  const router = useRouter();
+
+  const { run: getDetailCourse, data: dataDetail } = useGetDetailCourse({});
+
+  useEffect(() => {
+    if (router?.query?.id) {
+      getDetailCourse(router.query.id as string);
+    }
+  }, [router?.query?.id]);
+
   return (
     <div className="flex flex-col gap-5 pl-[80px] pr-[32px]">
       <Text className="text-white" type="font-24-700">
-        HTML5 for web development essential HTML from scratch. With this HTML
-        course, you don't need previous knowledge of HTML
+        {dataDetail?.data?.subtitle}
       </Text>
       <div className="flex flex-col gap-12">
         <div className="flex flex-col gap-6">
@@ -30,7 +43,8 @@ const Overview = () => {
             </div>
             <div className="flex flex-col gap-[6px]">
               <Text className="text-white" type="font-14-700">
-                15.568
+                {dataDetail?.data?.userCourses?.length ||
+                  dataDetail?.data?.countStudents}
               </Text>
               <Text className="text-black-7" type="font-12-400">
                 Students
@@ -49,7 +63,8 @@ const Overview = () => {
             <div className="flex items-center gap-2">
               <IconUpload />
               <Text className="text-black-5" type="font-14-400">
-                Last Updated January 2025
+                Last Updated{' '}
+                {dayjs(dataDetail?.data?.updatedAt).format('MMMM YYYY')}
               </Text>
             </div>
             <div className="flex items-center gap-4">
@@ -69,8 +84,8 @@ const Overview = () => {
           </div>
         </div>
         <div className="flex flex-col gap-3">
-          <ByTheNumbers />
-          <Description />
+          <ByTheNumbers course={dataDetail?.data} />
+          <Description description={dataDetail?.data?.description} />
         </div>
       </div>
     </div>
