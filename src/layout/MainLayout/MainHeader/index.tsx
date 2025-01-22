@@ -19,6 +19,7 @@ import {
   setAuthCookies,
 } from '@/store/auth';
 import { useGetUserNonce, useLoginWeb3 } from './service';
+import { toast } from '@/components/UI/Toast/toast';
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
@@ -32,6 +33,7 @@ const MainHeader = () => {
 
   const { run: runLoginWeb3 } = useLoginWeb3({
     onSuccess(res) {
+      toast.success('Login successfully');
       setAuthCookies({
         token: res?.data?.accessToken,
       });
