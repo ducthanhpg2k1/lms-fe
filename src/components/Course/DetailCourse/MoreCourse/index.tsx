@@ -4,20 +4,38 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import CardCourse from '@/components/CourseSearch/ListCourse/CardCourse';
 import { getAccessToken } from '@/store/auth';
+import { useGetListCourse } from '../../ListCourse/service';
+import { useEffect } from 'react';
 
-const MoreCourse = () => {
+const MoreCourse = (props: any) => {
+  const { author } = props;
   const token = getAccessToken();
+
+  const { dataCourses, loadMore, noMore, reload } = useGetListCourse({
+    pageSize: 3,
+    authors: author?.id,
+  });
+
+  useEffect(() => {
+    if (author?.id) {
+      reload();
+    }
+  }, [author]);
+
+  console.log('author', author);
+
+  if (!author) return null;
   return (
     <div className="flex flex-col gap-10 pb-10 border-b-1 border-b-black-10">
       <div className="flex flex-col gap-6">
         <Text className="text-white" type="font-20-600">
-          More Course By Theresa Edin
+          More Course By {author?.walletAddress}
         </Text>
-        {/* <div className="grid grid-cols-3 gap-6">
-          {Array.from({ length: 3 }).map((_, key) => {
-            return <CardCourse index={key} key={key} />;
+        <div className="grid grid-cols-3 gap-6">
+          {dataCourses.map((item: any, key: number) => {
+            return <CardCourse item={item} key={key} />;
           })}
-        </div> */}
+        </div>
       </div>
       <div className="flex flex-col gap-10">
         <Text className="text-white" type="font-20-600">
