@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import HeaderCourse from './HeaderCourse';
 import Footer from './Footer';
 import ContenStep1 from './ContenStep1';
@@ -28,7 +28,8 @@ const CreateCourse = () => {
         title: values?.title,
         categoryId: values.categoryId,
         type: values.type,
-        timeSpent: 'im so busy',
+        timeSpent: values.timeSpent,
+        // timeSpent: 'im so busy',
       };
       runCreateCourse(body);
       return;
@@ -43,8 +44,13 @@ const CreateCourse = () => {
     control,
     watch,
     getValues,
+    setValue,
     formState: { errors },
   } = useForm({});
+
+  useEffect(() => {
+    setValue('type', 'COURSE');
+  }, []);
 
   return (
     <form>
@@ -54,7 +60,7 @@ const CreateCourse = () => {
           {step === 1 && <ContenStep1 control={control} />}
           {step === 2 && <ContenStep2 control={control} />}
           {step === 3 && <ContenStep3 control={control} />}
-          {step === 4 && <ContenStep4 control={control} />}
+          {step === 4 && <ContenStep4 control={control} setValue={setValue} />}
         </div>
         <Footer
           watch={watch}

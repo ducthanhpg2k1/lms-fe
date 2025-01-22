@@ -43,7 +43,7 @@ const HeaderPlanYourCourse = ({
             Save
           </Text>
         </Button>
-        <SelectCustom
+        {/* <SelectCustom
           placeholder="Preview"
           className="min-w-[146px]"
           isLesson
@@ -57,7 +57,7 @@ const HeaderPlanYourCourse = ({
               label: 'As Student',
             },
           ]}
-        />
+        /> */}
       </div>
     </div>
   );

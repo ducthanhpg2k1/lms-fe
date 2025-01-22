@@ -12,13 +12,13 @@ const DATA_CONTENT = [
     description:
       'Create rich learning experiences with the help of video lectures, quizzes, programming exercises, and more.',
   },
-  {
-    id: 'PRACTICE_TESTS',
-    label: 'Practice Tests',
-    img: '/images/img-practice.png',
-    description:
-      'Help students prepare for exams by providing practice questions.',
-  },
+  // {
+  //   id: 'PRACTICE_TESTS',
+  //   label: 'Practice Tests',
+  //   img: '/images/img-practice.png',
+  //   description:
+  //     'Help students prepare for exams by providing practice questions.',
+  // },
 ];
 
 const ContenStep1 = ({ control }: { control: Control }) => {
@@ -30,6 +30,7 @@ const ContenStep1 = ({ control }: { control: Control }) => {
       <Controller
         name="type"
         control={control}
+        defaultValue={'COURSE'}
         render={({ field }) => (
           <div className="flex items-center gap-6">
             {DATA_CONTENT?.map((item) => {

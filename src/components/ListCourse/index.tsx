@@ -5,22 +5,39 @@ import Text from '../UI/Text';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/const';
 import Image from 'next/image';
-import { useGetListCourse } from './service';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import NoData from './NoData';
+import { useGetListCourse } from '../Course/ListCourse/service';
+import { useDebounce } from 'ahooks';
 
 const SORT_BY = [
-  { key: 'newest', label: 'Newest' },
-  { key: 'oldest', label: 'Oldest' },
-  { key: 'a-z', label: 'A-Z' },
-  { key: 'z-a', label: 'Z-A' },
+  { key: 'createdAt desc', label: 'Newest' },
+  { key: 'createdAt asc', label: 'Oldest' },
+  // { key: 'a-z', label: 'A-Z' },
+  // { key: 'z-a', label: 'Z-A' },
 ];
 
 const ListCourse = () => {
   const router = useRouter();
-  const { dataCourses } = useGetListCourse();
 
+  const [sort, setSort] = useState();
+  const [search, setSearch] = useState('');
+  const [debounceVal, setDebounceVal] = useState('');
+
+  const debounceValue = useDebounce(search, { wait: 500 });
   const [idHovered, setIdHovered] = useState<string>('');
+  const { dataCourses, reload } = useGetListCourse({
+    order: sort,
+    search: debounceVal,
+  });
+  useEffect(() => {
+    console.log('Debounced:', search);
+    setDebounceVal(search);
+  }, [debounceValue]);
+
+  const handleChange = (e: any) => {
+    setSearch(e.target.value);
+  };
 
   const handleMouseEnter = (id: string) => {
     setIdHovered(id);
@@ -29,6 +46,10 @@ const ListCourse = () => {
   const handleMouseLeave = () => {
     setIdHovered('');
   };
+
+  useEffect(() => {
+    reload();
+  }, [sort, debounceVal]);
 
   return (
     <div className="flex flex-col gap-[50px]">
@@ -43,12 +64,19 @@ const ListCourse = () => {
               className="min-w-[302px]"
               isInputSubmit
               placeholder="Search"
+              value={search}
+              onChange={handleChange}
             />
             <SelectCustom
               placeholder="Sort by type"
               isSelectSubmit
               className="min-w-[120px] min-h-[44px]"
               options={SORT_BY}
+              value={sort}
+              onChange={(value: any) => {
+                console.log('valueeee', value.target.value);
+                setSort(value.target.value);
+              }}
             />
           </div>
           <Button
@@ -59,8 +87,8 @@ const ListCourse = () => {
           </Button>
         </div>
       </div>
-      {dataCourses?.data?.length > 0 &&
-        dataCourses?.data?.map((item: any) => {
+      {dataCourses?.length > 0 &&
+        dataCourses?.map((item: any) => {
           return (
             <div
               key={item?.id}
@@ -118,7 +146,7 @@ const ListCourse = () => {
             </div>
           );
         })}
-      {dataCourses?.data?.length === 0 && <NoData />}
+      {dataCourses?.length === 0 && <NoData />}
     </div>
   );
 };
