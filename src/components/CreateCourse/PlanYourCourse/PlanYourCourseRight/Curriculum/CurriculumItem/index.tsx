@@ -33,6 +33,8 @@ const CurriculumItem = ({ item }: { item: any }) => {
   const [typeAddQuizzQuestion, setAddQuizzQuestion] = useState<string>('');
 
   const [valueContent, setValueContent] = useState<string>('');
+  const [valueInfo, setValueInfo] = useState<any>({});
+
   const [valueQuestion, setValueQuestion] = useState<any>({});
 
   const [indexContentAdd, setIndexAddContent] = useState<any>([]);
@@ -188,6 +190,15 @@ const CurriculumItem = ({ item }: { item: any }) => {
     setFormAdd(type);
   };
 
+  const handleSaveVideo = (values: any, id: string, index: number) => {
+    const newData = indexContentAdd?.filter((item: any) => item !== index);
+    setIndexAddContent(newData);
+    const body = {
+      info: values,
+      contentType: LessonContentType?.VIDEO,
+    };
+    runEditLecture(body, id);
+  };
   const handleSaveArticle = (value: string, id: string, index: number) => {
     const newData = indexContentAdd?.filter((item: any) => item !== index);
     setIndexAddContent(newData);
@@ -271,10 +282,13 @@ const CurriculumItem = ({ item }: { item: any }) => {
   const handleClickEditContent = (
     content: string,
     type: TYPE_COURSE,
-    index: number
+    index: number,
+    info: any
   ) => {
     setTypeAddContent(type);
     setValueContent(content);
+    setValueInfo(info);
+
     setIndexAddContent((prev: any) =>
       prev.includes(index)
         ? prev.filter((i: any) => i !== index)
@@ -299,6 +313,8 @@ const CurriculumItem = ({ item }: { item: any }) => {
   return (
     <div className="flex flex-col gap-4 pl-[52px] relative">
       {dataCurriculum?.map((item: any, indexCurriculum: number) => {
+        console.log(item, 'item');
+
         return (
           <div className="w-full">
             <div
@@ -345,6 +361,7 @@ const CurriculumItem = ({ item }: { item: any }) => {
                       setIndexAddContent(newData);
                       setIndexAddQuestion(newDataQuestion);
                       setValueContent('');
+                      setValueInfo({});
                       setValueQuestion({});
                     }}
                     isIconOnly
@@ -357,7 +374,7 @@ const CurriculumItem = ({ item }: { item: any }) => {
                 </div>
               ) : (
                 <>
-                  {(!item?.content || item?.questions?.length === 0) && (
+                  {item?.content || item?.info?.duration ? null : (
                     <Button
                       onClick={() =>
                         handleClickAddContent(item.type, indexCurriculum)
@@ -377,17 +394,21 @@ const CurriculumItem = ({ item }: { item: any }) => {
                 </>
               )}
             </div>
-            {item?.content && !indexContentAdd?.includes(indexCurriculum) && (
-              <Content
-                handleClickEditContent={() =>
-                  handleClickEditContent(
-                    item.content,
-                    item?.type,
-                    indexCurriculum
-                  )
-                }
-              />
-            )}
+            {(item?.content || item?.info) &&
+              !indexContentAdd?.includes(indexCurriculum) && (
+                <Content
+                  info={item?.info}
+                  type={item?.contentType}
+                  handleClickEditContent={() =>
+                    handleClickEditContent(
+                      item.content,
+                      item?.contentType,
+                      indexCurriculum,
+                      item?.info
+                    )
+                  }
+                />
+              )}
             {item?.questions?.length > 0 &&
               !indexAddQuestion?.includes(indexCurriculum) && (
                 <ContentQuestions
@@ -401,18 +422,22 @@ const CurriculumItem = ({ item }: { item: any }) => {
                   questions={item?.questions}
                 />
               )}
-            {typeAddContent === TYPE_COURSE.LECTURE &&
-              indexContentAdd?.includes(indexCurriculum) && (
-                <>
-                  <FormAddContent
-                    valueContent={valueContent}
-                    handleSaveArticle={(value) =>
-                      handleSaveArticle(value, item?.id, indexCurriculum)
-                    }
-                    loading={loadingEditLecture}
-                  />
-                </>
-              )}
+            {typeAddContent && indexContentAdd?.includes(indexCurriculum) && (
+              <>
+                <FormAddContent
+                  typeAddContent={typeAddContent}
+                  valueContent={valueContent}
+                  valueInfo={valueInfo}
+                  handleSaveVideo={(values) =>
+                    handleSaveVideo(values, item?.id, indexCurriculum)
+                  }
+                  handleSaveArticle={(value) =>
+                    handleSaveArticle(value, item?.id, indexCurriculum)
+                  }
+                  loading={loadingEditLecture}
+                />
+              </>
+            )}
 
             {typeAddQuizzQuestion === TYPE_COURSE.QUIZ &&
               indexAddQuestion.includes(indexCurriculum) && (

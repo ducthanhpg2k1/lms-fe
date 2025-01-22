@@ -1,38 +1,82 @@
 import Text from '@/components/UI/Text';
+import { LessonContentType } from '@/utils/const';
 import { Button } from '@nextui-org/react';
 import { File } from '@phosphor-icons/react';
 import Image from 'next/image';
+import { useMemo } from 'react';
 
 const Content = ({
   handleClickEditContent,
+  type,
+  info,
 }: {
   handleClickEditContent: VoidFunction;
+  type: LessonContentType;
+  info: any;
 }) => {
+  console.log(info, 'info');
+
+  const formattedTime: string = useMemo(() => {
+    const minutes = Math.floor(info?.duration / 60);
+    const seconds = Math.floor(info?.duration % 60);
+    const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds
+      .toString()
+      .padStart(2, '0')}`;
+
+    return formattedTime;
+  }, [info?.duration]);
   return (
     <div className="flex items-start justify-between p-3  border-1 border-t-0 border-white/15 gap-3">
       <div className="flex items-center gap-2 cursor-pointer">
-        <div className="w-[116px] h-[65px] bg-black-10 flex justify-center items-center">
-          <File size={32} weight="light" />
-        </div>
+        {info?.thumbnailUrl ? (
+          <Image
+            alt=""
+            width={116}
+            height={65}
+            className="object-cover"
+            src={info?.thumbnailUrl}
+          />
+        ) : (
+          <div className="w-[116px] h-[65px] bg-black-10 flex justify-center items-center">
+            <File size={32} weight="light" />
+          </div>
+        )}
+
         <div className="flex flex-col gap-1">
-          <Text type="font-14-400" className="text-white">
-            00:00
-          </Text>
+          {info?.fileNameVideo && (
+            <Text
+              type="font-14-700"
+              className="text-white max-w-[80%] line-clamp-1"
+            >
+              {info?.fileNameVideo}
+            </Text>
+          )}
+          {info?.duration ? (
+            <Text type="font-14-400" className="text-white">
+              {formattedTime}
+            </Text>
+          ) : (
+            <Text type="font-14-400" className="text-white">
+              00:00
+            </Text>
+          )}
+
           <div
             onClick={handleClickEditContent}
             className="flex items-center gap-1"
           >
             <IconEdit />
             <Text type="font-14-400" className="text-[#0059FF]">
-              Edit content
+              {type === LessonContentType.VIDEO ? 'Edit video' : 'Edit content'}
             </Text>
           </div>
-          <div className="flex items-center gap-1">
+
+          {/* <div className="flex items-center gap-1">
             <IconPlay />
             <Text type="font-14-400" className="text-[#0059FF]">
               Replace With Video
             </Text>
-          </div>
+          </div> */}
         </div>
       </div>
       <Button className="bg-main w-max rounded h-[40px]">

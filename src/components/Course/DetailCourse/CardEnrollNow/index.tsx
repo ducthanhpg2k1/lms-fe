@@ -16,7 +16,7 @@ const DATA_NOTE = [
   'Certificate of completion',
 ];
 
-const CardEnrollNow = () => {
+const CardEnrollNow = ({ idCourse }: { idCourse: string }) => {
   const router = useRouter();
   return (
     <div className="rounded transition-all cursor-pointer duration-300">
@@ -66,7 +66,7 @@ const CardEnrollNow = () => {
             </Button>
           </div>
           <Button
-            onClick={() => router.push(ROUTE_PATH.LESSON)}
+            onClick={() => router.push(ROUTE_PATH.DETAIL_LESSON(idCourse))}
             className="bg-main min-h-[40px] rounded"
           >
             <Text className="text-white" type="font-16-600">

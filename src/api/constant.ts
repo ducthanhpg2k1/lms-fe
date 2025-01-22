@@ -8,6 +8,8 @@ export const API_PATH = {
 
   CATEGORIES: '/api/categories',
 
+  SUB_CATEGORIES: `/api/subcategories`,
+
   CREATE_COURSE: '/api/courses',
   EDIT_COURSE: (id: string) => `/api/courses/${id}`,
 

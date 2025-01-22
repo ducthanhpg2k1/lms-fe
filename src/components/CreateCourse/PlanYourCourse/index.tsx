@@ -37,6 +37,10 @@ const PlanYourCourse = () => {
         title: res?.data?.title,
         description: res?.data?.description,
         topics: res?.data?.topics?.[0],
+        image: res?.data?.image,
+        video: res?.data?.video,
+        subCategoryId: res?.data?.subCategoryId,
+        categoryId: res?.data?.categoryId,
         sections: [
           {
             title: 'Section 1',
@@ -86,8 +90,13 @@ const PlanYourCourse = () => {
       requirements: values?.requirements?.map((item: any) => item?.name),
       intenedLeaners: values?.intenedLeaners?.map((item: any) => item?.name),
       description: values?.description,
+      image: values?.image,
+      video: values?.image,
       subtitle: values?.subtitle,
       title: values?.title,
+      subCategoryId: values?.subCategoryId,
+      categoryId: values?.categoryId,
+
       topics: [values.topics],
       lang: values.lang,
       level: values.level,
@@ -125,6 +134,7 @@ const PlanYourCourse = () => {
               <div className="col-span-8">
                 <PlanYourCourseRight
                   handleSubmit={handleSubmit}
+                  watch={watch}
                   idDetail={router.query.id as string}
                   control={control}
                   activePlan={activePlan}

@@ -19,6 +19,30 @@ export const useGetCategories = () => {
   };
 };
 
+const serviceGetSubCategories = async (id: string) => {
+  const params = {
+    categoryId: id,
+  };
+  return await privateRequest(request.get, API_PATH.SUB_CATEGORIES, { params });
+};
+
+export const useGetSubCategories = () => {
+  const { data, loading, run } = useRequest(
+    async (id: string) => {
+      return await serviceGetSubCategories(id);
+    },
+    {
+      manual: true,
+    }
+  );
+
+  return {
+    dataSubCategories: data,
+    run,
+    loading,
+  };
+};
+
 interface IBody {
   categoryId: string;
   timeSpent: string;
@@ -147,7 +171,18 @@ export const useUploadFile = (options?: IOptions) => {
     ...options,
   });
 };
-
+export const uploadMultipleFiles = (file1: any, file2: any) => {
+  return Promise.all([serviceUploadFile(file1), serviceUploadFile(file2)]);
+};
+export const useUploadMultipleFiles = (options?: IOptions) => {
+  return useRequest(
+    (file1: any, file2: any) => uploadMultipleFiles(file1, file2),
+    {
+      manual: true,
+      ...options,
+    }
+  );
+};
 interface answers {
   answer: string;
   isCorrect: boolean;

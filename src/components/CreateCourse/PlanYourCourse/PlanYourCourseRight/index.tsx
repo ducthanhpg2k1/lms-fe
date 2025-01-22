@@ -10,6 +10,7 @@ const CourseLandingPage = dynamic(() => import('./CourseLandingPage'), {
 const PlanYourCourseRight = ({
   activePlan,
   control,
+  watch,
   idDetail,
   handleSubmit,
 }: {
@@ -17,6 +18,7 @@ const PlanYourCourseRight = ({
   activePlan: number;
   idDetail: string;
   handleSubmit: any;
+  watch?: any;
 }) => {
   return (
     <div className="bg-[#181F25] py-6 px-8 flex flex-col rounded shadow-lg w-full min-h-[600px] gap-8">
@@ -28,7 +30,9 @@ const PlanYourCourseRight = ({
         />
       )}
       {activePlan === 2 && <Curriculum />}
-      {activePlan === 3 && <CourseLandingPage control={control} />}
+      {activePlan === 3 && (
+        <CourseLandingPage watch={watch} control={control} />
+      )}
       {activePlan === 4 && <Referral control={control} />}
     </div>
   );

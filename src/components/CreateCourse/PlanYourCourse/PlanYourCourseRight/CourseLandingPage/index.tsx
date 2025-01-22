@@ -7,8 +7,30 @@ import { Control, Controller } from 'react-hook-form';
 import UploadImage from './UploadImage';
 import PromotionalVideo from './PromotionalVideo';
 import { DATA_LANGUAGE, DATA_LEVEL } from '@/utils/const';
+import { useGetCategories } from '@/services/filter.service';
+import { useGetSubCategories } from '@/components/CreateCourse/service';
+import { useEffect } from 'react';
 
-const CourseLandingPage = ({ control }: { control: Control }) => {
+const CourseLandingPage = ({
+  control,
+  watch,
+}: {
+  control: Control;
+  watch: any;
+}) => {
+  const { data } = useGetCategories();
+
+  const { dataSubCategories, run: runGetSubCategories } = useGetSubCategories();
+
+  const watchCategories = watch('categoryId');
+
+  useEffect(() => {
+    if (watchCategories) {
+      runGetSubCategories(watchCategories);
+    }
+  }, [watchCategories]);
+  console.log(dataSubCategories, 'dataSubCategories');
+
   return (
     <div className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
@@ -119,12 +141,28 @@ const CourseLandingPage = ({ control }: { control: Control }) => {
           />
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <SelectCustom
-            placeholder="Developer"
-            inputDefault
-            className="min-w-[120px]"
-            options={CATEGORIES}
+          <Controller
+            name="categoryId"
+            control={control}
+            render={({ field }) => (
+              <SelectCustom
+                placeholder="Developer"
+                inputDefault
+                onChange={field.onChange}
+                value={field.value}
+                className="min-w-[120px]"
+                options={
+                  data?.data?.map((item: any) => {
+                    return {
+                      key: item?.id,
+                      label: item?.name,
+                    };
+                  }) || []
+                }
+              />
+            )}
           />
+
           <Controller
             name="subCategoryId"
             control={control}
@@ -135,7 +173,14 @@ const CourseLandingPage = ({ control }: { control: Control }) => {
                 onChange={field.onChange}
                 value={field.value}
                 inputDefault
-                options={CATEGORIES}
+                options={
+                  dataSubCategories?.data?.map((item: any) => {
+                    return {
+                      key: item?.id,
+                      label: item?.name,
+                    };
+                  }) || []
+                }
               />
             )}
           />
@@ -162,8 +207,20 @@ const CourseLandingPage = ({ control }: { control: Control }) => {
           />
         </div>
       </div>
-      <UploadImage />
-      <PromotionalVideo />
+      <Controller
+        name="image"
+        control={control}
+        render={({ field }) => (
+          <UploadImage onChange={field.onChange} value={field.value} />
+        )}
+      />
+      <Controller
+        name="video"
+        control={control}
+        render={({ field }) => (
+          <PromotionalVideo onChange={field.onChange} value={field.value} />
+        )}
+      />
     </div>
   );
 };
