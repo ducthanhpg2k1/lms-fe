@@ -8,6 +8,8 @@ const FormQuizz = ({ dataQuizz }: { dataQuizz: any }) => {
 
   const [startTakingTest, setStartTakingTest] = useState(false);
 
+
+
   return (
     <>
       {startTakingTest ? (
@@ -33,7 +35,7 @@ const FormQuizz = ({ dataQuizz }: { dataQuizz: any }) => {
 
             <Button
               onClick={() => setStartTakingTest(true)}
-              className="bg-main w-max min-h-[56px] rounded min-w-[250px]"
+              className="bg-main w-max min-h-[45px] rounded min-w-[250px]"
             >
               <Text className="text-white" type="font-16-400">
                 Start taking the test

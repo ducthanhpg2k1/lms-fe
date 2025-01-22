@@ -2,6 +2,8 @@ import LoadingContainer from '@/components/UI/LoadingContainer';
 import { useEffect, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
+import 'videojs-hls-quality-selector';
+import 'videojs-contrib-quality-levels';
 
 const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
   const videoRef: any = useRef(null);
@@ -44,6 +46,7 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
           videoElement,
           options,
           function onPlayerReady() {
+            playerRef.current.hlsQualitySelector();
             console.log('Player is ready');
           }
         );

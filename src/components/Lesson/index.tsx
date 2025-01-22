@@ -15,9 +15,10 @@ import { useRouter } from 'next/router';
 import { useGetListSession } from '../CreateCourse/service';
 import { useEffect } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
-import { TYPE_COURSE } from '@/utils/const';
+import { LessonContentType, TYPE_COURSE } from '@/utils/const';
 import { useGetLessons, useGetQuizz } from './service';
 import FormQuizz from './FormQuizz';
+import Article from './Article';
 const itemsTab = [
   {
     key: '1',
@@ -112,18 +113,33 @@ const Lesson = () => {
     }
   };
 
-  console.log(dataQuizz, 'dataQuizz');
-
   return (
     <div className="grid grid-cols-10 relative">
       <div className="col-span-7 flex flex-col">
+
         {dataQuizz?.data?.id ? (
           <FormQuizz dataQuizz={dataQuizz?.data} />
         ) : (
-          <VideoSection
-            loading={loadingLesson || loadingQuizz}
-            info={dataLesson?.data?.info}
-          />
+          <>
+            {
+              dataLesson?.data?.contentType === LessonContentType.VIDEO && (
+                <VideoSection
+                  loading={loadingLesson || loadingQuizz}
+                  info={dataLesson?.data?.info}
+                />
+              )
+            }
+
+            {
+              dataLesson?.data?.contentType === LessonContentType.ARTICLE && (
+                <Article
+                  loading={loadingLesson || loadingQuizz}
+                  content={dataLesson?.data}
+                />
+              )
+            }
+          </>
+
         )}
 
         <div className="flex w-full flex-col">
