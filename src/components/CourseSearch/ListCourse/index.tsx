@@ -157,7 +157,7 @@ const ListCourse = () => {
             <Button
               variant="light"
               radius="full"
-              className="hover:bg-main/20"
+              className="hover:bg-main/20 w-max"
               onClick={loadMore}
             >
               <div className="flex items-center gap-[2px]">

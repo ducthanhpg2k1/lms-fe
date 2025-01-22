@@ -36,8 +36,9 @@ const CardCourse = ({ item }: { item: any }) => {
           <IconLikeCourse />
         </Button>
       </div>
+
       <Image
-        src={'/images/img-default.png'}
+        src={item?.image ? item?.image : '/images/img-default.png'}
         width={302}
         height={200}
         alt=""

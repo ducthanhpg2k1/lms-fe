@@ -18,7 +18,7 @@ const CardCourse = ({ item }: { item?: any }) => {
       className="rounded transition-all cursor-pointer  duration-300 hover:opacity-80"
     >
       <Image
-        src={'/images/img-default.png'}
+        src={item?.image ? item?.image : '/images/img-default.png'}
         width={302}
         height={200}
         alt=""

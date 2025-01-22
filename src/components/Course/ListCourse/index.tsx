@@ -16,18 +16,6 @@ export const CATEGORIES = [
   { key: 'personal', label: 'Personal Development' },
 ];
 
-const INSTRUCTORS = [
-  { key: 'pavan', label: 'Pavan R.' },
-  { key: '2', label: 'Lucas' },
-  { key: '3', label: 'Davis' },
-  { key: '4', label: 'Leona' },
-];
-
-const PRICES = [
-  { key: 'PAID', label: 'Paid' },
-  { key: 'FREE', label: 'Free' },
-];
-
 const SORT_BY = [
   // { key: 'most_relevant', label: 'Most Relevant' },
   // { key: 'most_reviewer', label: 'Most Reviewer' },

@@ -394,7 +394,7 @@ const CurriculumItem = ({ item }: { item: any }) => {
                 </>
               )}
             </div>
-            {(item?.content || item?.info) &&
+            {(item?.content || item?.info?.duration) &&
               !indexContentAdd?.includes(indexCurriculum) && (
                 <Content
                   info={item?.info}

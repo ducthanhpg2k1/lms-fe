@@ -1,17 +1,11 @@
 import InputText from '@/components/UI/InputText';
-import {
-  Button,
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@nextui-org/react';
+import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import Menubar from '../Menubar';
-import ContentProfile from './ContentProfile';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/const';
 import { useEffect, useState } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
+import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount, useSignMessage } from 'wagmi';
 import {
   deleteAuthCookies,
@@ -54,11 +48,13 @@ const MainHeader = () => {
     }
   };
 
-  useEffect(() => {
-    if (!isConnected) {
-      deleteAuthCookies();
-    }
-  }, [isConnected]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (!isConnected) {
+  //       deleteAuthCookies();
+  //     }
+  //   }, 1000);
+  // }, [isConnected]);
 
   useEffect(() => {
     if (isConnected && address && !token) {
@@ -149,6 +145,7 @@ const MainHeader = () => {
                 <ContentProfile />
               </PopoverContent>
             </Popover> */}
+
             <div className="w-full">
               <ConnectButton />
             </div>
