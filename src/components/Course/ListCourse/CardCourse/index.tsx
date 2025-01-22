@@ -18,11 +18,14 @@ const CardCourse = ({ item }: { item?: any }) => {
       className="rounded transition-all cursor-pointer  duration-300 hover:opacity-80"
     >
       <Image
-        src={item?.image ? item?.image : '/images/img-default.png'}
+        src={item?.image || '/images/img-default.png'}
         width={302}
         height={200}
         alt=""
         className="w-full h-[200px] rounded rounded-b-none"
+        onError={(e: any) => {
+          e.target.srcset = '/images/img-default.png';
+        }}
       />
       <div className="py-4 px-3 rounded bg-white/10 flex flex-col gap-[10px]">
         <div className="flex items-center gap-2">

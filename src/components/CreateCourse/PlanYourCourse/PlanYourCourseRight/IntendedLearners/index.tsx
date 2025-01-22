@@ -54,7 +54,7 @@ const IntendedLearners = ({
           </Text>
           <Text type="font-16-400" className="text-black-6">
             You must enter at least 4
-            <Text className="underline" element="span">
+            <Text className="underline mx-1" element="span">
               learning objectives or outcomes
             </Text>
             that learners can expect to achieve after completing your course.

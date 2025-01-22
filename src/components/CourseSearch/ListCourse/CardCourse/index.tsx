@@ -43,6 +43,9 @@ const CardCourse = ({ item }: { item: any }) => {
         height={200}
         alt=""
         className="w-full h-[200px] rounded rounded-b-none"
+        onError={(e: any) => {
+          e.target.srcset = '/images/img-default.png';
+        }}
       />
       <div className="py-4 px-3 rounded bg-white/10 flex flex-col gap-[10px]">
         <div className="flex items-center gap-2">
