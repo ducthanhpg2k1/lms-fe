@@ -1,15 +1,25 @@
 import Text from '@/components/UI/Text';
 import { TYPE_COURSE } from '@/utils/const';
-import { Checkbox, CheckboxGroup } from '@nextui-org/react';
 import { File, MonitorPlay } from '@phosphor-icons/react';
+import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
 const ChildSection = ({
   items,
   handleClickChildLesson,
+  firstId,
 }: {
   items: any;
+  firstId: any;
   handleClickChildLesson: (id: string, type: TYPE_COURSE) => void;
 }) => {
+  const [activeChildSection, setActiveChilSection] = useState(false);
+
+  useEffect(() => {
+    if (firstId) {
+      setActiveChilSection(firstId);
+    }
+  }, [firstId]);
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
@@ -22,13 +32,33 @@ const ChildSection = ({
           return (
             <div
               key={item?.id}
-              onClick={() => handleClickChildLesson(item?.id, item?.type)}
-              className="flex flex-col gap-3 px-4 py-3 cursor-pointer hover:bg-main/50 transition-all"
+              onClick={() => {
+                if (item?.type === TYPE_COURSE.QUIZ) {
+                  localStorage.setItem(
+                    'titleQuizz',
+                    `Multiple choice ${item?.sttQuizz}`
+                  );
+                }
+                setActiveChilSection(item?.id);
+                handleClickChildLesson(item?.id, item?.type);
+              }}
+              className={clsx(
+                'flex flex-col gap-3 px-4 py-3 cursor-pointer hover:bg-main/50 transition-all',
+                {
+                  ['bg-main/50']: item?.id === activeChildSection,
+                }
+              )}
             >
               <div className="flex items-center gap-3">
-                <Text type="font-16-600" className="text-white">
-                  {`${index + 1}. ${item?.title}`}
-                </Text>
+                {item?.type === TYPE_COURSE.QUIZ ? (
+                  <Text type="font-16-600" className="text-white">
+                    {`Multiple choice ${item?.sttQuizz}. ${item?.title}`}
+                  </Text>
+                ) : (
+                  <Text type="font-16-600" className="text-white">
+                    {`${index + 1}. ${item?.title}`}
+                  </Text>
+                )}
               </div>
               {item?.type === TYPE_COURSE.LECTURE && (
                 <div className="flex items-center gap-2">

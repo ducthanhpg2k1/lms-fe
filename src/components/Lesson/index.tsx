@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
 import { TYPE_COURSE } from '@/utils/const';
 import { useGetLessons, useGetQuizz } from './service';
+import FormQuizz from './FormQuizz';
 const itemsTab = [
   {
     key: '1',
@@ -61,14 +62,39 @@ const Lesson = () => {
     run: runGetListSession,
     data: dataListSession,
     loading: loadingListSession,
-  } = useGetListSession();
+  } = useGetListSession({
+    onSuccess: (res) => {
+      const firstSection = res?.data?.[0];
+
+      const newLessons = firstSection?.lessons?.map((lesson: any) => {
+        return {
+          ...lesson,
+          type: TYPE_COURSE.LECTURE,
+        };
+      });
+
+      const newQuizzes = firstSection?.quizzes?.map((quizz: any) => {
+        return {
+          ...quizz,
+          type: TYPE_COURSE.QUIZ,
+        };
+      });
+      const combinedArray = [...newLessons, ...newQuizzes];
+      const firstId = combinedArray?.[0]?.id;
+      if (combinedArray?.[0]?.type === TYPE_COURSE.LECTURE) {
+        runGetLessons(firstId);
+      } else {
+        runGetQuizz(firstId);
+      }
+    },
+  });
 
   const {
     dataLesson,
     run: runGetLessons,
     loading: loadingLesson,
   } = useGetLessons();
-  const { run: runGetQuizz, loading: loadingQuizz } = useGetQuizz();
+  const { dataQuizz, run: runGetQuizz, loading: loadingQuizz } = useGetQuizz();
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -86,67 +112,75 @@ const Lesson = () => {
     }
   };
 
+  console.log(dataQuizz, 'dataQuizz');
+
   return (
-    <LoadingScreen
-      isLoading={loadingListSession || loadingLesson || loadingQuizz}
-    >
-      <div className="grid grid-cols-10 relative">
-        <div className="col-span-7 flex flex-col">
-          <VideoSection info={dataLesson?.data?.info} />
-          <div className="flex w-full flex-col">
-            <Tabs
-              aria-label="Options"
-              defaultSelectedKey={'2'}
-              classNames={{
-                tabList:
-                  'gap-3 w-full relative rounded-none p-0 border-b border-white/10',
-                cursor: 'w-full bg-[#129DDB]',
-                tab: 'max-w-fit px-5 h-16 text-[16px] font-medium text-[#BFBFBF]',
-                tabContent: 'group-data-[selected=true]:text-white',
-              }}
-              color="primary"
-              variant="underlined"
-            >
-              {itemsTab?.map((item) => {
-                return (
-                  <Tab
-                    key={item?.key}
-                    className="py-6"
-                    title={item?.icon ? item?.icon : item?.label}
-                  >
-                    {item?.children && item?.children}
-                  </Tab>
-                );
-              })}
-            </Tabs>
-          </div>
-        </div>
-        <div className="col-span-3">
-          <div className="w-full sticky top-0 max-h-[100dvh] overflow-x-hidden overflow-auto right-0 z-[10000] h-full bg-[#0F141A]">
-            <div className="flex justify-between py-6 px-4 items-center border-l-1 border-b-1 border-b-[#D9D9D91A] border-l-[#D9D9D91A] sticky top-0 z-[1000] bg-gray">
-              <div className="flex items-center gap-2">
-                <Avatar src="/images/avatar-user.png" className="w-12 h-12" />
-                <div className="flex flex-col gap-[2px]">
-                  <Text type="text-18-600" className="text-white">
-                    Set certificate expiration date
-                  </Text>
-                  <Text type="font-14-400" className="text-white">
-                    Set certificate expiration date
-                  </Text>
-                </div>
-              </div>
-              <Button variant="light" size="sm" isIconOnly radius="full">
-                <X color="#fff" />
-              </Button>
-            </div>
-            <ListSection
-              handleClickChildLesson={handleClickChildLesson}
-              sections={dataListSession?.data}
-            />
-          </div>
+    <div className="grid grid-cols-10 relative">
+      <div className="col-span-7 flex flex-col">
+        {dataQuizz?.data?.id ? (
+          <FormQuizz dataQuizz={dataQuizz?.data} />
+        ) : (
+          <VideoSection
+            loading={loadingLesson || loadingQuizz}
+            info={dataLesson?.data?.info}
+          />
+        )}
+
+        <div className="flex w-full flex-col">
+          <Tabs
+            aria-label="Options"
+            defaultSelectedKey={'2'}
+            classNames={{
+              tabList:
+                'gap-3 w-full relative rounded-none p-0 border-b border-white/10',
+              cursor: 'w-full bg-[#129DDB]',
+              tab: 'max-w-fit px-5 h-16 text-[16px] font-medium text-[#BFBFBF]',
+              tabContent: 'group-data-[selected=true]:text-white',
+            }}
+            color="primary"
+            variant="underlined"
+          >
+            {itemsTab?.map((item) => {
+              return (
+                <Tab
+                  key={item?.key}
+                  className="py-6"
+                  title={item?.icon ? item?.icon : item?.label}
+                >
+                  {item?.children && item?.children}
+                </Tab>
+              );
+            })}
+          </Tabs>
         </div>
       </div>
-    </LoadingScreen>
+      <div className="col-span-3">
+        <div className="w-full sticky top-0 max-h-[100dvh] overflow-x-hidden overflow-auto right-0 z-[10000] h-full bg-[#0F141A]">
+          <div className="flex justify-between py-6 px-4 items-center border-l-1 border-b-1 border-b-[#D9D9D91A] border-l-[#D9D9D91A] sticky top-0 z-[1000] bg-gray">
+            <div className="flex items-center gap-2">
+              <Avatar src="/images/avatar-user.png" className="w-12 h-12" />
+              <div className="flex flex-col gap-[2px]">
+                <Text type="text-18-600" className="text-white">
+                  Set certificate expiration date
+                </Text>
+                <Text type="font-14-400" className="text-white">
+                  Set certificate expiration date
+                </Text>
+              </div>
+            </div>
+            <Button variant="light" size="sm" isIconOnly radius="full">
+              <X color="#fff" />
+            </Button>
+          </div>
+          <ListSection
+            loading={loadingListSession}
+            handleClickChildLesson={handleClickChildLesson}
+            sections={dataListSession?.data}
+          />
+        </div>
+      </div>
+    </div>
+    // </LoadingScreen>
   );
 };
 export default Lesson;

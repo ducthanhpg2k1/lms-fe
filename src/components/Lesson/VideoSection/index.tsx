@@ -1,15 +1,25 @@
+import LoadingContainer from '@/components/UI/LoadingContainer';
 import { useEffect, useRef } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 
-const VideoSection = ({ info }: { info: any }) => {
+const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
   const videoRef: any = useRef(null);
   const playerRef: any = useRef(null);
 
   useEffect(() => {
-    if (info?.urlVideo && videoRef.current && !playerRef.current) {
-      // Log URL để debug
-      console.log('Video URL:', info.urlVideo);
+    // Initialize player if it doesn't exist
+    if (!playerRef.current) {
+      const videoElement = document.createElement('video');
+      videoElement.className = 'video-js vjs-big-play-centered';
+      videoElement.controls = true;
+      videoElement.preload = 'auto';
+      videoElement.crossOrigin = 'anonymous';
+
+      // Replace old video element with new one
+      if (videoRef.current) {
+        videoRef.current.appendChild(videoElement);
+      }
 
       const options = {
         controls: true,
@@ -27,38 +37,34 @@ const VideoSection = ({ info }: { info: any }) => {
           nativeAudioTracks: false,
           nativeTextTracks: false,
         },
-        sources: [
-          {
-            src: info.urlVideo,
-            type: determineVideoType(info.urlVideo),
-          },
-        ],
       };
 
-      // Khởi tạo player với error handling
       try {
         playerRef.current = videojs(
-          videoRef.current,
+          videoElement,
           options,
           function onPlayerReady() {
             console.log('Player is ready');
-
-            // Kiểm tra source loaded
-            this.on('loadedmetadata', function () {
-              console.log('Video metadata loaded');
-            });
-
-            // Log tất cả các events
-            this.on('all', function (event: string) {
-              console.log('Player event:', event);
-            });
           }
         );
 
-        // Error handling
-        playerRef.current.on('error', function (error: any) {});
+        playerRef.current.on('error', function (error: any) {
+          console.error('Video player error:', error);
+        });
       } catch (error) {
         console.error('Player initialization error:', error);
+      }
+    }
+
+    // Update source when URL changes
+    if (playerRef.current && info?.urlVideo) {
+      try {
+        playerRef.current.src({
+          src: info.urlVideo,
+          type: determineVideoType(info.urlVideo),
+        });
+      } catch (error) {
+        console.error('Error updating video source:', error);
       }
     }
 
@@ -66,32 +72,25 @@ const VideoSection = ({ info }: { info: any }) => {
       if (playerRef.current) {
         try {
           playerRef.current.dispose();
+          playerRef.current = null;
         } catch (error) {
           console.error('Error disposing player:', error);
         }
-        playerRef.current = null;
       }
     };
   }, [info?.urlVideo]);
 
-  // Hàm xác định loại video
   const determineVideoType = (url: string): string => {
     if (url.includes('.m3u8')) return 'application/x-mpegURL';
     if (url.includes('.mp4')) return 'video/mp4';
     if (url.includes('.webm')) return 'video/webm';
-    // Mặc định return mp4 nếu không xác định được
     return 'video/mp4';
   };
 
   return (
-    <div className="video-container">
-      <video
-        ref={videoRef}
-        className="video-js vjs-big-play-centered"
-        controls
-        preload="auto"
-        crossOrigin="anonymous" // Thêm CORS attribute
-      />
+    <div className="video-container relative">
+      <LoadingContainer loading={loading} />
+      <div ref={videoRef} />
     </div>
   );
 };

@@ -3,16 +3,21 @@ import Text from '@/components/UI/Text';
 import { TYPE_COURSE } from '@/utils/const';
 import { useMemo } from 'react';
 import ChildSection from './ChildSection';
+import LoadingContainer from '@/components/UI/LoadingContainer';
 
 const ListSection = ({
   sections,
   handleClickChildLesson,
+  loading,
 }: {
   handleClickChildLesson: (id: string, type: TYPE_COURSE) => void;
   sections: any;
+  loading: boolean;
 }) => {
   return (
-    <div className="flex flex-col gap-4 border-l-1 border-l-[#D9D9D91A]">
+    <div className="flex flex-col gap-4 h-full border-l-1 border-l-[#D9D9D91A] relative">
+      <LoadingContainer loading={loading} />
+
       <div className="mx-[-8px]">
         {sections?.map((item: any, index: number) => {
           const countChildrendSection =
@@ -39,6 +44,13 @@ const ListSection = ({
           );
           const listChildSection = newLessons?.concat(newQuizzes);
 
+          const firstSection = sections?.[0];
+
+          const combinedArray = [
+            ...firstSection?.lessons,
+            ...firstSection?.quizzes,
+          ];
+
           return (
             <AccordionCustom
               key={item?.id}
@@ -61,6 +73,7 @@ const ListSection = ({
             >
               {listChildSection?.length > 0 ? (
                 <ChildSection
+                  firstId={combinedArray?.[0]?.id}
                   handleClickChildLesson={handleClickChildLesson}
                   items={listChildSection}
                 />

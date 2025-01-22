@@ -3,7 +3,7 @@ import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
 import { ROUTE_PATH } from '@/utils/const';
-import { Button } from '@nextui-org/react';
+import { Button, Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -41,7 +41,7 @@ const CardCourse = ({ item }: { item?: any }) => {
             <Text type="font-12-500">16 hours</Text>
           </div>
         </div>
-        <Text type="font-16-500" className="line-clamp-2 capitalize">
+        <Text type="font-16-500" className="line-clamp-1 capitalize">
           {item?.title}
         </Text>
         <div className="flex flex-col gap-[14px] border-b border-b-white/5 pb-4">
