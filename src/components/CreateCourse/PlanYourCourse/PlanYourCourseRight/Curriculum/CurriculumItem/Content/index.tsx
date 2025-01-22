@@ -79,14 +79,14 @@ const Content = ({
           </div> */}
         </div>
       </div>
-      <Button className="bg-main w-max rounded h-[40px]">
+      {/* <Button className="bg-main w-max rounded h-[40px]">
         <div className="flex items-center gap-2">
           <Text type="font-16-400" className="text-white">
             Preview
           </Text>
           <IconArrowDown />
         </div>
-      </Button>
+      </Button> */}
     </div>
   );
 };
