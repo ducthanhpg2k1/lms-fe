@@ -2,6 +2,7 @@ export const ROUTE_PATH = {
   HOME: '/',
   COURSE_SEARCH: '/course-search',
   CREATE_COURSE: '/create-course',
+  MY_LEARNING: '/my-learning',
 
   COURSE: '/course',
   LESSON: '/lesson',
