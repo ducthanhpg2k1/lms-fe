@@ -16,6 +16,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { useGetDetailCourse } from '@/components/CreateCourse/service';
 import dayjs from 'dayjs';
+import { clean } from '@/utils/common';
 
 const DetailCourse = () => {
   const router = useRouter();
@@ -30,12 +31,26 @@ const DetailCourse = () => {
 
   console.log(dataDetail, 'dataDetail');
 
-  const lessonCount = dataDetail?.sections?.reduce(
+  const lessonCount = dataDetail?.data?.sections?.reduce(
     (total: number, section: any) => {
       return total + (section.lessons?.length || 0);
     },
     0
   );
+
+  console.log('lessonCount', lessonCount);
+
+  const mapCategoryCourse = () => {
+    if (!dataDetail?.data) return '';
+    const catRelated = [
+      dataDetail?.data?.category?.name,
+      dataDetail?.data?.subCategory?.name,
+    ];
+    const cleanArr = clean(catRelated);
+    console.log('cleanArr', cleanArr);
+
+    return cleanArr.join(' | ');
+  };
 
   return (
     <div className="flex flex-col gap-[52px] relative">
@@ -48,8 +63,7 @@ const DetailCourse = () => {
               {dataDetail?.data?.title}
             </Text>
             <Text type="font-14-400" className="text-white">
-              Learn: HTML | CSS | JavaScript | Web programming | Web development
-              | Front-end | Responsive | JQuery
+              Learn: {mapCategoryCourse()}
             </Text>
             <div className="flex items-center gap-2">
               <Text type="font-14-400" className="text-white">
@@ -57,20 +71,29 @@ const DetailCourse = () => {
               </Text>
               <Rater total={5} rating={4} />
               <div className="w-[1px] h-5 bg-[#BFBFBF]" />
-              <div className="flex items-center gap-1">
-                <IconBookMark />
-                <Text type="font-14-400" className="text-white">
-                  {lessonCount} Lessons
-                </Text>
-              </div>
-              <div className="w-[1px] h-5 bg-[#BFBFBF]" />
-              <div className="flex items-center gap-1">
-                <IconStudent />
-                <Text type="font-14-400" className="text-white">
-                  229 Students
-                </Text>
-              </div>
-              <div className="w-[1px] h-5 bg-[#BFBFBF]" />
+              {lessonCount && (
+                <>
+                  <div className="flex items-center gap-1">
+                    <IconBookMark />
+                    <Text type="font-14-400" className="text-white">
+                      {lessonCount || 0} Lessons
+                    </Text>
+                  </div>
+                  <div className="w-[1px] h-5 bg-[#BFBFBF]" />
+                </>
+              )}
+              {dataDetail?.data?.userCourses?.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-1">
+                    <IconStudent />
+                    <Text type="font-14-400" className="text-white">
+                      {dataDetail?.data?.userCourses.length} Students
+                    </Text>
+                  </div>
+                  <div className="w-[1px] h-5 bg-[#BFBFBF]" />
+                </div>
+              )}
+
               <div className="flex items-center gap-1">
                 <IconTimeNew />
                 <Text type="font-14-400" className="text-white">
@@ -93,7 +116,7 @@ const DetailCourse = () => {
                 By
               </Text>
               <Text type="font-16-500" className="text-white">
-                Esther Howard
+                {dataDetail?.data?.author?.walletAddress}
               </Text>
             </div>
           </div>
@@ -101,7 +124,7 @@ const DetailCourse = () => {
           <Requirements data={dataDetail?.data} />
           <About data={dataDetail?.data} />
           <Mentors />
-          <MoreCourse />
+          <MoreCourse author={dataDetail?.data?.author} />
         </div>
         <div className="col-span-3">
           <div className="sticky top-32 z-[100000]">

@@ -17,47 +17,45 @@ import { useEffect } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
 import { TYPE_COURSE } from '@/utils/const';
 import { useGetLessons, useGetQuizz } from './service';
-
+const itemsTab = [
+  {
+    key: '1',
+    icon: <IconSearch />,
+    children: <Search />,
+  },
+  {
+    key: '2',
+    label: 'Overview',
+    children: <Overview />,
+  },
+  {
+    key: '3',
+    label: 'Q&A',
+    children: <QA />,
+  },
+  {
+    key: '4',
+    label: 'Notes',
+    children: <Notes />,
+  },
+  {
+    key: '5',
+    label: 'Announcements',
+    children: <Announcements />,
+  },
+  {
+    key: '6',
+    label: 'Reviews',
+    children: <Reviews />,
+  },
+  {
+    key: '7',
+    label: 'Learning tools',
+    children: <LearningTools />,
+  },
+];
 const Lesson = () => {
   const router = useRouter();
-
-  const itemsTab = [
-    {
-      key: '1',
-      icon: <IconSearch />,
-      children: <Search />,
-    },
-    {
-      key: '2',
-      label: 'Overview',
-      children: <Overview />,
-    },
-    {
-      key: '3',
-      label: 'Q&A',
-      children: <QA />,
-    },
-    {
-      key: '4',
-      label: 'Notes',
-      children: <Notes />,
-    },
-    {
-      key: '5',
-      label: 'Announcements',
-      children: <Announcements />,
-    },
-    {
-      key: '6',
-      label: 'Reviews',
-      children: <Reviews />,
-    },
-    {
-      key: '7',
-      label: 'Learning tools',
-      children: <LearningTools />,
-    },
-  ];
 
   const {
     run: runGetListSession,
@@ -73,16 +71,18 @@ const Lesson = () => {
   const { run: runGetQuizz, loading: loadingQuizz } = useGetQuizz();
 
   useEffect(() => {
-    if (router.query.id) {
+    if (router?.query?.id) {
       runGetListSession(router.query.id as string);
     }
-  }, [router.query.id]);
+  }, [router?.query?.id]);
 
   const handleClickChildLesson = (id: string, type: TYPE_COURSE) => {
-    if (type === TYPE_COURSE.LECTURE && id) {
-      runGetLessons(id);
-    } else {
-      runGetQuizz(id);
+    if (id) {
+      if (type === TYPE_COURSE.LECTURE) {
+        runGetLessons(id);
+      } else {
+        runGetQuizz(id);
+      }
     }
   };
 
