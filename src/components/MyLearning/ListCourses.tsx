@@ -8,6 +8,7 @@ import CourseCard from './CourseCard';
 import { useGetListUserCourse } from './service';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
+import NoData from '../ListCourse/NoData';
 
 const SORT_BY = [
   { key: 'createdAt desc', label: 'Newest' },
@@ -104,7 +105,7 @@ export default function ListCourses() {
       </div>
 
       <div className="grid grid-cols-4 gap-6">
-        {list.map((item) => (
+        {list?.length > 0 && list.map((item) => (
           <CourseCard
             key={item.id}
             id={item?.course?.id}
@@ -115,7 +116,14 @@ export default function ListCourses() {
             rating={4}
           />
         ))}
+
       </div>
+      {
+        list?.length === 0 && (
+
+          <NoData />
+        )
+      }
 
       {!noMore && (
         <Button
