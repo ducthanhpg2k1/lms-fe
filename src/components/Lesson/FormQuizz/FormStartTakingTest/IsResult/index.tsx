@@ -1,9 +1,12 @@
 import Text from "@/components/UI/Text"
-import { Check, Star } from "@phosphor-icons/react"
+import { Tooltip } from "@nextui-org/react";
+import { Check, Info, Star } from "@phosphor-icons/react"
 
-const IsResult = ({ title }: { title: string }) => {
+const IsResult = ({ title, totalQuizz, questions }: { questions: any, title: string, totalQuizz: number }) => {
+    console.log(questions, 'questions');
+
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full flex-1">
             <div className="bg-green/50 p-8 min-h-[240px]">
                 <div className="flex flex-col justify-center  gap-3 w-6/12 mx-auto">
                     <div className="flex items-center gap-4">
@@ -20,22 +23,35 @@ const IsResult = ({ title }: { title: string }) => {
                         Great! You're ready to move on to the next lecture.
                     </Text>
                     <Text className="text-white" type="font-16-400">
-                        You answered 1/1 question correctly.
+                        {`You answered ${totalQuizz}/${totalQuizz} question correctly.`}
                     </Text>
                 </div>
 
 
             </div>
-            <div className="flex-1 p-12 h-full flex flex-col gap-5">
+            <div className="flex-1 p-12  w-6/12 mx-auto h-full flex flex-col gap-5">
                 <div className="flex flex-col gap-3">
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 mb-4">
                         <Check size={24} weight="light" className="text-green" />
                         <Text className="text-white" type="font-24-700">Things you need to know
                         </Text>
+                        <Info size={20} weight="fill" />
                     </div>
-                    <Text className="text-black-5 pl-10" type="font-20-600">{title}
-                    </Text>
+
+
+                    {
+                        questions?.map((item: any, index: number) => {
+                            return (
+                                <div key={item?.id} className="flex items-center gap-1 pl-10">
+                                    <Text className="text-black-6" type="font-16-600">{`${index + 1}.`}
+                                    </Text>
+                                    <div dangerouslySetInnerHTML={{ __html: item?.question }} className="text-xl font-semibold text-black-6" />
+
+                                </div>
+                            )
+                        })
+                    }
                 </div>
 
 

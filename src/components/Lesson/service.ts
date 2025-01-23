@@ -44,3 +44,16 @@ export const useGetQuizz = (options?: IOptions) => {
 const serviceGetQuizz = async (id: string) => {
   return await privateRequest(request.get, `${API_PATH.QUIZZ}/${id}`, {});
 };
+
+const serviceProgressStatusQuizz = (body: any, id: string) => {
+  return privateRequest(request.patch, API_PATH.PROGRESS_QUIZZ(id), {
+    data: body,
+  });
+};
+
+export const useProgressStatusQuizz = (options: any) => {
+  return useRequest(serviceProgressStatusQuizz, {
+    manual: true,
+    ...options,
+  });
+};

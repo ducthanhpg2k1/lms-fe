@@ -16,9 +16,12 @@ import { useGetListSession } from '../CreateCourse/service';
 import { useEffect, useState } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
 import { LessonContentType, TYPE_COURSE } from '@/utils/const';
-import { useGetLessons, useGetQuizz } from './service';
+import { useGetLessons, useGetQuizz, useProgressStatusQuizz } from './service';
 import FormQuizz from './FormQuizz';
 import Article from './Article';
+import LoadingContainer from '../UI/LoadingContainer';
+import { UserCourseProgressStatus } from '@/utils/common';
+import { toast } from '../UI/Toast/toast';
 const itemsTab = [
   {
     key: '1',
@@ -58,7 +61,9 @@ const itemsTab = [
 ];
 const Lesson = () => {
   const router = useRouter();
-  const [typeLoadCotent, setTypeLoadContent] = useState<string>('')
+  const [typeLoadCotent, setTypeLoadContent] = useState<string>('');
+  const [activeIdChildSection, setActiveIdChildSection] = useState<string>('');
+
 
   const {
     run: runGetListSession,
@@ -85,11 +90,10 @@ const Lesson = () => {
       const firstId = combinedArray?.[0]?.id;
       if (combinedArray?.[0]?.type === TYPE_COURSE.LECTURE) {
         runGetLessons(firstId);
-        setTypeLoadContent(TYPE_COURSE.LECTURE)
+        setTypeLoadContent(TYPE_COURSE.LECTURE);
       } else {
         runGetQuizz(firstId);
-        setTypeLoadContent(TYPE_COURSE.QUIZ)
-
+        setTypeLoadContent(TYPE_COURSE.QUIZ);
       }
     },
   });
@@ -100,14 +104,58 @@ const Lesson = () => {
     loading: loadingLesson,
   } = useGetLessons({
     onSuccess: () => {
-      handleScrollTop()
-    }
+      handleScrollTop();
+    },
   });
-  const { dataQuizz, run: runGetQuizz, loading: loadingQuizz } = useGetQuizz({
+  const {
+    dataQuizz,
+    run: runGetQuizz,
+    loading: loadingQuizz,
+  } = useGetQuizz({
     onSuccess: () => {
-      handleScrollTop()
-    }
+      handleScrollTop();
+    },
   });
+
+  const requestProgressStatusQuizz = useProgressStatusQuizz({
+    onSuccess: (res: any) => {
+      toast.success(res?.message);
+
+      const allItems = dataListSession?.data.reduce(
+        (result: any, section: any) => {
+          const newLessons = section?.lessons?.map((lesson: any) => {
+            return {
+              ...lesson,
+              type: TYPE_COURSE.LECTURE,
+            };
+          });
+
+          const newQuizzes = section?.quizzes?.map((quizz: any) => {
+            return {
+              ...quizz,
+              type: TYPE_COURSE.QUIZ,
+            };
+          });
+          return result.concat(newLessons, newQuizzes);
+        },
+        []
+      );
+      const currentIndex = allItems.findIndex((item: any) => item.id === res?.data?.quizId);
+
+      if (currentIndex !== -1 && currentIndex + 1 < allItems.length) {
+        const nextItem = allItems[currentIndex + 1];
+        handleClickChildLesson(nextItem?.id, nextItem?.type)
+
+        const newPath = `/lesson/${router.query.id}?idChildSection=${nextItem?.id}`;
+        router.push(newPath);
+
+      }
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
+
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -130,7 +178,7 @@ const Lesson = () => {
   };
 
   const handleClickChildLesson = (id: string, type: TYPE_COURSE) => {
-    setTypeLoadContent(type)
+    setTypeLoadContent(type);
     if (type === TYPE_COURSE.LECTURE && id) {
       runGetLessons(id);
     } else {
@@ -138,33 +186,94 @@ const Lesson = () => {
     }
   };
 
+  useEffect(() => {
+    if (router.query.idChildSection) {
+      setActiveIdChildSection(router.query.idChildSection as string);
+    }
+  }, [router.query.idChildSection]);
+
+  useEffect(() => {
+    if (dataListSession?.data?.length > 0) {
+      const firstSection = dataListSession?.data?.[0];
+      const combinedArray = [
+        ...(firstSection?.lessons || []),
+        ...(firstSection?.quizzes || []),
+      ];
+
+      const firstId = combinedArray?.[0]?.id;
+
+      if (firstId) {
+        setActiveIdChildSection(firstId);
+      }
+    }
+  }, [dataListSession?.data]);
+
+  const handleSkipQuizz = (id: string) => {
+    const allItems = dataListSession?.data.reduce(
+      (result: any, section: any) => {
+        const newLessons = section?.lessons?.map((lesson: any) => {
+          return {
+            ...lesson,
+            type: TYPE_COURSE.LECTURE,
+          };
+        });
+
+        const newQuizzes = section?.quizzes?.map((quizz: any) => {
+          return {
+            ...quizz,
+            type: TYPE_COURSE.QUIZ,
+          };
+        });
+        return result.concat(newLessons, newQuizzes);
+      },
+      []
+    );
+    const currentIndex = allItems.findIndex((item: any) => item.id === id);
+
+    if (currentIndex !== -1 && currentIndex + 1 < allItems.length) {
+      const nextItem = allItems[currentIndex + 1];
+      handleClickChildLesson(nextItem?.id, nextItem?.type)
+
+      const newPath = `/lesson/${router.query.id}?idChildSection=${nextItem?.id}`;
+      router.push(newPath);
+
+    }
+  };
+  const handleClickContinueQuizz = (id: string) => {
+    const body = {
+      status: UserCourseProgressStatus.COMPLETED
+    }
+    requestProgressStatusQuizz.run(body, id)
+
+  };
+
+
   return (
     <div className="grid grid-cols-10 relative" id="topLesson">
       <div className="col-span-7 flex flex-col">
-
         {typeLoadCotent === TYPE_COURSE.QUIZ ? (
-          <FormQuizz dataQuizz={dataQuizz?.data} />
+          <FormQuizz
+            handleClickContinueQuizz={handleClickContinueQuizz}
+            loading={loadingQuizz || requestProgressStatusQuizz?.loading}
+            handleSkipQuizz={handleSkipQuizz}
+            dataQuizz={dataQuizz?.data}
+          />
         ) : (
           <>
-            {
-              dataLesson?.data?.contentType === LessonContentType.VIDEO && (
-                <VideoSection
-                  loading={loadingLesson || loadingQuizz}
-                  info={dataLesson?.data?.info}
-                />
-              )
-            }
+            {dataLesson?.data?.contentType === LessonContentType.VIDEO && (
+              <VideoSection
+                loading={loadingLesson || loadingQuizz}
+                info={dataLesson?.data?.info}
+              />
+            )}
 
-            {
-              dataLesson?.data?.contentType === LessonContentType.ARTICLE && (
-                <Article
-                  loading={loadingLesson || loadingQuizz}
-                  content={dataLesson?.data}
-                />
-              )
-            }
+            {dataLesson?.data?.contentType === LessonContentType.ARTICLE && (
+              <Article
+                loading={loadingLesson || loadingQuizz}
+                content={dataLesson?.data}
+              />
+            )}
           </>
-
         )}
 
         <div className="flex w-full flex-col">
@@ -214,6 +323,7 @@ const Lesson = () => {
             </Button>
           </div>
           <ListSection
+            activeIdChildSection={activeIdChildSection}
             loading={loadingListSession}
             handleClickChildLesson={handleClickChildLesson}
             sections={dataListSession?.data}

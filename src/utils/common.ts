@@ -12,3 +12,17 @@ export const clean = (arr: any) => {
     return element !== undefined && element !== null;
   });
 };
+
+export const formatTimeDuration = (time: string) => {
+  const [part1, part2] = time.split(':').map(Number);
+  if (part1 === 0) {
+    return `${part2}s`;
+  } else {
+    return `${part1}min`;
+  }
+};
+
+export enum UserCourseProgressStatus {
+  PROGRESS = 'PROGRESS',
+  COMPLETED = 'COMPLETED',
+}

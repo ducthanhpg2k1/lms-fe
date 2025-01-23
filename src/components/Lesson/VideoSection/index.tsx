@@ -1,5 +1,5 @@
 import LoadingContainer from '@/components/UI/LoadingContainer';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import 'videojs-hls-quality-selector';
@@ -8,6 +8,11 @@ import 'videojs-contrib-quality-levels';
 const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
   const videoRef: any = useRef(null);
   const playerRef: any = useRef(null);
+
+  const [progressVideo, setProgressVideo] = useState(0)
+
+  console.log(progressVideo, 'progressVideo');
+
 
   useEffect(() => {
     // Initialize player if it doesn't exist
@@ -21,6 +26,8 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
       // Replace old video element with new one
       if (videoRef.current) {
         videoRef.current.appendChild(videoElement);
+
+
       }
 
       const options = {
@@ -61,15 +68,30 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
 
     // Update source when URL changes
     if (playerRef.current && info?.urlVideo) {
+      const handleTimeUpdate = () => {
+        const currentTime = playerRef.current.currentTime();
+        const duration = playerRef.current.duration();
+        const progress = (currentTime / duration) * 100;
+
+        if (progress >= 80) {
+          console.log('Video has reached 80% of its duration');
+          setProgressVideo(progress)
+          playerRef.current.off('timeupdate', handleTimeUpdate);
+        }
+      }
+
       try {
         playerRef.current.src({
           src: info.urlVideo,
           type: determineVideoType(info.urlVideo),
         });
+        playerRef.current.on('timeupdate', handleTimeUpdate);
+
       } catch (error) {
         console.error('Error updating video source:', error);
       }
     }
+
 
     return () => {
       if (playerRef.current) {

@@ -3,15 +3,20 @@ import Text from '@/components/UI/Text';
 import { Button, Radio, RadioGroup } from '@nextui-org/react';
 import { CaretRight, CheckCircle, XCircle } from '@phosphor-icons/react';
 import clsx from 'clsx';
-import { useMemo, useState } from 'react';
-import { set } from 'video.js/dist/types/tech/middleware';
+import { useState } from 'react';
 import IsResult from './IsResult';
 
-const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
-  const [currentQuestion, setCurrentQuestion] = useState(0);
+const enum STEP_ANSWER_QUESTION {
+  SEE_RESULTS = 'SEE_RESULTS',
+  CONTINUE = 'CONTINUE'
+}
+
+const FormStartTakingTest = ({ dataQuizz, handleClickContinueQuizz }: { handleClickContinueQuizz: (id: string) => void, dataQuizz: any }) => {
+  const [currentQuestion, setCurrentQuestion] = useState(1);
   const [answerCorrectly, setAnswerCorrectly] = useState<any>('');
   const [loading, setLoading] = useState(false)
-  const [isSeeReult, setIsSeeReult] = useState(false)
+
+  const [stepAnswerQuestion, setStepAnswerQuestion] = useState<string>('')
 
 
   const [valueQuestion, setValueQuestion] = useState('');
@@ -19,29 +24,44 @@ const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
     setValueQuestion(value);
   };
 
+
   const checkIsCorrectById = (id: string) => {
-    const item = dataQuizz?.questions?.[currentQuestion]?.answers?.find(
+    const item = dataQuizz?.questions?.[currentQuestion - 1]?.answers?.find(
       (item: any) => item.id === id
     );
     return item ? item.isCorrect : false;
   };
 
   const handleCheckAnswer = () => {
-    setLoading(true);
-    setTimeout(() => {
-      const isAnswers = checkIsCorrectById(valueQuestion);
+    const isAnswers = checkIsCorrectById(valueQuestion);
 
+
+    setLoading(true);
+
+    setTimeout(() => {
       setLoading(false);
       setAnswerCorrectly(isAnswers);
+      if (currentQuestion === dataQuizz?.questions?.length && isAnswers) {
+        setStepAnswerQuestion(STEP_ANSWER_QUESTION.SEE_RESULTS)
 
+      }
     }, 500);
   };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion <= dataQuizz?.questions?.length && dataQuizz?.questions?.length > 2 && answerCorrectly) {
+      setCurrentQuestion(currentQuestion + 1)
+      setAnswerCorrectly('')
+    }
+
+
+  }
 
   const handleSeeResult = () => {
     setLoading(true);
     setTimeout(() => {
 
-      setIsSeeReult(true)
+      setStepAnswerQuestion(STEP_ANSWER_QUESTION.CONTINUE)
 
       setLoading(false);
 
@@ -53,10 +73,13 @@ const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
     <div className="w-full flex flex-col min-h-[566px] relative">
       <LoadingContainer loading={loading} />
       {
-        isSeeReult ? (
-          <IsResult title={dataQuizz?.title} />
+        stepAnswerQuestion === STEP_ANSWER_QUESTION.CONTINUE ? (
+          <IsResult
+            questions={dataQuizz?.questions}
+            totalQuizz={dataQuizz?.questions?.length}
+            title={dataQuizz?.title} />
         ) : (
-          <div className="w-6/12 pt-20 flex-1 mx-auto flex items-start text-start flex-col gap-4">
+          <div className="w-6/12 pt-10 flex-1 mx-auto flex items-start text-start flex-col gap-4">
             {answerCorrectly === true && (
               <div className="p-4 flex items-center gap-3 w-full bg-transparent rounded-2xl border-1 border-green">
                 <CheckCircle className='text-green' size={30} weight="fill" />
@@ -74,18 +97,18 @@ const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
               </div>
             )}
 
-            <Text type="font-32-700" className="text-white">{`Question ${currentQuestion + 1
+            <Text type="font-32-700" className="text-white">{`Question ${currentQuestion
               }`}</Text>
 
             <div
               className="text-2xl text-white pb-4"
               dangerouslySetInnerHTML={{
-                __html: dataQuizz?.questions?.[currentQuestion]?.question,
+                __html: dataQuizz?.questions?.[currentQuestion - 1]?.question,
               }}
             />
             <div className="w-full">
               <RadioGroup onValueChange={onValueChange}>
-                {dataQuizz?.questions?.[currentQuestion]?.answers?.map(
+                {dataQuizz?.questions?.[currentQuestion - 1]?.answers?.map(
                   (item: any) => {
                     return (
                       <CustomRadio key={item.id} value={item.id}>
@@ -106,10 +129,11 @@ const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
       }
 
       <div className="p-5 border-1 border-black-10 flex justify-between items-center border-l-0 border-r-0">
-        <Text type="font-16-400" className="text-white">{`${currentQuestion + 1
+        <Text type="font-16-400" className="text-white">{`${currentQuestion
           }/${dataQuizz?.questions?.length}`}</Text>
+
         {
-          answerCorrectly ? (
+          stepAnswerQuestion === STEP_ANSWER_QUESTION.SEE_RESULTS && (
             <Button
               onClick={handleSeeResult}
               className="bg-main w-max  rounded min-w-[150px]"
@@ -124,18 +148,68 @@ const FormStartTakingTest = ({ dataQuizz }: { dataQuizz: any }) => {
               </div>
 
             </Button>
-          ) : (
+          )
+        }
+        {
+          stepAnswerQuestion === STEP_ANSWER_QUESTION.CONTINUE && answerCorrectly && (
             <Button
-              isDisabled={!valueQuestion}
-              onClick={handleCheckAnswer}
-              className="bg-main w-max  rounded min-w-[150px]"
+              onClick={() => {
+                setStepAnswerQuestion('')
+                setCurrentQuestion(1)
+                setAnswerCorrectly('')
+                handleClickContinueQuizz(dataQuizz?.id)
+              }}
+              className="bg-main w-max  rounded min-w-[100px]"
             >
-              <Text className="text-white" type="font-16-400">
-                Check the answer
-              </Text>
+              <div className='flex items-center gap-2'>
+                <Text className="text-white" type="font-16-400">
+                  Continue
+
+                </Text>
+                <CaretRight size={16} weight="light" />
+
+              </div>
+
             </Button>
           )
         }
+        {!stepAnswerQuestion && (
+          <>
+            {
+              answerCorrectly && currentQuestion < dataQuizz?.questions?.length ? (
+                <Button
+                  className="bg-main w-max  rounded min-w-[80px]"
+                  onClick={handleNextQuestion}
+                >
+
+                  <div className='flex items-center gap-2'>
+                    <Text className="text-white" type="font-16-400">
+                      Next
+
+                    </Text>
+                    <CaretRight size={16} weight="light" />
+
+                  </div>
+
+                </Button>
+              ) : (
+                <Button
+                  isDisabled={!valueQuestion}
+                  onClick={() => handleCheckAnswer()}
+                  className="bg-main w-max  rounded min-w-[150px]"
+                >
+                  <Text className="text-white" type="font-16-400">
+                    Check the answer
+                  </Text>
+                </Button>
+              )
+            }
+          </>
+
+        )}
+
+
+
 
       </div>
     </div>
