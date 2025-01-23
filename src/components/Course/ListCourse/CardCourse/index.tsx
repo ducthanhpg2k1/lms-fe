@@ -74,7 +74,7 @@ const CardCourse = ({ item }: { item?: any }) => {
           <Button
             variant="light"
             radius="full"
-            onClick={() => router.push(ROUTE_PATH.LESSON)}
+            onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(item?.id))}
           >
             <div className="flex items-center gap-1">
               <Text type="font-14-500" className="text-white">

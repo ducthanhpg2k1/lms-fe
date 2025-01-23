@@ -18,9 +18,12 @@ import { useGetDetailCourse } from '@/components/CreateCourse/service';
 import dayjs from 'dayjs';
 import { clean } from '@/utils/common';
 import LoadingScreen from '@/components/UI/LoadingScreen';
+import { useProfile } from '@/store/profile/useProfile';
 
 const DetailCourse = () => {
   const router = useRouter();
+  const { profile } = useProfile();
+  console.log('profile', profile);
 
   const {
     run: getDetailCourse,
@@ -34,9 +37,9 @@ const DetailCourse = () => {
 
   useEffect(() => {
     if (router.query.id) {
-      getDetailCourse(router.query.id as string);
+      getDetailCourse(router.query.id as string, profile?.id);
     }
-  }, [router.query.id]);
+  }, [router.query.id, profile?.id]);
 
   const lessonCount = dataDetail?.data?.sections?.reduce(
     (total: number, section: any) => {
