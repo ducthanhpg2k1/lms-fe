@@ -38,6 +38,12 @@ const FormAddQuestion = ({
           isCorrect: false,
           explain: '',
         },
+        {
+          id: '4',
+          answer: '',
+          isCorrect: false,
+          explain: '',
+        },
       ],
     },
   });

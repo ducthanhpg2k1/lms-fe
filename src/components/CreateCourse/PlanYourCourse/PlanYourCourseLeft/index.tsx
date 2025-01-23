@@ -43,7 +43,7 @@ const PlanYourCourseLeft = ({
               }
             )}
           >
-            <div className="w-5 h-5 rounded-full border-1 border-black-7" />
+            <div className="w-5 h-5 rounded-[4px] border-1 border-black-7" />
             <Text type="font-16-500" className="text-white">
               {item?.content}
             </Text>

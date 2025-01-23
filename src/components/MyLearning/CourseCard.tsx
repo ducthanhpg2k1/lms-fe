@@ -31,7 +31,8 @@ export default function CourseCard({
           alt={name}
           width={302}
           height={200}
-          className="w-full"
+          className="w-full h-[200px]"
+          layout='contain'
           onError={(e: any) => {
             e.target.srcset = '/images/img-default.png';
           }}
@@ -41,7 +42,7 @@ export default function CourseCard({
         <div className="flex flex-col gap-[10px]">
           <Text type="font-16-500">{name}</Text>
 
-          <Text type="font-14-400" className="text-[#8C8C8C]">
+          <Text type="font-14-400" className="text-[#8C8C8C] break-all">
             {authorName}
           </Text>
         </div>
