@@ -13,7 +13,7 @@ import LearningTools from './LearningTools';
 import Search from './Search';
 import { useRouter } from 'next/router';
 import { useGetListSession } from '../CreateCourse/service';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
 import { LessonContentType, TYPE_COURSE } from '@/utils/const';
 import { useGetLessons, useGetQuizz } from './service';
@@ -58,6 +58,7 @@ const itemsTab = [
 ];
 const Lesson = () => {
   const router = useRouter();
+  const [typeLoadCotent, setTypeLoadContent] = useState<string>('')
 
   const {
     run: runGetListSession,
@@ -84,8 +85,11 @@ const Lesson = () => {
       const firstId = combinedArray?.[0]?.id;
       if (combinedArray?.[0]?.type === TYPE_COURSE.LECTURE) {
         runGetLessons(firstId);
+        setTypeLoadContent(TYPE_COURSE.LECTURE)
       } else {
         runGetQuizz(firstId);
+        setTypeLoadContent(TYPE_COURSE.QUIZ)
+
       }
     },
   });
@@ -94,8 +98,16 @@ const Lesson = () => {
     dataLesson,
     run: runGetLessons,
     loading: loadingLesson,
-  } = useGetLessons();
-  const { dataQuizz, run: runGetQuizz, loading: loadingQuizz } = useGetQuizz();
+  } = useGetLessons({
+    onSuccess: () => {
+      handleScrollTop()
+    }
+  });
+  const { dataQuizz, run: runGetQuizz, loading: loadingQuizz } = useGetQuizz({
+    onSuccess: () => {
+      handleScrollTop()
+    }
+  });
 
   useEffect(() => {
     if (router?.query?.id) {
@@ -103,21 +115,34 @@ const Lesson = () => {
     }
   }, [router?.query?.id]);
 
+  const handleScrollTop = () => {
+    const element: any = document.querySelector('#topLesson');
+
+    if (element) {
+      element.style.scrollMarginTop = '120px';
+
+      element.scrollIntoView({ behavior: 'smooth' });
+
+      setTimeout(() => {
+        element.style.scrollMarginTop = '0';
+      }, 1000);
+    }
+  };
+
   const handleClickChildLesson = (id: string, type: TYPE_COURSE) => {
-    if (id) {
-      if (type === TYPE_COURSE.LECTURE) {
-        runGetLessons(id);
-      } else {
-        runGetQuizz(id);
-      }
+    setTypeLoadContent(type)
+    if (type === TYPE_COURSE.LECTURE && id) {
+      runGetLessons(id);
+    } else {
+      runGetQuizz(id);
     }
   };
 
   return (
-    <div className="grid grid-cols-10 relative">
+    <div className="grid grid-cols-10 relative" id="topLesson">
       <div className="col-span-7 flex flex-col">
 
-        {dataQuizz?.data?.id ? (
+        {typeLoadCotent === TYPE_COURSE.QUIZ ? (
           <FormQuizz dataQuizz={dataQuizz?.data} />
         ) : (
           <>
@@ -171,7 +196,7 @@ const Lesson = () => {
         </div>
       </div>
       <div className="col-span-3">
-        <div className="w-full sticky top-0 max-h-[100dvh] overflow-x-hidden overflow-auto right-0 z-[10000] h-full bg-[#0F141A]">
+        <div className="w-full sticky top-0 max-h-[100dvh] overflow-hidden right-0 z-[10000] h-full bg-[#0F141A]">
           <div className="flex justify-between py-6 px-4 items-center border-l-1 border-b-1 border-b-[#D9D9D91A] border-l-[#D9D9D91A] sticky top-0 z-[1000] bg-gray">
             <div className="flex items-center gap-2">
               <Avatar src="/images/avatar-user.png" className="w-12 h-12" />

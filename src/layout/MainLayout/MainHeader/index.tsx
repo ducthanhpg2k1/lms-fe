@@ -8,18 +8,19 @@ import { useEffect, useState } from 'react';
 import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
 import { useAccount, useSignMessage } from 'wagmi';
 import {
-  deleteAuthCookies,
   getAccessToken,
   setAuthCookies,
 } from '@/store/auth';
 import { useGetUserNonce, useLoginWeb3 } from './service';
 import { toast } from '@/components/UI/Toast/toast';
+import { useProfileInitial } from '@/store/profile/useProfileInitial';
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
   const { isConnected, address } = useAccount();
   const token = getAccessToken();
   const { signMessageAsync } = useSignMessage();
+  const { requestGetProfile } = useProfileInitial();
 
   const handleChangeSearch = (e: any) => {
     setValueSearch(e.target.value);
@@ -28,6 +29,7 @@ const MainHeader = () => {
   const { run: runLoginWeb3 } = useLoginWeb3({
     onSuccess(res) {
       toast.success('Login successfully');
+      requestGetProfile();
       setAuthCookies({
         token: res?.data?.accessToken,
       });

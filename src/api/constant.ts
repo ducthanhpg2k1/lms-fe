@@ -2,6 +2,8 @@ export const API_PATH = {
   // Auth
   AUTH_LOGIN: '/api/v1/auth/login',
 
+  GET_USER: '/api/users/me',
+
   GET_NONCE: '/api/auth/nonce',
 
   LOGIN_WEB3: '/api/auth/login-web3',

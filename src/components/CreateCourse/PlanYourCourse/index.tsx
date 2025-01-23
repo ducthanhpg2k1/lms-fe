@@ -85,18 +85,19 @@ const PlanYourCourse = () => {
   });
 
   const onSubmit = (values: any) => {
+    console.log('values?.intenedLeaners', values?.intenedLeaners);
+
     const body: any = {
-      objectives: values?.objectives?.map((item: any) => item?.name),
-      requirements: values?.requirements?.map((item: any) => item?.name),
-      intenedLeaners: values?.intenedLeaners?.map((item: any) => item?.name),
+      objectives: values?.objectives?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
+      requirements: values?.requirements?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
+      intenedLeaners: values?.intenedLeaners?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
       description: values?.description,
       image: values?.image,
-      video: values?.image,
+      video: values?.video,
       subtitle: values?.subtitle,
       title: values?.title,
       subCategoryId: values?.subCategoryId,
       categoryId: values?.categoryId,
-
       topics: [values.topics],
       lang: values.lang,
       level: values.level,
@@ -123,7 +124,7 @@ const PlanYourCourse = () => {
             loading={requestEditCourse?.loading}
             handleSubmitForm={handleSubmit(onSubmit)}
           />
-          <div className="w-10/12 mx-auto pt-10">
+          <div className="w-11/12 mx-auto pt-10">
             <div className="grid grid-cols-10 gap-12">
               <div className="col-span-2">
                 <PlanYourCourseLeft

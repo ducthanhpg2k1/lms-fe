@@ -23,7 +23,7 @@ export enum Language {
 export const DATA_LANGUAGE = [
   {
     key: Language.EN,
-    label: 'En',
+    label: 'English',
   },
 ];
 export enum Level {

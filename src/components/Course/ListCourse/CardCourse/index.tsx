@@ -23,6 +23,7 @@ const CardCourse = ({ item }: { item?: any }) => {
         height={200}
         alt=""
         className="w-full h-[200px] rounded rounded-b-none"
+        layout='contain'
         onError={(e: any) => {
           e.target.srcset = '/images/img-default.png';
         }}

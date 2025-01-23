@@ -24,6 +24,7 @@ const ChildSection = ({
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
         {items?.map((item: any, index: number) => {
+
           const minutes = Math.floor(item?.info?.duration / 60);
           const seconds = Math.floor(item?.info?.duration % 60);
           const formattedTime = `${minutes
