@@ -7,7 +7,7 @@ import { Control, Controller } from 'react-hook-form';
 import UploadImage from './UploadImage';
 import PromotionalVideo from './PromotionalVideo';
 import { DATA_LANGUAGE, DATA_LEVEL } from '@/utils/const';
-import { useGetCategories } from '@/services/filter.service';
+import { useGetCategories, useGetLanguages, useGetLevels } from '@/services/filter.service';
 import { useGetSubCategories } from '@/components/CreateCourse/service';
 import { useEffect } from 'react';
 
@@ -19,6 +19,9 @@ const CourseLandingPage = ({
   watch: any;
 }) => {
   const { data } = useGetCategories();
+  const { data: levels } = useGetLevels();
+
+  const { data: languages } = useGetLanguages();
 
   const { dataSubCategories, run: runGetSubCategories } = useGetSubCategories();
 
@@ -121,7 +124,12 @@ const CourseLandingPage = ({
                 onChange={field.onChange}
                 value={field.value}
                 inputDefault
-                options={DATA_LANGUAGE}
+                options={languages?.data?.map((item: any) => {
+                  return {
+                    key: item?.value,
+                    label: item?.label,
+                  };
+                }) || []}
               />
             )}
           />
@@ -135,7 +143,12 @@ const CourseLandingPage = ({
                 onChange={field.onChange}
                 value={field.value}
                 inputDefault
-                options={DATA_LEVEL}
+                options={levels?.data?.map((item: any) => {
+                  return {
+                    key: item?.value,
+                    label: item?.label,
+                  };
+                }) || []}
               />
             )}
           />
