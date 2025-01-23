@@ -1,14 +1,40 @@
+import { useGetDetailCourse } from '@/components/CreateCourse/service';
+import { valueProgressAtom } from '@/components/Lesson';
 import IconArrowDown from '@/components/UI/Icons/IconArrowDown';
 import IconArrowLeft from '@/components/UI/Icons/IconArrowLeft';
 import IconDots from '@/components/UI/Icons/IconDots';
 import ProgressCircle from '@/components/UI/ProgressCircle';
 import Text from '@/components/UI/Text';
-import { Button } from '@nextui-org/react';
+import { Button, CircularProgress } from '@nextui-org/react';
+import { useAtom } from 'jotai';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 
 const LessonLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
+  const [valueYourProgress] = useAtom(valueProgressAtom)
+  console.log(valueYourProgress, 'valueYourProgress');
+
+  const {
+    run: getDetailCourse,
+    data: dataDetail,
+  } = useGetDetailCourse({
+    onSuccess: () => {
+    },
+  });
+
+  useEffect(() => {
+    if (router.query.id) {
+      getDetailCourse(router.query.id as string)
+    }
+
+  }, [router.query.id])
+
+  console.log(dataDetail, 'dataDetail');
+
+
+
   return (
     <div className="w-screen bg-primary h-screen overflow-auto overflow-x-hidden flex flex-col relative">
       <div className="flex py-6 px-4 border-b-1 border-b-black-9 justify-between items-center">
@@ -29,12 +55,32 @@ const LessonLayout = ({ children }: { children: ReactNode }) => {
           </div>
           <div className="w-[1px] h-6 bg-black-6" />
           <Text type="font-16-500" className="text-white">
-            AWS Certified Solution Architect by the end of 2025
+            {dataDetail?.data?.title}
           </Text>
         </div>
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-2 cursor-pointer">
-            <ProgressCircle value={20} />
+            <div className='flex items-center justify-center relative'>
+              <div className='absolute'>
+                <Image
+                  src="/images/img-trophy-line.png"
+                  width={16}
+                  height={16}
+                  alt="Trophy"
+                  className="w-5 h-5"
+                />
+              </div>
+              <CircularProgress
+                classNames={{
+                  svg: 'w-[32px] h-[32px]',
+                  indicator: 'text-green'
+                }}
+                maxValue={valueYourProgress?.total}
+                value={valueYourProgress?.value}
+                size="sm"
+              />
+            </div>
+
             <Text type="font-16-500" className="text-white">
               Your Progress
             </Text>

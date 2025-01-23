@@ -4,15 +4,28 @@ import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import 'videojs-hls-quality-selector';
 import 'videojs-contrib-quality-levels';
+import NextVideo from './NextVideo';
 
-const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
+const VideoSection = ({
+  info,
+  loading,
+  data,
+  handleNextChildSection,
+  handleFindIdNextChildSection,
+}: {
+  handleNextChildSection: (type: string, idNext: string) => void;
+  handleFindIdNextChildSection: any;
+  data: any;
+  loading: boolean;
+  info: any;
+}) => {
   const videoRef: any = useRef(null);
   const playerRef: any = useRef(null);
 
-  const [progressVideo, setProgressVideo] = useState(0)
+  // const [progressVideo, setProgressVideo] = useState(0);
+  const [endVideo, setEndVideo] = useState(false);
 
-  console.log(progressVideo, 'progressVideo');
-
+  const dataItemNext = handleFindIdNextChildSection(data?.id);
 
   useEffect(() => {
     // Initialize player if it doesn't exist
@@ -23,11 +36,13 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
       videoElement.preload = 'auto';
       videoElement.crossOrigin = 'anonymous';
 
+      videoElement.addEventListener('ended', () => {
+        setEndVideo(true);
+      });
+
       // Replace old video element with new one
       if (videoRef.current) {
         videoRef.current.appendChild(videoElement);
-
-
       }
 
       const options = {
@@ -74,11 +89,10 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
         const progress = (currentTime / duration) * 100;
 
         if (progress >= 80) {
-          console.log('Video has reached 80% of its duration');
-          setProgressVideo(progress)
+          // setProgressVideo(progress);
           playerRef.current.off('timeupdate', handleTimeUpdate);
         }
-      }
+      };
 
       try {
         playerRef.current.src({
@@ -86,12 +100,10 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
           type: determineVideoType(info.urlVideo),
         });
         playerRef.current.on('timeupdate', handleTimeUpdate);
-
       } catch (error) {
         console.error('Error updating video source:', error);
       }
     }
-
 
     return () => {
       if (playerRef.current) {
@@ -112,8 +124,25 @@ const VideoSection = ({ info, loading }: { loading: boolean; info: any }) => {
     return 'video/mp4';
   };
 
+  const resetVideo = () => {
+    if (playerRef.current) {
+      playerRef.current.currentTime(0);
+      playerRef.current.pause();
+    }
+  };
+
   return (
     <div className="video-container relative">
+      {endVideo && (
+        <NextVideo
+          handleNextChildSection={(type, id) => {
+            setEndVideo(false);
+            resetVideo();
+            handleNextChildSection(type, id);
+          }}
+          dataItemNext={dataItemNext}
+        />
+      )}
       <LoadingContainer loading={loading} />
       <div ref={videoRef} />
     </div>

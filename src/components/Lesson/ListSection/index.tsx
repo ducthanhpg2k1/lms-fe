@@ -4,15 +4,17 @@ import { TYPE_COURSE } from '@/utils/const';
 import { useMemo } from 'react';
 import ChildSection from './ChildSection';
 import LoadingContainer from '@/components/UI/LoadingContainer';
-import { formatTimeDuration } from '@/utils/common';
+import { formatTimeDuration, UserCourseProgressStatus } from '@/utils/common';
 
 const ListSection = ({
   sections,
   handleClickChildLesson,
+  onChangeCheckBox,
   loading,
   activeIdChildSection,
 }: {
-  handleClickChildLesson: (id: string, type: TYPE_COURSE) => void;
+  handleClickChildLesson: (id: string, type: TYPE_COURSE, status: UserCourseProgressStatus) => void;
+  onChangeCheckBox: (values: any) => void;
   sections: any;
   loading: boolean;
   activeIdChildSection: any
@@ -26,6 +28,9 @@ const ListSection = ({
 
           const countChildrendSection =
             item?.quizzes?.length + item?.lessons?.length;
+
+
+
 
           const newLessons = item?.lessons?.map(
             (lesson: any, indexLesson: number) => {
@@ -47,7 +52,10 @@ const ListSection = ({
             }
           );
           const listChildSection = newLessons?.concat(newQuizzes);
-          console.log(newLessons, 'newLessons');
+          const completedCount = listChildSection?.filter(
+            (item: any) => item.progress && item.progress.status === UserCourseProgressStatus.COMPLETED
+          ).length;
+
           const totalDuration = newLessons
             .filter((item: any) => item.contentType === "VIDEO")
             .reduce((sum: any, item: any) => sum + (item.info.duration || 0), 0);
@@ -69,7 +77,7 @@ const ListSection = ({
                   </Text>
                   <div className="flex items-center gap-3">
                     <Text type="font-14-400" className="opacity-50">
-                      {`0/${countChildrendSection}`}
+                      {`${completedCount}/${countChildrendSection}`}
                     </Text>
                     <Text type="font-14-400" className="opacity-50">
                       {formatTimeDuration(formattedTime)}
@@ -80,6 +88,7 @@ const ListSection = ({
             >
               {listChildSection?.length > 0 ? (
                 <ChildSection
+                  onChangeCheckBox={onChangeCheckBox}
                   activeIdChildSection={activeIdChildSection}
                   handleClickChildLesson={handleClickChildLesson}
                   items={listChildSection}

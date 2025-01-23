@@ -3,8 +3,9 @@ import Text from '@/components/UI/Text';
 import { Button, Radio, RadioGroup } from '@nextui-org/react';
 import { CaretRight, CheckCircle, XCircle } from '@phosphor-icons/react';
 import clsx from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import IsResult from './IsResult';
+import { UserCourseProgressStatus } from '@/utils/common';
 
 const enum STEP_ANSWER_QUESTION {
   SEE_RESULTS = 'SEE_RESULTS',
@@ -17,6 +18,15 @@ const FormStartTakingTest = ({ dataQuizz, handleClickContinueQuizz }: { handleCl
   const [loading, setLoading] = useState(false)
 
   const [stepAnswerQuestion, setStepAnswerQuestion] = useState<string>('')
+
+  console.log(dataQuizz, 'dataQuizz');
+
+  useEffect(() => {
+    if (dataQuizz?.progress?.status === UserCourseProgressStatus.COMPLETED) {
+      setStepAnswerQuestion(STEP_ANSWER_QUESTION.CONTINUE)
+    }
+  }, [dataQuizz])
+
 
 
   const [valueQuestion, setValueQuestion] = useState('');
@@ -129,9 +139,32 @@ const FormStartTakingTest = ({ dataQuizz, handleClickContinueQuizz }: { handleCl
       }
 
       <div className="p-5 border-1 border-black-10 flex justify-between items-center border-l-0 border-r-0">
-        <Text type="font-16-400" className="text-white">{`${currentQuestion
-          }/${dataQuizz?.questions?.length}`}</Text>
+        <div className='w-[200px]'>
+          {
+            dataQuizz?.progress?.status !== UserCourseProgressStatus.COMPLETED && (
+              <Text type="font-16-400" className="text-white">{`${currentQuestion
+                }/${dataQuizz?.questions?.length}`}</Text>
+            )
+          }
+        </div>
 
+        {dataQuizz?.progress?.status === UserCourseProgressStatus.COMPLETED && (
+
+          <Button
+            onClick={() => handleClickContinueQuizz(dataQuizz?.id)}
+
+            className="bg-main w-max  rounded min-w-[120px]"
+          >
+            <div className='flex items-center gap-2'>
+              <Text className="text-white" type="font-16-400">
+                Continue
+              </Text>
+              <CaretRight size={16} weight="light" />
+            </div>
+
+          </Button>
+
+        )}
         {
           stepAnswerQuestion === STEP_ANSWER_QUESTION.SEE_RESULTS && (
             <Button
@@ -141,10 +174,8 @@ const FormStartTakingTest = ({ dataQuizz, handleClickContinueQuizz }: { handleCl
               <div className='flex items-center gap-2'>
                 <Text className="text-white" type="font-16-400">
                   See results
-
                 </Text>
                 <CaretRight size={16} weight="light" />
-
               </div>
 
             </Button>
@@ -205,12 +236,7 @@ const FormStartTakingTest = ({ dataQuizz, handleClickContinueQuizz }: { handleCl
               )
             }
           </>
-
         )}
-
-
-
-
       </div>
     </div>
   );

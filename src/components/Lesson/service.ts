@@ -57,3 +57,16 @@ export const useProgressStatusQuizz = (options: any) => {
     ...options,
   });
 };
+
+const serviceProgressStatusLesson = (body: any, id: string) => {
+  return privateRequest(request.patch, API_PATH.PROGRESS_LESSON(id), {
+    data: body,
+  });
+};
+
+export const useProgressStatusLesson = (options: any) => {
+  return useRequest(serviceProgressStatusLesson, {
+    manual: true,
+    ...options,
+  });
+};

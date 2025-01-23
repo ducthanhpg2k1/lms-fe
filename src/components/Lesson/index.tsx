@@ -16,12 +16,19 @@ import { useGetListSession } from '../CreateCourse/service';
 import { useEffect, useState } from 'react';
 import LoadingScreen from '../UI/LoadingScreen';
 import { LessonContentType, TYPE_COURSE } from '@/utils/const';
-import { useGetLessons, useGetQuizz, useProgressStatusQuizz } from './service';
+import {
+  useGetLessons,
+  useGetQuizz,
+  useProgressStatusLesson,
+  useProgressStatusQuizz,
+} from './service';
 import FormQuizz from './FormQuizz';
 import Article from './Article';
 import LoadingContainer from '../UI/LoadingContainer';
 import { UserCourseProgressStatus } from '@/utils/common';
 import { toast } from '../UI/Toast/toast';
+import { useProfile } from '@/store/profile/useProfile';
+import { atom, useAtom } from 'jotai';
 const itemsTab = [
   {
     key: '1',
@@ -59,11 +66,15 @@ const itemsTab = [
     children: <LearningTools />,
   },
 ];
+export const valueProgressAtom = atom<any>({})
 const Lesson = () => {
   const router = useRouter();
   const [typeLoadCotent, setTypeLoadContent] = useState<string>('');
   const [activeIdChildSection, setActiveIdChildSection] = useState<string>('');
+  const [startTakingTest, setStartTakingTest] = useState(false);
+  const { profile } = useProfile();
 
+  const [_, setValueYourProgress] = useAtom(valueProgressAtom)
 
   const {
     run: runGetListSession,
@@ -71,6 +82,8 @@ const Lesson = () => {
     loading: loadingListSession,
   } = useGetListSession({
     onSuccess: (res) => {
+      console.log(res, 'res');
+
       const firstSection = res?.data?.[0];
 
       const newLessons = firstSection?.lessons?.map((lesson: any) => {
@@ -87,6 +100,29 @@ const Lesson = () => {
         };
       });
       const combinedArray = [...newLessons, ...newQuizzes];
+
+      const totalLessons = res?.data.reduce((acc: any, section: any) => acc + section.lessons.length, 0);
+      const totalQuizzes = res?.data.reduce((acc: any, section: any) => acc + section.quizzes.length, 0);
+      const completedLessons = res?.data.reduce((acc: any, section: any) =>
+        acc + section.lessons.filter((lesson: any) =>
+          lesson.progress && lesson.progress.status === 'COMPLETED'
+        ).length, 0);
+
+      const completedQuizzes = res?.data.reduce((acc: any, section: any) =>
+        acc + section.quizzes.filter((quiz: any) =>
+          quiz.progress && quiz.progress.status === 'COMPLETED'
+        ).length, 0);
+
+
+      setValueYourProgress({
+        total: totalLessons + totalQuizzes,
+        value: completedLessons + completedQuizzes
+      })
+
+      console.log({ totalLessons, totalQuizzes });
+
+      console.log(combinedArray, 'combinedArray');
+
       const firstId = combinedArray?.[0]?.id;
       if (combinedArray?.[0]?.type === TYPE_COURSE.LECTURE) {
         runGetLessons(firstId);
@@ -117,6 +153,32 @@ const Lesson = () => {
     },
   });
 
+  const onChangeCheckBox = (values: any) => {
+    if (values?.progress?.status !== UserCourseProgressStatus?.COMPLETED) {
+      if (values?.type === TYPE_COURSE.QUIZ) {
+        const body = {
+          status: UserCourseProgressStatus.COMPLETED,
+        };
+        requestProgressStatusQuizz.run(body, values?.id);
+      } else {
+        const body = {
+          status: UserCourseProgressStatus.COMPLETED,
+        };
+        requestProgressStatusLesson.run(body, values?.id);
+      }
+    }
+  };
+
+  const requestProgressStatusLesson = useProgressStatusLesson({
+    onSuccess: (res: any) => {
+      toast.success(res?.message);
+      runGetListSession(router.query.id as string, profile?.id);
+
+    },
+    onError: (error: any) => {
+      toast.error(error.message);
+    },
+  });
   const requestProgressStatusQuizz = useProgressStatusQuizz({
     onSuccess: (res: any) => {
       toast.success(res?.message);
@@ -140,15 +202,18 @@ const Lesson = () => {
         },
         []
       );
-      const currentIndex = allItems.findIndex((item: any) => item.id === res?.data?.quizId);
+      const currentIndex = allItems.findIndex(
+        (item: any) => item.id === res?.data?.quizId
+      );
 
       if (currentIndex !== -1 && currentIndex + 1 < allItems.length) {
         const nextItem = allItems[currentIndex + 1];
-        handleClickChildLesson(nextItem?.id, nextItem?.type)
+        console.log(nextItem, 'nextItem');
+
+        handleClickChildLesson(nextItem?.id, nextItem?.type, nextItem?.progress?.status);
 
         const newPath = `/lesson/${router.query.id}?idChildSection=${nextItem?.id}`;
         router.push(newPath);
-
       }
     },
     onError: (error: any) => {
@@ -156,12 +221,11 @@ const Lesson = () => {
     },
   });
 
-
   useEffect(() => {
-    if (router?.query?.id) {
-      runGetListSession(router.query.id as string);
+    if (router?.query?.id && profile?.id) {
+      runGetListSession(router.query.id as string, profile?.id);
     }
-  }, [router?.query?.id]);
+  }, [router?.query?.id, profile?.id]);
 
   const handleScrollTop = () => {
     const element: any = document.querySelector('#topLesson');
@@ -177,11 +241,17 @@ const Lesson = () => {
     }
   };
 
-  const handleClickChildLesson = (id: string, type: TYPE_COURSE) => {
+  const handleClickChildLesson = (id: string, type: TYPE_COURSE, status?: UserCourseProgressStatus) => {
     setTypeLoadContent(type);
     if (type === TYPE_COURSE.LECTURE && id) {
       runGetLessons(id);
     } else {
+      if (status === UserCourseProgressStatus.COMPLETED) {
+        setStartTakingTest(true)
+      } else {
+        setStartTakingTest(false);
+
+      }
       runGetQuizz(id);
     }
   };
@@ -232,27 +302,66 @@ const Lesson = () => {
 
     if (currentIndex !== -1 && currentIndex + 1 < allItems.length) {
       const nextItem = allItems[currentIndex + 1];
-      handleClickChildLesson(nextItem?.id, nextItem?.type)
+      handleClickChildLesson(nextItem?.id, nextItem?.type);
 
       const newPath = `/lesson/${router.query.id}?idChildSection=${nextItem?.id}`;
       router.push(newPath);
+    }
+  };
 
+  const handleFindIdNextChildSection = (id: string) => {
+    const allItems = dataListSession?.data.reduce(
+      (result: any, section: any) => {
+        const newLessons = section?.lessons?.map((lesson: any) => {
+          return {
+            ...lesson,
+            type: TYPE_COURSE.LECTURE,
+          };
+        });
+
+        const newQuizzes = section?.quizzes?.map((quizz: any) => {
+          return {
+            ...quizz,
+            type: TYPE_COURSE.QUIZ,
+          };
+        });
+        return result.concat(newLessons, newQuizzes);
+      },
+      []
+    );
+    const currentIndex = allItems.findIndex((item: any) => item.id === id);
+
+    if (currentIndex !== -1 && currentIndex + 1 < allItems.length) {
+      const nextItem = allItems[currentIndex + 1];
+      return nextItem;
     }
   };
   const handleClickContinueQuizz = (id: string) => {
     const body = {
-      status: UserCourseProgressStatus.COMPLETED
-    }
-    requestProgressStatusQuizz.run(body, id)
-
+      status: UserCourseProgressStatus.COMPLETED,
+    };
+    requestProgressStatusQuizz.run(body, id);
   };
 
+  const handleNextChildSection = (type: string, idNext: string) => {
+    const newPath = `/lesson/${router.query.id}?idChildSection=${idNext}`;
+    router.push(newPath);
+    setTypeLoadContent(type);
+
+    if (type === TYPE_COURSE.LECTURE && idNext) {
+      runGetLessons(idNext);
+    } else {
+      runGetQuizz(idNext);
+    }
+  };
 
   return (
     <div className="grid grid-cols-10 relative" id="topLesson">
       <div className="col-span-7 flex flex-col">
         {typeLoadCotent === TYPE_COURSE.QUIZ ? (
           <FormQuizz
+            handleStartTakingTheTest={() => setStartTakingTest(true)}
+            startTakingTest={startTakingTest}
             handleClickContinueQuizz={handleClickContinueQuizz}
             loading={loadingQuizz || requestProgressStatusQuizz?.loading}
             handleSkipQuizz={handleSkipQuizz}
@@ -262,6 +371,9 @@ const Lesson = () => {
           <>
             {dataLesson?.data?.contentType === LessonContentType.VIDEO && (
               <VideoSection
+                handleNextChildSection={handleNextChildSection}
+                handleFindIdNextChildSection={handleFindIdNextChildSection}
+                data={dataLesson?.data}
                 loading={loadingLesson || loadingQuizz}
                 info={dataLesson?.data?.info}
               />
@@ -308,14 +420,14 @@ const Lesson = () => {
         <div className="w-full sticky top-0 max-h-[100dvh] overflow-hidden right-0 z-[10000] h-full bg-[#0F141A]">
           <div className="flex justify-between py-6 px-4 items-center border-l-1 border-b-1 border-b-[#D9D9D91A] border-l-[#D9D9D91A] sticky top-0 z-[1000] bg-gray">
             <div className="flex items-center gap-2">
-              <Avatar src="/images/avatar-user.png" className="w-12 h-12" />
+              {/* <Avatar src="/images/avatar-user.png" className="w-12 h-12" /> */}
               <div className="flex flex-col gap-[2px]">
                 <Text type="text-18-600" className="text-white">
-                  Set certificate expiration date
+                  Course content
                 </Text>
-                <Text type="font-14-400" className="text-white">
+                {/* <Text type="font-14-400" className="text-white">
                   Set certificate expiration date
-                </Text>
+                </Text> */}
               </div>
             </div>
             <Button variant="light" size="sm" isIconOnly radius="full">
@@ -323,6 +435,7 @@ const Lesson = () => {
             </Button>
           </div>
           <ListSection
+            onChangeCheckBox={onChangeCheckBox}
             activeIdChildSection={activeIdChildSection}
             loading={loadingListSession}
             handleClickChildLesson={handleClickChildLesson}

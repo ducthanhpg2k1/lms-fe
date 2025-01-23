@@ -13,7 +13,11 @@ const PlanYourCourse = () => {
   const [activePlan, setActivePlan] = useState(1);
   const router = useRouter();
 
-  const { run: getDetailCourse, loading } = useGetDetailCourse({
+  const {
+    run: getDetailCourse,
+    loading,
+    data: dataDetail,
+  } = useGetDetailCourse({
     onSuccess: (res) => {
       reset({
         objectives: res?.data?.objectives?.map((item: any) => {
@@ -77,6 +81,7 @@ const PlanYourCourse = () => {
 
   const requestEditCourse = useEditCourse({
     onSuccess: (res: any) => {
+      getDetailCourse(router.query.id as string)
       toast.success(res?.message);
     },
     onError: (error: any) => {
@@ -85,12 +90,16 @@ const PlanYourCourse = () => {
   });
 
   const onSubmit = (values: any) => {
-    console.log('values?.intenedLeaners', values?.intenedLeaners);
-
     const body: any = {
-      objectives: values?.objectives?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
-      requirements: values?.requirements?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
-      intenedLeaners: values?.intenedLeaners?.filter((v: any) => !!v?.name)?.map((item: any) => item?.name),
+      objectives: values?.objectives
+        ?.filter((v: any) => !!v?.name)
+        ?.map((item: any) => item?.name),
+      requirements: values?.requirements
+        ?.filter((v: any) => !!v?.name)
+        ?.map((item: any) => item?.name),
+      intenedLeaners: values?.intenedLeaners
+        ?.filter((v: any) => !!v?.name)
+        ?.map((item: any) => item?.name),
       description: values?.description,
       image: values?.image,
       video: values?.video,
@@ -128,6 +137,7 @@ const PlanYourCourse = () => {
             <div className="grid grid-cols-10 gap-12">
               <div className="col-span-2">
                 <PlanYourCourseLeft
+                  dataDetail={dataDetail}
                   activePlan={activePlan}
                   handleActivePlan={(plan) => setActivePlan(plan)}
                 />

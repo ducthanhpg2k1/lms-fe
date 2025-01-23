@@ -1,4 +1,5 @@
 import Text from '@/components/UI/Text';
+import { UserCourseProgressStatus } from '@/utils/common';
 import { TYPE_COURSE } from '@/utils/const';
 import { Checkbox } from '@nextui-org/react';
 import { File, MonitorPlay } from '@phosphor-icons/react';
@@ -9,17 +10,16 @@ const ChildSection = ({
   items,
   handleClickChildLesson,
   activeIdChildSection,
+  onChangeCheckBox
 }: {
   items: any;
   activeIdChildSection: string;
-  handleClickChildLesson: (id: string, type: TYPE_COURSE) => void;
+  handleClickChildLesson: (id: string, type: TYPE_COURSE, status: UserCourseProgressStatus) => void;
+  onChangeCheckBox: (values: any) => void
 }) => {
   const router = useRouter();
 
-  const handleChangeCheckbox = (id: any) => {
-    console.log(id, 'value');
 
-  }
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
@@ -42,7 +42,7 @@ const ChildSection = ({
                 }
                 const newPath = `/lesson/${router.query.id}?idChildSection=${item?.id}`;
                 router.push(newPath);
-                handleClickChildLesson(item?.id, item?.type);
+                handleClickChildLesson(item?.id, item?.type, item?.progress?.status);
               }}
               className={clsx(
                 'flex flex-col gap-3 px-4 py-3 cursor-pointer hover:bg-main/50 transition-all',
@@ -51,20 +51,21 @@ const ChildSection = ({
                 }
               )}
             >
-              <div className="flex items-center gap-3">
+              <div className="flex items-start gap-3">
                 <Checkbox
                   radius='sm'
-                  onChange={() => handleChangeCheckbox(item?.id)}
+                  onChange={() => onChangeCheckBox(item)}
+                  isSelected={item?.progress?.status === UserCourseProgressStatus?.COMPLETED}
                   classNames={{
                     wrapper: 'after:!bg-main before:!border-black-7',
                   }}
                 />
                 {item?.type === TYPE_COURSE.QUIZ ? (
-                  <Text type="font-16-600" className="text-white">
+                  <Text type="font-16-600" className="text-white mt-[-4px]">
                     {`Quizz ${item?.sttQuizz}. ${item?.title}`}
                   </Text>
                 ) : (
-                  <Text type="font-16-600" className="text-white">
+                  <Text type="font-16-600" className="text-white mt-[-4px]">
                     {`${index + 1}. ${item?.title}`}
                   </Text>
                 )}

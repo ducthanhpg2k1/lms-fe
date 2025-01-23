@@ -1,6 +1,7 @@
 import { API_PATH } from '@/api/constant';
 import { IOptions } from '@/api/interface';
 import { privateRequest, request } from '@/api/request';
+import { useProfile } from '@/store/profile/useProfile';
 import { useRequest } from 'ahooks';
 
 const serviceGetCategories = async () => {
@@ -84,9 +85,10 @@ export const useEditCourse = (options: any) => {
   });
 };
 
-const getListSession = async (id: string): Promise<any> => {
+const getListSession = async (id: string, userId: string): Promise<any> => {
   const params = {
     courseId: id,
+    ownerId: userId,
   };
   return privateRequest(request.get, `${API_PATH.SECTIONS}`, { params });
 };
