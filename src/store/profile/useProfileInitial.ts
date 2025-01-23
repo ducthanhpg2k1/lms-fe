@@ -16,7 +16,7 @@ export const useProfileInitial = () => {
         `${PREFIX_API}${API_PATH.GET_USER}`
       ).then((res) => res.json());
       setProfile({
-        ...res?.data?.result,
+        ...res?.data,
       });
     };
     init();
