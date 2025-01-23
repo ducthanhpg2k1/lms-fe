@@ -7,7 +7,7 @@ const MENUS = [
   {
     key: 1,
     label: 'My learning',
-    href: '',
+    href: ROUTE_PATH.MY_LEARNING,
   },
   {
     key: 2,
@@ -24,8 +24,9 @@ const MENUS = [
 const Menubar = () => {
   const router = useRouter();
   const handleClickRedirectPage = (key: number) => {
-    if (key === 3) {
-      router.push('/list-course');
+    const menuItem = MENUS.find((item) => item.key === key);
+    if (menuItem?.href) {
+      router.push(menuItem?.href);
     }
   };
   return (
