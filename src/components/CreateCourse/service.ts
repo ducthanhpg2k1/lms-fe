@@ -4,7 +4,9 @@ import { privateRequest, request } from '@/api/request';
 import { useRequest } from 'ahooks';
 
 const serviceGetCategories = async () => {
-  return await privateRequest(request.get, API_PATH.CATEGORIES, {});
+  return await privateRequest(request.get, API_PATH.CATEGORIES, {
+    pageSize: 100,
+  });
 };
 
 export const useGetCategories = () => {
@@ -22,6 +24,7 @@ export const useGetCategories = () => {
 const serviceGetSubCategories = async (id: string) => {
   const params = {
     categoryId: id,
+    pageSize: 50,
   };
   return await privateRequest(request.get, API_PATH.SUB_CATEGORIES, { params });
 };
