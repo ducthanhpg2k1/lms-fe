@@ -103,10 +103,11 @@ export default function ListCourses() {
         </div>
       </div>
 
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-4 gap-6">
         {list.map((item) => (
           <CourseCard
             key={item.id}
+            id={item?.course?.id}
             name={item?.course?.title}
             authorName={item?.course?.author?.walletAddress || ''}
             image={item?.course?.image}

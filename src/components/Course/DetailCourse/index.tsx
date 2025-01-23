@@ -102,7 +102,7 @@ const DetailCourse = () => {
                   </>
                 )}
                 {dataDetail?.data?.userCourses?.length > 0 && (
-                  <div>
+                  <>
                     <div className="flex items-center gap-1">
                       <IconStudent />
                       <Text type="font-14-400" className="text-white">
@@ -110,7 +110,7 @@ const DetailCourse = () => {
                       </Text>
                     </div>
                     <div className="w-[1px] h-5 bg-[#BFBFBF]" />
-                  </div>
+                  </>
                 )}
 
                 <div className="flex items-center gap-1">

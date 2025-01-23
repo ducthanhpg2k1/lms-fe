@@ -1,8 +1,12 @@
 import React from 'react';
 import Text from '@/components/UI/Text';
 import RateStar from '../UI/RateStar';
+import Image from 'next/image';
+import { ROUTE_PATH } from '@/utils/const';
+import { useRouter } from 'next/router';
 
 interface IProps {
+  id: string;
   image: string;
   progress: number;
   rating: number;
@@ -11,19 +15,26 @@ interface IProps {
 }
 
 export default function CourseCard({
+  id,
   name,
   progress = 50,
   rating = 4,
   authorName,
   image,
 }: IProps) {
+  const router = useRouter();
   return (
-    <div className="w-full bg-[#FFFFFF0D] rounded overflow-hidden">
+    <div className="w-full bg-[#FFFFFF0D] rounded overflow-hidden cursor-pointer" onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(id))}>
       <div className="w-full">
-        <img
+        <Image
           src={image || '/images/img-default.png'}
           alt={name}
+          width={302}
+          height={200}
           className="w-full"
+          onError={(e: any) => {
+            e.target.srcset = '/images/img-default.png';
+          }}
         />
       </div>
       <div className="py-4 px-3 flex flex-col gap-4">

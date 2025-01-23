@@ -89,6 +89,7 @@ const CardEnrollNow = ({ course }: { course: any }) => {
             )}
           </div>
           <Button
+            isLoading={loading}
             onClick={() => {
               if (course?.isOnwer) {
                 router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
