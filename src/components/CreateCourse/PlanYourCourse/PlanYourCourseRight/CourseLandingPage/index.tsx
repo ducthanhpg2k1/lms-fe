@@ -7,7 +7,7 @@ import { Control, Controller } from 'react-hook-form';
 import UploadImage from './UploadImage';
 import PromotionalVideo from './PromotionalVideo';
 import { DATA_LANGUAGE, DATA_LEVEL } from '@/utils/const';
-import { useGetCategories, useGetLanguages, useGetLevels } from '@/services/filter.service';
+import { useGetCategories, useGetLanguages, useGetLevels, useGetTopics } from '@/services/filter.service';
 import { useGetSubCategories } from '@/components/CreateCourse/service';
 import { useEffect } from 'react';
 
@@ -22,6 +22,8 @@ const CourseLandingPage = ({
   const { data: levels } = useGetLevels();
 
   const { data: languages } = useGetLanguages();
+
+  const { data: topics } = useGetTopics();
 
   const { dataSubCategories, run: runGetSubCategories } = useGetSubCategories();
 
@@ -209,13 +211,34 @@ const CourseLandingPage = ({
             name="topics"
             control={control}
             render={({ field }) => (
-              <InputText
-                onChange={field.onChange}
-                value={field.value}
-                label="What is primarily taught in your course?"
-                placeholder="e.g Landscape Photography"
-                inputDefault
-              />
+              // <InputText
+              //   onChange={field.onChange}
+              //   value={field.value}
+              //   label="What is primarily taught in your course?"
+              //   placeholder="e.g Landscape Photography"
+              //   inputDefault
+              // />
+              <>
+                <Text type="font-16-600" className="text-white mb-3">
+                  What is primarily taught in your course?
+                </Text>
+                <SelectCustom
+                  placeholder="e.g Landscape Photography"
+                  className="min-w-[120px]"
+                  onChange={field.onChange}
+                  value={field.value}
+                  inputDefault
+                  options={
+                    topics?.data?.map((item: any) => {
+                      return {
+                        key: item?.value,
+                        label: item?.label,
+                      };
+                    }) || []
+                  }
+                />
+              </>
+
             )}
           />
         </div>

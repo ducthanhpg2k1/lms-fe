@@ -38,7 +38,7 @@ const ListCourse = () => {
   const router = useRouter();
   const [tab, setTab] = useState(TAB_VIEW?.GRID);
   const [pageSize, setPageSize] = useState(3);
-  const [sort, setSort] = useState();
+  const [sort, setSort] = useState<any>();
   const searchParams = useSearchParams();
   const [params, setParams] = useState(initParams);
 
@@ -71,6 +71,7 @@ const ListCourse = () => {
 
   const clearFilter = () => {
     setParams(initParams);
+    setSort(null);
   };
 
   return (

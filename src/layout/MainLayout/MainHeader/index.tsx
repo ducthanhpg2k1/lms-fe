@@ -74,7 +74,7 @@ const MainHeader = () => {
   };
 
   return (
-    <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5">
+    <div className="w-full sticky z-[1000] top-0 backdrop-blur-sm border-b border-black-10 py-5 px-10">
       <div className="max-w-[1440px]  mx-auto flex justify-between items-center">
         <Image
           onClick={() => router.push(ROUTE_PATH.HOME)}

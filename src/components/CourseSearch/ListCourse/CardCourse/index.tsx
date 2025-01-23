@@ -73,7 +73,7 @@ const CardCourse = ({ item }: { item: any }) => {
           {item?.author?.walletAddress && (
             <div className="flex gap-0.5 break-words">
               <Text type="font-14-400" className="text-main break-words">
-                By: 
+                By:
               </Text>
               <Text
                 type="font-14-400"
@@ -101,7 +101,7 @@ const CardCourse = ({ item }: { item: any }) => {
           <Button
             variant="light"
             radius="full"
-            onClick={() => router.push(ROUTE_PATH.LESSON)}
+            onClick={handleClickCardCourse}
           >
             <div className="flex items-center gap-1">
               <Text type="font-14-500" className="text-white">

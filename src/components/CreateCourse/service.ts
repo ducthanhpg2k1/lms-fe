@@ -61,8 +61,10 @@ export const useCreateCourse = (options?: IOptions) => {
   return useRequest(serviceCreateCourse, { manual: true, ...options });
 };
 
-const getDetailCourse = async (id: string): Promise<any> => {
-  return privateRequest(request.get, `${API_PATH.CREATE_COURSE}/${id}`, {});
+const getDetailCourse = async (id: string, userId?: string): Promise<any> => {
+  return privateRequest(request.get, `${API_PATH.CREATE_COURSE}/${id}`, {
+    params: { userId },
+  });
 };
 
 export const useGetDetailCourse = (options?: IOptions) => {

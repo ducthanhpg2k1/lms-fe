@@ -7,6 +7,7 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEnrollCourse } from './service';
+import { useProfile } from '@/store/profile/useProfile';
 
 const DATA_NOTE = [
   '12 hours of on-demand video',
@@ -19,6 +20,9 @@ const DATA_NOTE = [
 
 const CardEnrollNow = ({ course }: { course: any }) => {
   const router = useRouter();
+  console.log('courserrr', course);
+
+
   const { run, loading } = useEnrollCourse({
     onSuccess: (res) => {
       console.log('ressssss', res);
@@ -65,12 +69,12 @@ const CardEnrollNow = ({ course }: { course: any }) => {
               )}
             </div>
 
-            {!course?.isOnwer && (
+            {!course?.isOwner && (
               <Button
                 variant="light"
                 radius="full"
                 onClick={() => {
-                  if (course?.isOnwer) return;
+                  if (course?.isOwner) return;
                   run(course.id);
                 }}
               >
@@ -91,7 +95,7 @@ const CardEnrollNow = ({ course }: { course: any }) => {
           <Button
             isLoading={loading}
             onClick={() => {
-              if (course?.isOnwer) {
+              if (course?.isOwner) {
                 router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
               } else {
                 run(course.id);
@@ -100,7 +104,7 @@ const CardEnrollNow = ({ course }: { course: any }) => {
             className="bg-main min-h-[40px] rounded"
           >
             <Text className="text-white" type="font-16-600">
-              {course?.isOnwer ? 'Go to course' : 'Enroll Now'}
+              {course?.isOwner ? 'Go to course' : 'Enroll Now'}
             </Text>
           </Button>
           <div className="flex flex-col gap-2">
