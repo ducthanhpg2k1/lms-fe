@@ -13,7 +13,7 @@ const VideoSection = ({
   handleNextChildSection,
   handleFindIdNextChildSection,
 }: {
-  handleNextChildSection: (type: string, idNext: string) => void;
+  handleNextChildSection: (type: string, idNext: string, idCurrent: string) => void;
   handleFindIdNextChildSection: any;
   data: any;
   loading: boolean;
@@ -138,7 +138,7 @@ const VideoSection = ({
           handleNextChildSection={(type, id) => {
             setEndVideo(false);
             resetVideo();
-            handleNextChildSection(type, id);
+            handleNextChildSection(type, id, data?.id);
           }}
           dataItemNext={dataItemNext}
         />

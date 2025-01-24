@@ -356,13 +356,17 @@ const Lesson = () => {
     requestProgressStatusQuizz.run(body, id);
   };
 
-  const handleNextChildSection = (type: string, idNext: string) => {
+  const handleNextChildSection = (type: string, idNext: string, idCurrent: string) => {
     const newPath = `/lesson/${router.query.id}?idChildSection=${idNext}`;
     router.push(newPath);
     setTypeLoadContent(type);
 
     if (type === TYPE_COURSE.LECTURE && idNext) {
       runGetLessons(idNext);
+      const body = {
+        status: UserCourseProgressStatus.PROGRESS,
+      };
+      requestProgressStatusLesson.run(body, idCurrent);
     } else {
       runGetQuizz(idNext);
     }
