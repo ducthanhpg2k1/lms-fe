@@ -7,7 +7,7 @@ import { ROUTE_PATH } from '@/utils/const';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import NoData from './NoData';
-import { useGetListCourse } from '../Course/ListCourse/service';
+import { useGetListCourse, useGetListMyCourse } from '../Course/ListCourse/service';
 import { useDebounce } from 'ahooks';
 
 const SORT_BY = [
@@ -26,7 +26,7 @@ const ListCourse = () => {
 
   const debounceValue = useDebounce(search, { wait: 500 });
   const [idHovered, setIdHovered] = useState<string>('');
-  const { dataCourses, reload } = useGetListCourse({
+  const { dataCourses, reload } = useGetListMyCourse({
     order: sort,
     search: debounceVal,
   });

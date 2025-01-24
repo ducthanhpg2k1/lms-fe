@@ -33,6 +33,7 @@
     "react-rater": "^6.0.5",
     "sass": "^1.83.1",
     "sonner": "^1.7.2",
+    "styled-components": "^6.1.14",
     "umi-request": "^1.4.0",
     "video.js": "^8.21.0",
     "videojs-hls-quality-selector": "^2.0.0",

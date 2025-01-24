@@ -1,32 +1,52 @@
 import Text from '@/components/UI/Text';
+import { deleteAuthCookies, setAuthCookies } from '@/store/auth';
+import { ROUTE_PATH } from '@/utils/const';
+import { Tooltip } from '@nextui-org/react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import { useAccount } from 'wagmi';
 
 const MENUS = [
   {
     id: 1,
     label: 'My Profile',
+    href: '',
+
   },
   {
     id: 2,
     label: 'My Learning',
+    href: ROUTE_PATH.MY_LEARNING,
+
   },
   {
     id: 3,
     label: 'English',
+    href: '',
+
   },
 ];
 
-const ContentProfile = () => {
+const ContentProfile = ({ disconnect }: { disconnect: any }) => {
+  const { address } = useAccount();
+  const router = useRouter()
+  const handleRedirectPage = (link: string) => {
+    router.push(link)
+  }
+  const handleLogout = () => {
+    disconnect()
+    setAuthCookies({
+      token: '',
+    });
+  }
   return (
     <div>
       <div className="p-4 border-b-1 border-solid border-[#F0F0F01A] flex gap-1 justify-between items-center">
         <div className="flex flex-col  gap-[2px]">
-          <Text className="text-white capitalize" type="font-16-700">
-            Marvin McKinney
+          <Text className="text-black-7 max-w-[200px] overflow-hidden text-ellipsis whitespace-nowrap truncate w-full" type="font-14-400">
+            {address}
           </Text>
-          <Text className="text-black-7 truncate w-full" type="font-14-400">
-            dolores.chambers@gmail.com
-          </Text>
+
         </div>
         <div className="py-[2px] px-2 rounded-[50px] bg-green/10 flex justify-center items-center">
           <Text type="font-12-500" className="text-green">
@@ -39,6 +59,7 @@ const ContentProfile = () => {
           return (
             <div
               key={item?.id}
+              onClick={() => handleRedirectPage(item?.href)}
               className="py-3 transition-all flex justify-between items-center cursor-pointer px-4 hover:bg-green/10"
             >
               <Text type="font-14-500" className="text-white">
@@ -56,7 +77,7 @@ const ContentProfile = () => {
           );
         })}
       </div>
-      <div className="cursor-pointer transition-all rounded-b-[4px] hover:bg-error/10 py-3 px-4 flex items-center gap-3">
+      <div onClick={handleLogout} className="cursor-pointer transition-all rounded-b-[4px] hover:bg-error/10 py-3 px-4 flex items-center gap-3">
         <Image src={'/images/ig-logout.png'} width={24} height={24} alt="" />
         <Text type="font-14-500" className="text-error">
           Logout

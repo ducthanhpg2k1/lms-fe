@@ -7,7 +7,9 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEnrollCourse } from './service';
-import { useProfile } from '@/store/profile/useProfile';
+import { getAccessToken } from '@/store/auth';
+import CustomButtonEnroll from '@/components/UI/CustomButtonEnroll';
+
 
 const DATA_NOTE = [
   '12 hours of on-demand video',
@@ -18,14 +20,14 @@ const DATA_NOTE = [
   'Certificate of completion',
 ];
 
+
 const CardEnrollNow = ({ course }: { course: any }) => {
   const router = useRouter();
-  console.log('courserrr', course);
+  const token = getAccessToken()
 
 
   const { run, loading } = useEnrollCourse({
     onSuccess: (res) => {
-      console.log('ressssss', res);
       if (res?.data?.courseId) {
         router.push(ROUTE_PATH.DETAIL_LESSON(res?.data?.courseId));
       }
@@ -92,21 +94,17 @@ const CardEnrollNow = ({ course }: { course: any }) => {
               </Button>
             )}
           </div>
-          <Button
-            isLoading={loading}
-            onClick={() => {
-              if (course?.isOwner) {
-                router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
-              } else {
-                run(course.id);
-              }
-            }}
-            className="bg-main min-h-[40px] rounded"
-          >
-            <Text className="text-white" type="font-16-600">
-              {course?.isOwner ? 'Go to course' : 'Enroll Now'}
-            </Text>
-          </Button>
+
+          <CustomButtonEnroll course={course} handleClickButton={() => {
+            if (course?.isOwner) {
+              router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
+            } else {
+              run(course.id);
+            }
+          }} loading={loading} token={token} label='Enroll Now' />
+
+
+
           <div className="flex flex-col gap-2">
             <Text className="text-white" type="font-18-600">
               This course includes

@@ -15,7 +15,6 @@ import { ReactNode, useEffect } from 'react';
 const LessonLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [valueYourProgress] = useAtom(valueProgressAtom)
-  console.log(valueYourProgress, 'valueYourProgress');
 
   const {
     run: getDetailCourse,
@@ -31,9 +30,6 @@ const LessonLayout = ({ children }: { children: ReactNode }) => {
     }
 
   }, [router.query.id])
-
-  console.log(dataDetail, 'dataDetail');
-
 
 
   return (
