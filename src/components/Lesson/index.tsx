@@ -154,6 +154,7 @@ const Lesson = () => {
   });
 
   const onChangeCheckBox = (values: any) => {
+    console.log('values', values);
     if (values?.progress?.status !== UserCourseProgressStatus?.COMPLETED) {
       if (values?.type === TYPE_COURSE.QUIZ) {
         const body = {
@@ -163,6 +164,18 @@ const Lesson = () => {
       } else {
         const body = {
           status: UserCourseProgressStatus.COMPLETED,
+        };
+        requestProgressStatusLesson.run(body, values?.id);
+      }
+    } else {
+      if (values?.type === TYPE_COURSE.QUIZ) {
+        const body = {
+          status: UserCourseProgressStatus.PROGRESS,
+        };
+        requestProgressStatusQuizz.run(body, values?.id);
+      } else {
+        const body = {
+          status: UserCourseProgressStatus.PROGRESS,
         };
         requestProgressStatusLesson.run(body, values?.id);
       }
