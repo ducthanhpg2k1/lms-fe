@@ -24,7 +24,7 @@ export default function CourseCard({
 }: IProps) {
   const router = useRouter();
   return (
-    <div className="w-full bg-[#FFFFFF0D] rounded overflow-hidden cursor-pointer" onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(id))}>
+    <div className="w-full bg-[#FFFFFF0D] rounded overflow-hidden cursor-pointer" onClick={() => router.push(ROUTE_PATH.DETAIL_LESSON(id))}>
       <div className="w-full">
         <Image
           src={image || '/images/img-default.png'}

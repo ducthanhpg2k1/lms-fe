@@ -5,7 +5,6 @@ import Menubar from '../Menubar';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/const';
 import { useEffect, useState } from 'react';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useSignMessage } from 'wagmi';
 import {
   getAccessToken,
@@ -14,8 +13,7 @@ import {
 import { useGetUserNonce, useLoginWeb3 } from './service';
 import { toast } from '@/components/UI/Toast/toast';
 import { useProfileInitial } from '@/store/profile/useProfileInitial';
-import ContentProfile from './ContentProfile';
-import CustomButtonLogin from '@/components/UI/CustomButtonLogin';
+import { initialProfile } from '@/store/profile/profile';
 import ButtonLoginWallet from '@/components/UI/ButtonLoginWallet';
 const MainHeader = () => {
   const router = useRouter();
@@ -23,7 +21,7 @@ const MainHeader = () => {
   const { isConnected, address } = useAccount();
   const token = getAccessToken();
   const { signMessageAsync } = useSignMessage();
-  const { requestGetProfile } = useProfileInitial();
+  const { requestGetProfile, setProfile } = useProfileInitial();
 
 
 
@@ -61,6 +59,14 @@ const MainHeader = () => {
     if (isConnected && address && !token) {
       runGetUserNonce(address);
     }
+    if (!isConnected && !token) {
+      setAuthCookies({
+        token: '',
+      });
+      setProfile(initialProfile)
+    }
+    console.log('isConnected', isConnected);
+
   }, [token, isConnected, address]);
 
   const handleKeyUp = (event: any) => {

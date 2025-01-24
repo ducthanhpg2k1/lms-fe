@@ -24,6 +24,7 @@ export const useProfileInitial = () => {
 
   return {
     profile,
+    setProfile,
     requestGetProfile: run,
   };
 };
