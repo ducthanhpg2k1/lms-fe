@@ -63,7 +63,7 @@ const MainHeader = () => {
     if (isConnected && address && !token) {
       runGetUserNonce(address);
     }
-    if (!isConnected) {
+    if (!isConnected && !token) {
       setAuthCookies({
         token: '',
       });
