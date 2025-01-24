@@ -14,13 +14,14 @@ import {
 import { useGetUserNonce, useLoginWeb3 } from './service';
 import { toast } from '@/components/UI/Toast/toast';
 import { useProfileInitial } from '@/store/profile/useProfileInitial';
+import { initialProfile } from '@/store/profile/profile';
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
   const { isConnected, address } = useAccount();
   const token = getAccessToken();
   const { signMessageAsync } = useSignMessage();
-  const { requestGetProfile } = useProfileInitial();
+  const { requestGetProfile, setProfile } = useProfileInitial();
 
   const handleChangeSearch = (e: any) => {
     setValueSearch(e.target.value);
@@ -62,6 +63,14 @@ const MainHeader = () => {
     if (isConnected && address && !token) {
       runGetUserNonce(address);
     }
+    if (!isConnected) {
+      setAuthCookies({
+        token: '',
+      });
+      setProfile(initialProfile)
+    }
+    console.log('isConnected', isConnected);
+
   }, [token, isConnected, address]);
 
   const handleKeyUp = (event: any) => {
