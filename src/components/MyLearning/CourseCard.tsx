@@ -17,12 +17,16 @@ interface IProps {
 export default function CourseCard({
   id,
   name,
-  progress = 50,
+  progress = 0,
   rating = 4,
   authorName,
   image,
 }: IProps) {
   const router = useRouter();
+
+  console.log('progress', progress);
+
+
   return (
     <div className="w-full bg-[#FFFFFF0D] rounded overflow-hidden cursor-pointer" onClick={() => router.push(ROUTE_PATH.DETAIL_LESSON(id))}>
       <div className="w-full">
@@ -46,9 +50,9 @@ export default function CourseCard({
             {authorName}
           </Text>
         </div>
-        <ProgressBar progress={progress} />
+        <ProgressBar progress={Number((progress * 100).toFixed(0))} />
         <div className="flex items-center justify-between">
-          <Text type="font-14-500">{progress}% complete</Text>
+          <Text type="font-14-500">{(progress * 100).toFixed(0)}% complete</Text>
           <div className="flex items-center gap-2">
             <RateStar rate={rating} />
             <Text type="font-14-500">(230)</Text>

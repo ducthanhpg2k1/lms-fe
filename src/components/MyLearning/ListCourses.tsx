@@ -112,7 +112,7 @@ export default function ListCourses() {
             name={item?.course?.title}
             authorName={item?.course?.author?.walletAddress || ''}
             image={item?.course?.image}
-            progress={item?.course?.progress || 0}
+            progress={item?.progress || 0}
             rating={4}
           />
         ))}
