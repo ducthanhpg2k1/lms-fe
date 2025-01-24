@@ -1,11 +1,11 @@
 import InputText from '@/components/UI/InputText';
-import { Button } from '@nextui-org/react';
+import { Button, Popover, PopoverContent, PopoverTrigger } from '@nextui-org/react';
 import Image from 'next/image';
 import Menubar from '../Menubar';
 import { useRouter } from 'next/router';
 import { ROUTE_PATH } from '@/utils/const';
 import { useEffect, useState } from 'react';
-import { ConnectButton, useConnectModal } from '@rainbow-me/rainbowkit';
+import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useSignMessage } from 'wagmi';
 import {
   getAccessToken,
@@ -14,6 +14,9 @@ import {
 import { useGetUserNonce, useLoginWeb3 } from './service';
 import { toast } from '@/components/UI/Toast/toast';
 import { useProfileInitial } from '@/store/profile/useProfileInitial';
+import ContentProfile from './ContentProfile';
+import CustomButtonLogin from '@/components/UI/CustomButtonLogin';
+import ButtonLoginWallet from '@/components/UI/ButtonLoginWallet';
 const MainHeader = () => {
   const router = useRouter();
   const [valueSearch, setValueSearch] = useState('');
@@ -21,6 +24,8 @@ const MainHeader = () => {
   const token = getAccessToken();
   const { signMessageAsync } = useSignMessage();
   const { requestGetProfile } = useProfileInitial();
+
+
 
   const handleChangeSearch = (e: any) => {
     setValueSearch(e.target.value);
@@ -50,13 +55,7 @@ const MainHeader = () => {
     }
   };
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (!isConnected) {
-  //       deleteAuthCookies();
-  //     }
-  //   }, 1000);
-  // }, [isConnected]);
+
 
   useEffect(() => {
     if (isConnected && address && !token) {
@@ -122,35 +121,14 @@ const MainHeader = () => {
             >
               <Image src={'/icons/ic-user.svg'} height={20} width={20} alt="" />
             </Button> */}
-            {/* <Popover
-              classNames={{
-                content:
-                  'rounded border-1 p-0 !bg-gray border-[#F0F0F01A] shadow-dropdown',
-              }}
-              color="default"
-              placement="bottom-end"
-            >
-              <PopoverTrigger>
-                <Button
-                  isIconOnly
-                  className="bg-gray-10 border-1 border-gray-10 rounded-[4px] w-10 h-10"
-                >
-                  <Image
-                    src={'/icons/ic-brush.svg'}
-                    height={20}
-                    width={20}
-                    alt=""
-                  />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent>
-                <ContentProfile />
-              </PopoverContent>
-            </Popover> */}
 
-            <div className="w-full">
+            <ButtonLoginWallet />
+
+
+
+            {/* <div className="w-full">
               <ConnectButton />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

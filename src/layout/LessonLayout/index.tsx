@@ -5,6 +5,7 @@ import IconArrowLeft from '@/components/UI/Icons/IconArrowLeft';
 import IconDots from '@/components/UI/Icons/IconDots';
 import ProgressCircle from '@/components/UI/ProgressCircle';
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/const';
 import { Button, CircularProgress } from '@nextui-org/react';
 import { useAtom } from 'jotai';
 import Image from 'next/image';
@@ -14,7 +15,6 @@ import { ReactNode, useEffect } from 'react';
 const LessonLayout = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
   const [valueYourProgress] = useAtom(valueProgressAtom)
-  console.log(valueYourProgress, 'valueYourProgress');
 
   const {
     run: getDetailCourse,
@@ -31,9 +31,6 @@ const LessonLayout = ({ children }: { children: ReactNode }) => {
 
   }, [router.query.id])
 
-  console.log(dataDetail, 'dataDetail');
-
-
 
   return (
     <div className="w-screen bg-primary h-screen overflow-auto overflow-x-hidden flex flex-col relative">
@@ -41,7 +38,7 @@ const LessonLayout = ({ children }: { children: ReactNode }) => {
         <div className="flex items-center gap-5">
           <div className="flex items-center gap-1">
             <Button
-              onClick={() => router.back()}
+              onClick={() => router.push(ROUTE_PATH.DETAIL_COURSE(router.query.id))}
               isIconOnly
               radius="full"
               size="md"
