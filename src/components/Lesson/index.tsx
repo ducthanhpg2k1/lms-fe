@@ -364,7 +364,7 @@ const Lesson = () => {
     if (type === TYPE_COURSE.LECTURE && idNext) {
       runGetLessons(idNext);
       const body = {
-        status: UserCourseProgressStatus.PROGRESS,
+        status: UserCourseProgressStatus.COMPLETED,
       };
       requestProgressStatusLesson.run(body, idCurrent);
     } else {
