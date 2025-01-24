@@ -9,6 +9,7 @@ import { useGetListUserCourse } from './service';
 import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import NoData from '../ListCourse/NoData';
+import { useProfile } from '@/store/profile/useProfile';
 
 const SORT_BY = [
   { key: 'createdAt desc', label: 'Newest' },
@@ -22,6 +23,8 @@ export default function ListCourses() {
   const [price, setPrice] = useState();
   const { dataCategories: categories } = useGetCategories();
   const { data: prices } = useGetPrices();
+  const { profile } = useProfile();
+
   const { list, loadMore, noMore, reload } = useGetListUserCourse({
     pageSize,
     order: sort,
@@ -49,7 +52,7 @@ export default function ListCourses() {
 
   useEffect(() => {
     reload();
-  }, [sort, category, price]);
+  }, [sort, category, price, profile]);
 
   return (
     <div className="flex flex-col gap-[26px]">

@@ -10,6 +10,7 @@ import NoData from './NoData';
 import { useGetListCourse, useGetListMyCourse } from '../Course/ListCourse/service';
 import { useDebounce } from 'ahooks';
 import CustomButtonNewCourse from '../UI/CustomButtonNewCourse';
+import { useProfile } from '@/store/profile/useProfile';
 
 const SORT_BY = [
   { key: 'createdAt desc', label: 'Newest' },
@@ -31,6 +32,8 @@ const ListCourse = () => {
     order: sort,
     search: debounceVal,
   });
+  const { profile } = useProfile();
+
   useEffect(() => {
     console.log('Debounced:', search);
     setDebounceVal(search);
@@ -50,7 +53,7 @@ const ListCourse = () => {
 
   useEffect(() => {
     reload();
-  }, [sort, debounceVal]);
+  }, [sort, debounceVal, profile]);
 
   return (
     <div className="flex flex-col gap-[50px]">
