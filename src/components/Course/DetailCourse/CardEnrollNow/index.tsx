@@ -10,7 +10,6 @@ import { useEnrollCourse } from './service';
 import { getAccessToken } from '@/store/auth';
 import CustomButtonEnroll from '@/components/UI/CustomButtonEnroll';
 
-
 const DATA_NOTE = [
   '12 hours of on-demand video',
   'Exercises',
@@ -20,11 +19,9 @@ const DATA_NOTE = [
   'Certificate of completion',
 ];
 
-
 const CardEnrollNow = ({ course }: { course: any }) => {
   const router = useRouter();
-  const token = getAccessToken()
-
+  const token = getAccessToken();
 
   const { run, loading } = useEnrollCourse({
     onSuccess: (res) => {
@@ -95,15 +92,19 @@ const CardEnrollNow = ({ course }: { course: any }) => {
             )}
           </div>
 
-          <CustomButtonEnroll course={course} handleClickButton={() => {
-            if (course?.isOwner) {
-              router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
-            } else {
-              run(course.id);
-            }
-          }} loading={loading} token={token} label='Enroll Now' />
-
-
+          <CustomButtonEnroll
+            course={course}
+            handleClickButton={() => {
+              if (course?.isOwner) {
+                router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
+              } else {
+                run(course.id);
+              }
+            }}
+            loading={loading}
+            token={token}
+            label="Enroll Now"
+          />
 
           <div className="flex flex-col gap-2">
             <Text className="text-white" type="font-18-600">

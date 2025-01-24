@@ -125,11 +125,11 @@ export default function ListCourses() {
         )
       }
 
-      {!noMore && (
+      {!noMore && list?.length > 0 && (
         <Button
           variant="light"
           radius="full"
-          className="hover:!bg-main/15"
+          className="hover:!bg-main/15 w-max"
           onClick={loadMore}
         >
           <div className="flex items-center gap-[2px]">

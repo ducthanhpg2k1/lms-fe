@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import NoData from './NoData';
 import { useGetListCourse } from '../Course/ListCourse/service';
 import { useDebounce } from 'ahooks';
+import CustomButtonNewCourse from '../UI/CustomButtonNewCourse';
 
 const SORT_BY = [
   { key: 'createdAt desc', label: 'Newest' },
@@ -79,12 +80,10 @@ const ListCourse = () => {
               }}
             />
           </div>
-          <Button
-            onClick={() => router.push(ROUTE_PATH.CREATE_COURSE)}
-            className="bg-main rounded py-[10px] px-6 min-h-[44px]"
-          >
-            <Text type="font-16-700">New Course</Text>
-          </Button>
+          <CustomButtonNewCourse handleClickButton={() => {
+            router.push(ROUTE_PATH.CREATE_COURSE)
+          }} />
+
         </div>
       </div>
       {dataCourses?.length > 0 &&

@@ -25,7 +25,7 @@ const ButtonLoginWallet = () => {
                                 onClick={openConnectModal}
                                 className="bg-main w-full min-h-[40px] rounded"
                             >
-                                <Text className="text-white" type="font-14-400">
+                                <Text className="text-white" type="font-16-600">
                                     Connect Wallet
                                 </Text>
                             </Button>
@@ -44,7 +44,7 @@ const ButtonLoginWallet = () => {
                                         className="bg-gray-10 border-1 border-gray-10 rounded-[4px] w-10 h-10"
                                     >
                                         <Image
-                                            src={'/icons/ic-brush.svg'}
+                                            src={'/icons/ic-user.svg'}
                                             height={20}
                                             width={20}
                                             alt=""
