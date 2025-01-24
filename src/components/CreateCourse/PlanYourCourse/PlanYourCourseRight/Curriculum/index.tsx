@@ -12,12 +12,14 @@ import {
 } from '@/components/CreateCourse/service';
 import { useRouter } from 'next/router';
 import LoadingScreen from '@/components/UI/LoadingScreen';
+import { useProfile } from '@/store/profile/useProfile';
 
 const CurriculumItem = dynamic(() => import('./CurriculumItem'), {
   ssr: false,
 });
 const Curriculum = () => {
   const { control, reset } = useForm<any>({});
+  const { profile } = useProfile();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -50,7 +52,7 @@ const Curriculum = () => {
 
   useEffect(() => {
     if (router.query.id) {
-      runGetListSession(router.query.id as string);
+      runGetListSession(router.query.id as string, profile?.id);
     }
   }, [router.query.id]);
 
@@ -69,7 +71,7 @@ const Curriculum = () => {
     },
   });
   const { run: runDeleteSesson } = useDeleteSesson({
-    onSuccess(res) {},
+    onSuccess(res) { },
   });
 
   const handleSaveSection = (index: number) => {
