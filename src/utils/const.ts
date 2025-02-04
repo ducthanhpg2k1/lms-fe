@@ -9,6 +9,8 @@ export const ROUTE_PATH = {
   DETAIL_LESSON: (id: any) => `/lesson/${id}`,
   LIST_COURSE: '/list-course',
   DETAIL_COURSE: (id: any) => `/course/${id}`,
+
+  MY_PROFILE: '/my-profile',
 };
 
 export enum TYPE_COURSE {
