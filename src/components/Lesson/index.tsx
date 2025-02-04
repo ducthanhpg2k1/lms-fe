@@ -45,26 +45,26 @@ const itemsTab = [
   //   label: 'Q&A',
   //   children: <QA />,
   // },
-  {
-    key: '4',
-    label: 'Notes',
-    children: <Notes />,
-  },
-  {
-    key: '5',
-    label: 'Announcements',
-    children: <Announcements />,
-  },
+  // {
+  //   key: '4',
+  //   label: 'Notes',
+  //   children: <Notes />,
+  // },
+  // {
+  //   key: '5',
+  //   label: 'Announcements',
+  //   children: <Announcements />,
+  // },
   {
     key: '6',
     label: 'Reviews',
     children: <Reviews />,
   },
-  {
-    key: '7',
-    label: 'Learning tools',
-    children: <LearningTools />,
-  },
+  // {
+  //   key: '7',
+  //   label: 'Learning tools',
+  //   children: <LearningTools />,
+  // },
 ];
 export const valueProgressAtom = atom<any>({})
 const Lesson = () => {

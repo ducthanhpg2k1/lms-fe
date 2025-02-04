@@ -45,9 +45,10 @@ const ChildSection = ({
                 handleClickChildLesson(item?.id, item?.type, item?.progress?.status);
               }}
               className={clsx(
-                'flex flex-col gap-3 px-4 py-3 cursor-pointer hover:bg-main/50 transition-all',
+                'flex flex-col gap-3 px-4 py-3 cursor-pointer min-h-[50px] justify-center border-b-1 border-b-black-9 hover:bg-main/50 transition-all',
                 {
                   ['bg-main/50']: item?.id === activeIdChildSection,
+
                 }
               )}
             >
