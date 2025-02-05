@@ -1,6 +1,9 @@
 import Text from '@/components/UI/Text';
+import { ROUTE_PATH } from '@/utils/const';
 import { Check } from '@phosphor-icons/react';
 import clsx from 'clsx';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 
 const DATA_CONTENT = [
   {
@@ -30,6 +33,7 @@ const PlanYourCourseLeft = ({
   activePlan: number;
   dataDetail: any;
 }) => {
+  const router = useRouter()
   const isEnoughIntendedLearners = dataDetail?.data?.objectives?.length > 0 &&
     dataDetail?.data?.intenedLeaners?.length > 0 &&
     dataDetail?.data?.requirements?.length > 0;
@@ -53,10 +57,12 @@ const PlanYourCourseLeft = ({
   );
 
 
-  console.log(dataDetail, 'dataDetail');
+  useEffect(() => {
+    if (isEnoughIntendedLearners && isEnoughCourseLangdingePage && isEnoughIntendedLearners) {
+      router.push(ROUTE_PATH.LIST_COURSE)
+    }
 
-  console.log(isEnoughIntendedLearners, 'isEnoughIntendedLearners');
-
+  }, [isEnoughIntendedLearners, isEnoughCourseLangdingePage, isEnoughIntendedLearners])
 
 
   return (

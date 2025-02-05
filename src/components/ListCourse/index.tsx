@@ -99,8 +99,10 @@ const ListCourse = () => {
               onClick={() =>
                 router.push(`${ROUTE_PATH.CREATE_COURSE}/${item?.id}`)
               }
-              className="rounded hover:bg-black/80 hover:backdrop-blur-lg cursor-pointer flex gap-2 w-full min-h-[202px] border-1 border-[#F0F0F01A] bg-[#181F25]"
+              className="rounded hover:bg-black/80  hover:backdrop-blur-md cursor-pointer transition-all flex gap-2 w-full min-h-[202px] border-1 border-[#F0F0F01A] bg-[#181F25]"
             >
+
+
               <Image
                 alt=""
                 src={'/img-course.png'}
@@ -109,6 +111,9 @@ const ListCourse = () => {
                 className="w-[200px] h-full"
               />
               <div className="p-4 flex flex-col relative justify-between w-full">
+                {idHovered === item?.id && (
+                  <div className="absolute inset-0 bg-[#000000B3] bg-blur-custom z-50"></div>
+                )}
                 {idHovered === item?.id && (
                   <div className="flex gap-2 absolute justify-center items-center left-1/2 top-[45%] z-[1000]">
                     <IconEdit />

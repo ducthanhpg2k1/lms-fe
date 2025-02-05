@@ -6,12 +6,37 @@ import ByTheNumbers from './ByTheNumbers';
 import Description from './Description';
 import RateStar from '@/components/UI/RateStar';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useGetDetailCourse } from '@/components/CreateCourse/service';
 import dayjs from 'dayjs';
+import { formatTimeDuration } from '@/utils/common';
 
-const Overview = () => {
+const Overview = ({ dataListSection }: any) => {
   const router = useRouter();
+
+  console.log(dataListSection, 'dataListSection');
+
+
+
+  const formattedTime: string = useMemo(() => {
+    const totalDuration = dataListSection?.reduce((total: any, section: any) => {
+      const videoLessons = section?.lessons?.filter((lesson: any) => lesson?.contentType === "VIDEO");
+      const durationSum = videoLessons?.reduce((sum: any, lesson: any) => sum + (lesson?.info?.duration || 0), 0);
+      return total + durationSum;
+    }, 0);
+
+    const minutes = Math.floor(totalDuration / 60);
+    const seconds = Math.floor(totalDuration % 60);
+    const formattedTime = `${minutes
+      .toString()
+      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+
+    return formattedTime;
+  }, [dataListSection]);
+
+
+
 
   const { run: getDetailCourse, data: dataDetail } = useGetDetailCourse({});
 
@@ -52,7 +77,7 @@ const Overview = () => {
             </div>
             <div className="flex flex-col gap-[6px]">
               <Text className="text-white" type="font-14-700">
-                1.5 Hours
+                {formatTimeDuration(formattedTime)}
               </Text>
               <Text className="text-black-7" type="font-12-400">
                 Total

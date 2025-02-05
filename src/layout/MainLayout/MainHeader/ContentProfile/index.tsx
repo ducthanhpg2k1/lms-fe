@@ -1,4 +1,5 @@
 import Text from '@/components/UI/Text';
+import { toast } from '@/components/UI/Toast/toast';
 import { deleteAuthCookies, setAuthCookies } from '@/store/auth';
 import { ROUTE_PATH } from '@/utils/const';
 import { Tooltip } from '@nextui-org/react';
@@ -38,6 +39,8 @@ const ContentProfile = ({ disconnect }: { disconnect: any }) => {
     setAuthCookies({
       token: '',
     });
+    toast.success('Logout successfully');
+
   }
   return (
     <div>

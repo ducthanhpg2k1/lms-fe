@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useGetListCourse } from './service';
 import { useGetCategories, useGetPrices } from '@/services/filter.service';
+import NoData from '@/components/ListCourse/NoData';
 
 export const CATEGORIES = [
   { key: 'business', label: 'Business' },
@@ -57,7 +58,6 @@ const ListCourse = () => {
     });
   };
 
-  console.log('categories', categories);
 
   useEffect(() => {
     reload();
@@ -119,10 +119,19 @@ const ListCourse = () => {
       <div className={clsx('grid grid-cols-1 gap-6', {})}>
         <div className={clsx('flex flex-col items-center gap-9', {})}>
           <div className={clsx('grid grid-cols-4 gap-6 w-full', {})}>
-            {dataCourses.map((item: any, key: number) => {
+            {dataCourses?.length > 0 && dataCourses.map((item: any, key: number) => {
               return <CardCourse item={item} key={key} />;
             })}
+
+
           </div>
+          {
+            dataCourses?.length === 0 && (
+              <div className='flex justify-center items-center pt-4'>
+                <NoData />
+              </div>
+            )
+          }
           {!noMore && (
             <Button
               variant="light"

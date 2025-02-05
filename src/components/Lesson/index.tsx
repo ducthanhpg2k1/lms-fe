@@ -29,43 +29,7 @@ import { UserCourseProgressStatus } from '@/utils/common';
 import { toast } from '../UI/Toast/toast';
 import { useProfile } from '@/store/profile/useProfile';
 import { atom, useAtom } from 'jotai';
-const itemsTab = [
-  {
-    key: '1',
-    icon: <IconSearch />,
-    children: <Search />,
-  },
-  {
-    key: '2',
-    label: 'Overview',
-    children: <Overview />,
-  },
-  // {
-  //   key: '3',
-  //   label: 'Q&A',
-  //   children: <QA />,
-  // },
-  // {
-  //   key: '4',
-  //   label: 'Notes',
-  //   children: <Notes />,
-  // },
-  // {
-  //   key: '5',
-  //   label: 'Announcements',
-  //   children: <Announcements />,
-  // },
-  {
-    key: '6',
-    label: 'Reviews',
-    children: <Reviews />,
-  },
-  // {
-  //   key: '7',
-  //   label: 'Learning tools',
-  //   children: <LearningTools />,
-  // },
-];
+
 export const valueProgressAtom = atom<any>({})
 const Lesson = () => {
   const router = useRouter();
@@ -152,6 +116,44 @@ const Lesson = () => {
       handleScrollTop();
     },
   });
+
+  const itemsTab = [
+    {
+      key: '1',
+      icon: <IconSearch />,
+      children: <Search />,
+    },
+    {
+      key: '2',
+      label: 'Overview',
+      children: <Overview dataListSection={dataListSession?.data} />,
+    },
+    // {
+    //   key: '3',
+    //   label: 'Q&A',
+    //   children: <QA />,
+    // },
+    // {
+    //   key: '4',
+    //   label: 'Notes',
+    //   children: <Notes />,
+    // },
+    // {
+    //   key: '5',
+    //   label: 'Announcements',
+    //   children: <Announcements />,
+    // },
+    {
+      key: '6',
+      label: 'Reviews',
+      children: <Reviews />,
+    },
+    // {
+    //   key: '7',
+    //   label: 'Learning tools',
+    //   children: <LearningTools />,
+    // },
+  ];
 
   const onChangeCheckBox = (values: any) => {
     console.log('values', values);

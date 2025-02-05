@@ -65,7 +65,6 @@ const MainHeader = () => {
       });
       setProfile(initialProfile)
     }
-    console.log('isConnected', isConnected);
 
   }, [token, isConnected, address]);
 
