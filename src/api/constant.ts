@@ -52,4 +52,7 @@ export const API_PATH = {
   PROGRESS_QUIZZ: (id: string) => `/api/quizzes/${id}/progress`,
 
   PROGRESS_LESSON: (id: string) => `/api/lessons/${id}/progress`,
+
+  USER_ME: '/api/users/me',
+  USER_UPDATE: '/api/users',
 };

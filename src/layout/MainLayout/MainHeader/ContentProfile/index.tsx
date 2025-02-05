@@ -11,7 +11,7 @@ const MENUS = [
   {
     id: 1,
     label: 'My Profile',
-    href: '',
+    href: ROUTE_PATH.MY_PROFILE,
 
   },
   {
