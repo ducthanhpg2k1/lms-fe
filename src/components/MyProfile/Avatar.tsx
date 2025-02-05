@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Text from '../UI/Text';
 import { Button } from '@nextui-org/react';
 
 const Avatar = () => {
+  const [file, setFile] = useState<File>();
+  const onChangeFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target?.files?.[0]) setFile(e.target.files[0]);
+  };
   return (
     <div className="flex flex-col gap-[12px]">
       <div className="text-[18px] font-bold">
@@ -14,11 +18,18 @@ const Avatar = () => {
       </div>
 
       <div className="p-[20px] h-[241px] bg-[#32383E] w-full rounded-[4px]">
-        <div className="w-full h-full bg-[#181F25] border border-dashed rounded-[4px] border-[#32383E] flex flex-col justify-center items-center gap-[16px]">
-          <div className="text-[#ffffff7f]">JPEG, PNG or JPG . Max 10mb.</div>
+        <div className="relative w-full h-full bg-[#181F25] border border-dashed rounded-[4px] border-[#32383E] flex flex-col justify-center items-center gap-[16px]">
+          <div className="text-[#ffffff7f]">
+            {file?.name || 'JPEG, PNG or JPG . Max 10mb.'}
+          </div>
           <button className="px-[20px] py-[10px] bg-[#ffffff19] rounded-[4px] border border-[#02A6C2]">
             Choose File
           </button>
+          <input
+            className="w-full h-full absolute top-0 opacity-0 cursor-pointer"
+            type="file"
+            onChange={onChangeFile}
+          />
         </div>
       </div>
 

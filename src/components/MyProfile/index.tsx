@@ -34,7 +34,7 @@ const MyProfile = () => {
         <Text type="font-28-700">My Profile</Text>
       </div>
 
-      <div className="flex gap-[24px]">
+      <div className="flex flex-col md:flex-row gap-[24px]">
         <Overview />
         <div className="bg-[#181F25] w-full p-[20px] rounded-[4px]">
           <div className="flex gap-[12px] mb-[32px] border-b border-[#2B3032]">
