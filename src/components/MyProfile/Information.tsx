@@ -1,3 +1,4 @@
+import { Button } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
 
 export default function Information() {
@@ -39,7 +40,7 @@ export default function Information() {
       name: 'biography',
       label: 'Biography',
       placeholder: 'Type',
-      type: 'textarea',
+      type: 'text',
     },
     {
       name: 'youtube',
@@ -53,16 +54,13 @@ export default function Information() {
     <div className="bg-gray-900 text-white rounded-lg w-full">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="grid grid-cols-2 gap-6"
+        className="grid col-span-2 gap-6 box-border
+      "
       >
         {inputFields.map((field, index) => (
           <div
             key={index}
-            className={
-              field.name === 'headline' || field.name === 'biography'
-                ? 'row-span-2'
-                : ''
-            }
+            className={field.name === 'headline' ? 'row-span-2' : ''}
           >
             <label className="block text-base font-semibold mb-1">
               {field.label}
@@ -71,9 +69,9 @@ export default function Information() {
               <textarea
                 {...register(field.name)}
                 placeholder={field.placeholder}
-                className={`bg-[#242A30] ${
+                className={`bg-[#242A30] rounded-[4px] ${
                   field.name === 'headline' ? 'h-[130px]' : 'h-[44px]'
-                } w-full p-[10px]`}
+                } w-full p-[10px] resize-none`}
               />
             ) : (
               <input
@@ -87,12 +85,12 @@ export default function Information() {
         ))}
 
         <div className="col-span-2">
-          <button
+          <Button
             type="submit"
             className="w-fit px-[24px] bg-[#02A6C2] text-white font-semibold py-[10px] rounded-[4px] hover:bg-cyan-400 transition"
           >
             Save Profile
-          </button>
+          </Button>
         </div>
       </form>
     </div>
