@@ -4,8 +4,16 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import CardCourse from '@/components/CourseSearch/ListCourse/CardCourse';
 import { getAccessToken } from '@/store/auth';
-import { useGetListCourse } from '../../ListCourse/service';
+import {
+  useCommentCours,
+  useGetListComment,
+  useGetListCourse,
+  useLikeComment,
+  useRemoveLikeComment,
+} from '../../ListCourse/service';
 import { useEffect } from 'react';
+import CardComment from './CardComment';
+import CustomButtonComment from '@/components/UI/CustomButtonEnroll';
 
 const MoreCourse = (props: any) => {
   const { author, courseId } = props;
@@ -16,14 +24,70 @@ const MoreCourse = (props: any) => {
     authors: author?.id,
     externalIds: courseId,
   });
+  const {
+    dataListComment,
+    run: runGetListComment,
+    mutate,
+  } = useGetListComment();
+
+  const { run: runRemoveLikeComment } = useRemoveLikeComment({
+    onSuccess(res) {
+      console.log(res, 'res');
+
+      const newData = dataListComment.data.map((item: any) => {
+        if (item.id === res?.data?.courseCommentId) {
+          const newReaction = item?.reactions?.filter(
+            (reaction: any) => reaction?.id !== res?.data?.id
+          );
+          return {
+            ...item,
+            reactions: newReaction,
+          };
+        } else {
+          return item;
+        }
+      });
+
+      mutate({
+        ...dataListComment,
+        data: newData,
+      });
+    },
+  });
+  const { run: runLikeComment } = useLikeComment({
+    onSuccess(res) {
+      const newData = dataListComment.data.map((item: any) =>
+        item.id === res?.data?.courseCommentId
+          ? { ...item, reactions: [...item.reactions, res?.data] }
+          : item
+      );
+      mutate({
+        ...dataListComment,
+        data: newData,
+      });
+    },
+  });
+  const handleLikeComment = (id: string) => {
+    const body = {
+      name: 'like',
+      code: '1',
+    };
+    runLikeComment(body, id);
+  };
+  const handleUnLikeComment = (id: string) => {
+    runRemoveLikeComment(id);
+  };
 
   useEffect(() => {
     if (author?.id && courseId) {
       reload();
+      runGetListComment(courseId);
     }
   }, [author, courseId]);
 
-  console.log('author', author);
+  const reloadListComment = () => {
+    runGetListComment(courseId);
+  };
 
   if (!author) return null;
   return (
@@ -34,7 +98,7 @@ const MoreCourse = (props: any) => {
         </Text>
         <div className="grid grid-cols-3 gap-6">
           {dataCourses.map((item: any, key: number) => {
-            return <CardCourse item={item} key={key} />;
+            return <CardCourse noLike item={item} key={key} />;
           })}
         </div>
       </div>
@@ -42,35 +106,47 @@ const MoreCourse = (props: any) => {
         <Text className="text-white" type="font-20-600">
           Comment
         </Text>
-        <div className="flex flex-col gap-6">
-          {Array.from({ length: 3 }).map((_, key) => {
-            return <Comment key={key} />;
-          })}
-          <Button
-            variant="light"
-            radius="full"
-            className="hover:bg-main/20 w-max"
-          >
-            <div className="flex items-center gap-[2px]">
-              <Text type="font-14-500" className="text-main">
-                See More
-              </Text>
-              <Image
-                src={'/icons/ic-arrow-drop-right-line.svg'}
-                width={20}
-                height={20}
-                alt=""
-              />
-            </div>
-          </Button>
-        </div>
-        {!token && (
-          <Button className="border-1 min-h-10 max-w-[185px] border-black-9 py-2 px-4 rounded bg-black-10">
-            <Text className="capitalize text-white" type="font-16-500">
-              Login to comment
-            </Text>
-          </Button>
+
+        {!token ? (
+          <CustomButtonComment />
+        ) : (
+          <CardComment
+            reloadListComment={reloadListComment}
+            courseId={courseId}
+          />
         )}
+
+        <div className="flex flex-col gap-6">
+          {dataListComment?.data.map((item: any, index: number) => {
+            return (
+              <Comment
+                handleUnLikeComment={handleUnLikeComment}
+                handleLikeComment={handleLikeComment}
+                item={item}
+                key={index}
+              />
+            );
+          })}
+          {/* {dataListComment?.meta?.totalRecord > 4 && (
+            <Button
+              variant="light"
+              radius="full"
+              className="hover:bg-main/20 w-max"
+            >
+              <div className="flex items-center gap-[2px]">
+                <Text type="font-14-500" className="text-main">
+                  See More
+                </Text>
+                <Image
+                  src={'/icons/ic-arrow-drop-right-line.svg'}
+                  width={20}
+                  height={20}
+                  alt=""
+                />
+              </div>
+            </Button>
+          )} */}
+        </div>
       </div>
     </div>
   );

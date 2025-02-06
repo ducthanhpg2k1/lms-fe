@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useGetListCourse } from '@/components/Course/ListCourse/service';
 import { useGetCategories, useGetPrices } from '@/services/filter.service';
 import { useSearchParams } from 'next/navigation';
+import { useLikeCourse } from '../service';
 
 enum TAB_VIEW {
   GRID = 'grid',
@@ -43,7 +44,7 @@ const ListCourse = () => {
   const [params, setParams] = useState(initParams);
 
   const search = searchParams.get('keySearch');
-  const { dataCourses, loadMore, noMore, reload } = useGetListCourse({
+  const { dataCourses, loadMore, noMore, reload, mutate } = useGetListCourse({
     pageSize,
     order: sort,
     prices: params?.prices?.join(','),
@@ -55,11 +56,29 @@ const ListCourse = () => {
     search,
   });
 
-  console.log('searchhhh', search);
+  console.log('dataCourses', dataCourses);
 
   // const loadMore = () => {
   //   setLengthCourse(() => lengthCourse + 8);
   // };
+
+  const { run: runLikeCourse } = useLikeCourse({
+    onSuccess(res) {
+      const index = dataCourses.findIndex(
+        (item: any) => item.id === res?.data?.courseId
+      );
+      dataCourses[index] = {
+        ...dataCourses[index],
+        liked: true,
+      };
+    },
+  });
+
+  // 2eb7467b-92fd-4338-b576-cbcbed6eba25
+
+  const handleLike = (id: string) => {
+    runLikeCourse(id);
+  };
 
   const onChangeTab = (tab: any) => {
     setTab(tab);
@@ -149,7 +168,9 @@ const ListCourse = () => {
 
             <div className={clsx('grid grid-cols-3 gap-6', {})}>
               {dataCourses.map((item: any, key: number) => {
-                return <CardCourse item={item} key={key} />;
+                return (
+                  <CardCourse handleLike={handleLike} item={item} key={key} />
+                );
               })}
             </div>
           </div>
@@ -158,7 +179,7 @@ const ListCourse = () => {
             <Button
               variant="light"
               radius="full"
-              className="hover:bg-main/20 w-max"
+              className="hover:bg-main/20 w-max mx-auto"
               onClick={loadMore}
             >
               <div className="flex items-center gap-[2px]">

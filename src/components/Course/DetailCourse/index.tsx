@@ -146,7 +146,10 @@ const DetailCourse = () => {
             <Requirements data={dataDetail?.data} />
             <About data={dataDetail?.data} />
             <Mentors />
-            <MoreCourse author={dataDetail?.data?.author} />
+            <MoreCourse
+              courseId={dataDetail?.data?.id}
+              author={dataDetail?.data?.author}
+            />
           </div>
           <div className="col-span-3">
             <div className="sticky top-32 z-[100000]">

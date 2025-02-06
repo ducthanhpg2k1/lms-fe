@@ -44,10 +44,7 @@ const Content = ({
 
         <div className="flex flex-col gap-1">
           {info?.fileNameVideo && (
-            <Text
-              type="font-14-700"
-              className="text-white max-w-[80%] line-clamp-1"
-            >
+            <Text type="font-14-700" className="text-white line-clamp-1">
               {info?.fileNameVideo}
             </Text>
           )}

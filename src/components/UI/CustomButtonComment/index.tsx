@@ -3,7 +3,20 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Text from '../Text';
 import { useProfile } from '@/store/profile/useProfile';
 
-const CustomButtonComment = ({}: {}) => {
+const CustomButtonEnroll = ({
+  course,
+  loading,
+  label,
+  token,
+  handleClickButton,
+}: {
+  course: any;
+  handleClickButton: VoidFunction;
+  loading: boolean;
+  token: any;
+  label: string;
+}) => {
+  const { profile } = useProfile();
   return (
     <ConnectButton.Custom>
       {({ account, chain, openConnectModal, mounted }) => {
@@ -16,24 +29,29 @@ const CustomButtonComment = ({}: {}) => {
             style={{
               display: 'flex',
               gap: 12,
+              justifyContent: 'center',
+              alignItems: 'center',
             }}
           >
             {!connected ? (
               <Button
                 onClick={openConnectModal}
-                className="border-1 min-h-10 max-w-[185px] border-black-9 py-2 px-4 rounded bg-black-10"
+                className="bg-main w-full min-h-[40px] rounded"
               >
-                <Text className="capitalize text-white" type="font-16-500">
-                  Login to comment
+                <Text className="text-white" type="font-16-600">
+                  {label}
                 </Text>
               </Button>
             ) : (
               <Button
-                onClick={openConnectModal}
-                className="border-1 min-h-10 max-w-[185px] border-black-9 py-2 px-4 rounded bg-black-10"
+                isLoading={loading}
+                onClick={handleClickButton}
+                className="bg-main w-full min-h-[40px] rounded"
               >
-                <Text className="capitalize text-white" type="font-16-500">
-                  Login to comment
+                <Text className="text-white" type="font-16-600">
+                  {course?.isOwner || course?.authorId === profile?.id
+                    ? 'Go to course'
+                    : 'Enroll Now'}
                 </Text>
               </Button>
             )}
@@ -44,4 +62,4 @@ const CustomButtonComment = ({}: {}) => {
   );
 };
 
-export default CustomButtonComment;
+export default CustomButtonEnroll;

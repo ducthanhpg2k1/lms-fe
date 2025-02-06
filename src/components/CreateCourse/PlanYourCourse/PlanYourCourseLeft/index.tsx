@@ -33,13 +33,14 @@ const PlanYourCourseLeft = ({
   activePlan: number;
   dataDetail: any;
 }) => {
-  const router = useRouter()
-  const isEnoughIntendedLearners = dataDetail?.data?.objectives?.length > 0 &&
+  const router = useRouter();
+  const isEnoughIntendedLearners =
+    dataDetail?.data?.objectives?.length > 0 &&
     dataDetail?.data?.intenedLeaners?.length > 0 &&
     dataDetail?.data?.requirements?.length > 0;
 
-
-  const isEnoughCourseLangdingePage = dataDetail?.data?.title &&
+  const isEnoughCourseLangdingePage =
+    dataDetail?.data?.title &&
     dataDetail?.data?.subtitle &&
     dataDetail?.data?.lang &&
     dataDetail?.data?.level &&
@@ -50,20 +51,18 @@ const PlanYourCourseLeft = ({
     dataDetail?.data?.video &&
     dataDetail?.data?.description;
 
-
-  const isEnoughCurruclum = dataDetail?.data?.sections?.some((item: any) =>
-    (item.lessons && item.lessons.length > 0) ||
-    (item.quizzes && item.quizzes.length > 0)
+  const isEnoughCurruclum = dataDetail?.data?.sections?.some(
+    (item: any) =>
+      (item.lessons && item.lessons.length > 0) ||
+      (item.quizzes && item.quizzes.length > 0)
   );
 
+  // useEffect(() => {
+  //   if (isEnoughIntendedLearners && isEnoughCourseLangdingePage && isEnoughIntendedLearners) {
+  //     router.push(ROUTE_PATH.LIST_COURSE)
+  //   }
 
-  useEffect(() => {
-    if (isEnoughIntendedLearners && isEnoughCourseLangdingePage && isEnoughIntendedLearners) {
-      router.push(ROUTE_PATH.LIST_COURSE)
-    }
-
-  }, [isEnoughIntendedLearners, isEnoughCourseLangdingePage, isEnoughIntendedLearners])
-
+  // }, [isEnoughIntendedLearners, isEnoughCourseLangdingePage, isEnoughIntendedLearners])
 
   return (
     <div className="flex flex-col gap-4">

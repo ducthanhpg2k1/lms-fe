@@ -2,6 +2,7 @@ import { Button } from '@nextui-org/react';
 import { useForm } from 'react-hook-form';
 import userService, { TUser } from './service';
 import { useEffect, useState } from 'react';
+import InputText from '../UI/InputText';
 
 export default function Information({
   reload,
@@ -107,9 +108,8 @@ export default function Information({
                 } w-full p-[10px] resize-none`}
               />
             ) : (
-              <input
+              <InputText
                 {...register(field.name)}
-                type={field.type}
                 placeholder={field.placeholder}
                 className="bg-[#242A30] h-[44px] w-full p-[10px] rounded-[4px] active:outline-hidden"
               />
