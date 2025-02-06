@@ -4,7 +4,7 @@ import Overview from './Overview';
 import Information from './Information';
 import Avatar from './Avatar';
 import Security from './Security';
-import userService, { TUser } from './service';
+import { userRequest, TUser, referralRequest } from './service';
 
 enum TAB {
   INFORMATION = 'information',
@@ -27,21 +27,44 @@ const tabs = [
   },
 ];
 
+interface Summary {
+  totalNetwork: number;
+  f1: number;
+  f2: number;
+  f3: number;
+  o: number;
+}
+
 const MyProfile = () => {
   const [tabSelected, setTabSelected] = useState<TAB>(TAB.INFORMATION);
   const [user, setUser] = useState<TUser>();
+  const [summary, setSummary] = useState<Summary>();
 
   const getMe = async () => {
     try {
-      const response = await userService.getMe();
+      const response = await userRequest.getMe();
       setUser(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
+  const getReferral = async () => {
+    try {
+      const res = await referralRequest.getSummary();
+      setSummary(res.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const reload = () => {
+    getMe();
+  };
+
   useEffect(() => {
     getMe();
+    getReferral();
   }, []);
 
   return (
@@ -60,11 +83,11 @@ const MyProfile = () => {
             email: user?.email || '--',
             verify: true,
             customers: {
-              total: 100,
-              f1: 20,
-              f2: 30,
-              f4: 40,
-              o: 10,
+              total: summary?.totalNetwork || 0,
+              f1: summary?.totalNetwork || 0,
+              f2: summary?.totalNetwork || 0,
+              f3: summary?.totalNetwork || 0,
+              o: 0,
             },
           }}
         />
@@ -89,14 +112,9 @@ const MyProfile = () => {
             ))}
           </div>
           {tabSelected === TAB.INFORMATION && (
-            <Information
-              user={user}
-              reload={() => {
-                getMe();
-              }}
-            />
+            <Information user={user} reload={reload} />
           )}
-          {tabSelected === TAB.AVATAR && <Avatar />}
+          {tabSelected === TAB.AVATAR && <Avatar user={user} reload={reload} />}
           {tabSelected === TAB.SECURITY && <Security />}
         </div>
       </div>

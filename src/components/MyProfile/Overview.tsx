@@ -2,6 +2,7 @@ import React from 'react';
 import Image from 'next/image';
 import Text from '../UI/Text';
 import { Button } from '@nextui-org/react';
+import { toast } from '../UI/Toast/toast';
 
 const calculatePercentage = (value: number, total: number): number => {
   if (total === 0) {
@@ -9,6 +10,8 @@ const calculatePercentage = (value: number, total: number): number => {
   }
   return (value / total) * 100;
 };
+
+const refLink = 'https://what.exchange/sign-up?upline=supertree';
 
 const Overview = ({
   data,
@@ -22,11 +25,15 @@ const Overview = ({
       total: number;
       f1: number;
       f2: number;
-      f4: number;
+      f3: number;
       o: number;
     };
   };
 }) => {
+  const onCopy = () => {
+    window.navigator.clipboard.writeText(refLink);
+    toast.success('Copied!');
+  };
   return (
     <div className="p-[20px] bg-[#181F25] rounded-[4px] w-full h-fit max-w-[460px] flex flex-col gap-[12px]">
       <div className="flex flex-col justify-center items-center gap-[4px]">
@@ -65,7 +72,7 @@ const Overview = ({
               width: `${calculatePercentage(
                 data.customers.f1,
                 data.customers.total
-              )}%`,
+              ) || 25}%`,
             }}
           >
             <div className="h-[12px] w-full bg-[#02A6C2] rounded-l-full" />
@@ -77,7 +84,7 @@ const Overview = ({
               width: `${calculatePercentage(
                 data.customers.f2,
                 data.customers.total
-              )}%`,
+              ) || 25}%`,
             }}
           >
             <div className="h-[12px] w-full bg-[#35B6CC]" />
@@ -87,13 +94,13 @@ const Overview = ({
             className="flex flex-col gap-[8px]"
             style={{
               width: `${calculatePercentage(
-                data.customers.f4,
+                data.customers.f3,
                 data.customers.total
-              )}%`,
+              ) || 25}%`,
             }}
           >
             <div className="h-[12px] w-full bg-[#79BEB6]" />
-            <div className="opacity-50">F4: {data.customers.f4}</div>
+            <div className="opacity-50">F3: {data.customers.f3}</div>
           </div>
           <div
             className="flex flex-col gap-[8px]"
@@ -101,7 +108,7 @@ const Overview = ({
               width: `${calculatePercentage(
                 data.customers.o,
                 data.customers.total
-              )}%`,
+              ) || 25}%`,
             }}
           >
             <div className="h-[12px] w-full bg-[#B4D4D9] rounded-r-full" />
@@ -116,11 +123,14 @@ const Overview = ({
         <div className="text-[16px] font-semibold flex gap-[4px]">
           <span className="text-[16px] whitespace-nowrap">Referral link: </span>
           <span className="text-[16px] opacity-50 text-ellipsis overflow-hidden whitespace-nowrap">
-            https://what.exchange/sign-up?upline=supertree
+            {refLink}
           </span>
         </div>
 
-        <Button className="rounded-[4px] font-bold text-base text-[#02A6C2] bg-[#16343B] h-[44px]">
+        <Button
+          onClick={onCopy}
+          className="rounded-[4px] font-bold text-base text-[#02A6C2] bg-[#16343B] h-[44px]"
+        >
           Copy Address
         </Button>
       </div>
