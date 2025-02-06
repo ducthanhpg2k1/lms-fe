@@ -27,6 +27,7 @@ interface InputTextProps extends InputProps {
   isInputSubmit?: boolean;
   inputDefault?: boolean;
   classInputWrapper?: string;
+  isBlack?: boolean;
 }
 
 const InputText = (props: InputTextProps) => {
@@ -55,6 +56,7 @@ const InputText = (props: InputTextProps) => {
     isFullName,
     isFilter,
     name,
+    isBlack,
     isLesson,
     isInput,
     ...rest
@@ -117,6 +119,8 @@ const InputText = (props: InputTextProps) => {
                 isInputSubmit,
               '!bg-[#0A0F1580] !py-[12px] !px-[10px]  data-[hover=true]:!border-main min-h-[48px] ':
                 inputDefault,
+              '!bg-[#0A0F1580]  !py-[12px] !px-[16px] data-[hover=true]:!border-main min-h-[50px] ':
+                isBlack,
             }
           ),
         }}

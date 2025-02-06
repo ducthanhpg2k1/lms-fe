@@ -1,5 +1,6 @@
 import IconLikeCourse from '@/components/UI/IconLikeCourse';
 import IconDate from '@/components/UI/Icons/IconDate';
+import IconLikedCourse from '@/components/UI/Icons/IconLikedCourse';
 import IconTime from '@/components/UI/Icons/IconTime';
 import RateStar from '@/components/UI/RateStar';
 import Text from '@/components/UI/Text';
@@ -8,7 +9,15 @@ import { Button } from '@nextui-org/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-const CardCourse = ({ item }: { item: any }) => {
+const CardCourse = ({
+  item,
+  noLike,
+  handleLike,
+}: {
+  handleLike?: (id: string) => void;
+  item: any;
+  noLike?: boolean;
+}) => {
   const router = useRouter();
 
   const handleClickCardCourse = () => {
@@ -27,15 +36,18 @@ const CardCourse = ({ item }: { item: any }) => {
           Best seller
         </Text>
       </div>
-      <div className="absolute right-2 top-2">
-        <Button
-          isIconOnly
-          variant="light"
-          className="hover:!bg-white/25 rounded-full"
-        >
-          <IconLikeCourse />
-        </Button>
-      </div>
+      {!noLike && (
+        <div className="absolute right-2 top-2">
+          <Button
+            isIconOnly
+            onClick={() => handleLike && handleLike(item?.id)}
+            variant="light"
+            className="hover:!bg-white/25 rounded-full"
+          >
+            {item?.liked ? <IconLikedCourse /> : <IconLikeCourse />}
+          </Button>
+        </div>
+      )}
 
       <Image
         src={item?.image ? item?.image : '/images/img-default.png'}
@@ -98,11 +110,7 @@ const CardCourse = ({ item }: { item: any }) => {
               </Text>
             )}
           </div>
-          <Button
-            variant="light"
-            radius="full"
-            onClick={handleClickCardCourse}
-          >
+          <Button variant="light" radius="full" onClick={handleClickCardCourse}>
             <div className="flex items-center gap-1">
               <Text type="font-14-500" className="text-white">
                 Enroll Course

@@ -11,7 +11,7 @@ const getListCourse = async (params: any) => {
 
 export const useGetListCourse = (initialParams: any) => {
   const memoizedParams = useMemo(() => initialParams, [initialParams]);
-  const { data, loading, loadMore, loadingMore, noMore, reload } =
+  const { data, loading, loadMore, loadingMore, noMore, reload, mutate } =
     useInfiniteScroll(
       async (lastData) => {
         const currentPage = lastData?.page || 0; // Default to page 1 if no data yet
@@ -40,6 +40,7 @@ export const useGetListCourse = (initialParams: any) => {
 
   return {
     reload,
+    mutate,
     dataCourses: data?.list || [],
     loadMore,
     loading,
@@ -88,5 +89,66 @@ export const useGetListMyCourse = (initialParams: any) => {
     loading,
     loadingMore,
     noMore,
+  };
+};
+
+interface IBodyComment {
+  parentId?: string;
+  content: string;
+}
+const serviceCommentCours = async (body: IBodyComment, id: string) => {
+  return privateRequest(request.post, API_PATH.COMMENT_COURSE(id), {
+    data: body,
+  });
+};
+
+export const useCommentCours = (options?: IOptions) => {
+  return useRequest(serviceCommentCours, { manual: true, ...options });
+};
+
+const serviceRemoveLikeComment = async (id: string) => {
+  return privateRequest(request.delete, API_PATH.REMOVE_LIKE_COMMENT(id));
+};
+
+export const useRemoveLikeComment = (options?: IOptions) => {
+  return useRequest(serviceRemoveLikeComment, { manual: true, ...options });
+};
+
+const serviceLikeComment = async (body: any, id: string) => {
+  return privateRequest(request.post, API_PATH.LIKE_COMMENT(id), {
+    data: body,
+  });
+};
+
+export const useLikeComment = (options?: IOptions) => {
+  return useRequest(serviceLikeComment, { manual: true, ...options });
+};
+
+const serviceGetListComment = async (id: string) => {
+  const params = {
+    order: 'createdAt desc',
+    page: 1,
+    pageSize: 30,
+  };
+  return await privateRequest(request.get, `${API_PATH.LIST_COMMENT(id)}`, {
+    params,
+  });
+};
+
+export const useGetListComment = (options?: IOptions) => {
+  const { data, loading, run, mutate } = useRequest(
+    async (id: string) => {
+      return serviceGetListComment(id);
+    },
+    {
+      ...options,
+    }
+  );
+
+  return {
+    mutate,
+    dataListComment: data,
+    run,
+    loading,
   };
 };

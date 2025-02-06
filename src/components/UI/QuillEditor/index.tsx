@@ -3,6 +3,10 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 import Text from '../Text';
 import clsx from 'clsx';
+import { useUploadFile } from '@/components/CreateCourse/service';
+import { PREFIX_API } from '@/api/request';
+import { API_PATH } from '@/api/constant';
+import { getAccessToken } from '@/store/auth';
 
 const QuillEditor = ({
   label,
@@ -23,17 +27,26 @@ const QuillEditor = ({
 }) => {
   const editorRef = useRef(null);
   const [editor, setEditor] = useState<Quill | null>(null);
+
+  const accessToken = getAccessToken();
+
   useEffect(() => {
     if (editorRef.current) {
       const quill = new Quill(editorRef.current, {
         theme: 'snow',
         modules: {
-          toolbar: [
-            [{ header: '1' }, { header: '2' }],
-            [{ list: 'ordered' }, { list: 'bullet' }],
-            ['bold', 'italic', 'underline'],
-            [{ align: [] }],
-          ],
+          toolbar: {
+            container: [
+              [{ header: '1' }, { header: '2' }],
+              [{ list: 'ordered' }, { list: 'bullet' }],
+              ['bold', 'italic', 'underline'],
+              [{ align: [] }],
+              ['image'],
+            ],
+            handlers: {
+              image: () => handleImageUpload(quill),
+            },
+          },
         },
         placeholder,
       });
@@ -44,13 +57,6 @@ const QuillEditor = ({
           onChange(content);
         }
       });
-      // if (autoFocus) {
-      //   quill.on('editor-change', () => {
-      //     const length = quill.getLength();
-      //     quill.setSelection(length - 1, 0);
-      //     quill.focus();
-      //   });
-      // }
     }
 
     return () => {
@@ -72,6 +78,60 @@ const QuillEditor = ({
       }
     }
   }, [editor, value]);
+
+  const handleImageUpload = (quill: Quill) => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+
+        reader.onload = () => {
+          const range = quill.getSelection();
+          if (range) {
+            quill.insertEmbed(range.index, 'image', reader.result as string);
+          }
+        };
+
+        reader.readAsDataURL(file);
+      }
+      // if (input.files && input.files[0]) {
+      //   const file = input.files[0];
+
+      //   try {
+      //     const formData = new FormData();
+      //     formData.append('file', file);
+
+      //     const response = await fetch(`${PREFIX_API}${API_PATH.UPLOAD_FILE}`, {
+      //       method: 'POST',
+      //       body: formData,
+      //       headers: {
+      //         Authorization: `Bearer ${accessToken}`,
+      //       },
+      //     });
+
+      //     const result = await response.json();
+
+      //     if (result?.data?.url) {
+      //       const imageUrl = result?.data?.url;
+
+      //       const range = quill.getSelection();
+
+      //       if (range) {
+      //         quill.insertEmbed(range.index, 'image', imageUrl);
+      //       }
+      //     } else {
+      //     }
+      //   } catch (error) {
+      //     console.error('error', error);
+      //   }
+      // }
+    };
+  };
 
   return (
     <div className="w-full flex flex-col gap-2">

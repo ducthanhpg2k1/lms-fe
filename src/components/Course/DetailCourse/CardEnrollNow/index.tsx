@@ -23,7 +23,7 @@ const DATA_NOTE = [
 const CardEnrollNow = ({ course }: { course: any }) => {
   const router = useRouter();
   const token = getAccessToken();
-  const { profile } = useProfile()
+  const { profile } = useProfile();
 
   const { run, loading } = useEnrollCourse({
     onSuccess: (res) => {
@@ -93,24 +93,20 @@ const CardEnrollNow = ({ course }: { course: any }) => {
               </Button>
             )}
           </div>
-          {
-            course?.authorId !== profile?.id && (
-              <CustomButtonEnroll
-                course={course}
-                handleClickButton={() => {
-                  if (course?.isOwner) {
-                    router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
-                  } else {
-                    run(course.id);
-                  }
-                }}
-                loading={loading}
-                token={token}
-                label="Enroll Now"
-              />
 
-            )
-          }
+          <CustomButtonEnroll
+            course={course}
+            handleClickButton={() => {
+              if (course?.isOwner || course?.authorId === profile?.id) {
+                router.push(ROUTE_PATH.DETAIL_LESSON(course?.id));
+              } else {
+                run(course.id);
+              }
+            }}
+            loading={loading}
+            token={token}
+            label="Enroll Now"
+          />
 
           <div className="flex flex-col gap-2">
             <Text className="text-white" type="font-18-600">

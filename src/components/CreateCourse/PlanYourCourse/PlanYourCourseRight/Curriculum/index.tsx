@@ -71,7 +71,7 @@ const Curriculum = () => {
     },
   });
   const { run: runDeleteSesson } = useDeleteSesson({
-    onSuccess(res) { },
+    onSuccess(res) {},
   });
 
   const handleSaveSection = (index: number) => {
@@ -95,11 +95,11 @@ const Curriculum = () => {
           <Text type="font-28-700" className="text-white">
             Curriculum item
           </Text>
-          <Button className="rounded border-1 bg-transparent border-main min-h-[44px] w-max min-w-[154px]">
+          {/* <Button className="rounded border-1 bg-transparent border-main min-h-[44px] w-max min-w-[154px]">
             <Text type="font-16-700" className="text-white">
               Bulk Uploader
             </Text>
-          </Button>
+          </Button> */}
         </div>
         <Text type="font-16-400" className="text-black-6">
           Start putting together your course by creating sections, lectures and
