@@ -4,10 +4,12 @@ import ListCourses from './ListCourses';
 import { Tab, Tabs } from '@nextui-org/react';
 import Wishlist from './Wishlist';
 import { useRouter } from 'next/router';
+import Certifications from './Certifications';
 
 export const enum TabMyLearning {
   COURSE_PROGRESS = 'COURSE_PROGRESS',
   WISHLIST = 'WISHLIST',
+  CERTIFICATIONS = 'CERTIFICATIONS',
 }
 
 export default function MyLearning() {
@@ -18,6 +20,11 @@ export default function MyLearning() {
       key: TabMyLearning.COURSE_PROGRESS,
       label: 'Course Progress',
       children: <ListCourses />,
+    },
+    {
+      key: TabMyLearning.CERTIFICATIONS,
+      label: 'Certifications',
+      children: <Certifications />,
     },
     {
       key: TabMyLearning.WISHLIST,
