@@ -18,6 +18,10 @@ const DATA_CONTENT = [
     id: 3,
     content: 'Course landing page',
   },
+  {
+    id: 4,
+    content: 'Set Price',
+  },
   // {
   //   id: 4,
   //   content: 'Referral',
@@ -33,7 +37,6 @@ const PlanYourCourseLeft = ({
   activePlan: number;
   dataDetail: any;
 }) => {
-  const router = useRouter();
   const isEnoughIntendedLearners =
     dataDetail?.data?.objectives?.length > 0 &&
     dataDetail?.data?.intenedLeaners?.length > 0 &&

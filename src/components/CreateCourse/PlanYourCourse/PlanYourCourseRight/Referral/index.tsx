@@ -18,8 +18,6 @@ const Referral = ({ control }: { control: Control }) => {
     name: 'referral2',
   });
 
-  console.log(fields, 'fields');
-
   return (
     <div className="flex flex-col gap-8">
       <Text type="font-28-700" className="text-white">
@@ -72,7 +70,7 @@ const Referral = ({ control }: { control: Control }) => {
 
           <Text type="font-16-600" className="text-black-6">
             List the required skills, experience, tools or equipment learners
-            should have prior to taking your course. If there are no
+            should have prior to taking your course.If there are no
             requirements, use this space as an opportunity to lower the barrier
             for beginners.
           </Text>

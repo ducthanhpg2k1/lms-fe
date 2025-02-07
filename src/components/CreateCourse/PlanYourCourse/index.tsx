@@ -3,7 +3,7 @@ import PlanYourCourseLeft from './PlanYourCourseLeft';
 import PlanYourCourseRight from './PlanYourCourseRight';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { TYPE_COURSE } from '@/utils/const';
+import { ROUTE_PATH, TYPE_COURSE } from '@/utils/const';
 import { useRouter } from 'next/router';
 import { useEditCourse, useGetDetailCourse } from '../service';
 import { toast } from '@/components/UI/Toast/toast';
@@ -13,12 +13,44 @@ const PlanYourCourse = () => {
   const [activePlan, setActivePlan] = useState(1);
   const router = useRouter();
 
+  const [isSubmit, setIsSubmit] = useState(false);
+
   const {
     run: getDetailCourse,
     loading,
     data: dataDetail,
   } = useGetDetailCourse({
     onSuccess: (res) => {
+      const isEnoughIntendedLearners =
+        res?.data?.objectives?.length > 0 &&
+        res?.data?.intenedLeaners?.length > 0 &&
+        res?.data?.requirements?.length > 0;
+
+      const isEnoughCourseLangdingePage =
+        res?.data?.title &&
+        res?.data?.subtitle &&
+        res?.data?.lang &&
+        res?.data?.level &&
+        res?.data?.categoryId &&
+        res?.data?.subCategoryId &&
+        res?.data?.topics?.length > 0 &&
+        res?.data?.image &&
+        res?.data?.video &&
+        res?.data?.description;
+
+      const isEnoughCurruclum = res?.data?.sections?.some(
+        (item: any) =>
+          (item.lessons && item.lessons.length > 0) ||
+          (item.quizzes && item.quizzes.length > 0)
+      );
+      if (
+        isEnoughIntendedLearners &&
+        isEnoughCurruclum &&
+        isEnoughCourseLangdingePage &&
+        isSubmit
+      ) {
+        router.push(ROUTE_PATH.LIST_COURSE);
+      }
       reset({
         objectives: res?.data?.objectives?.map((item: any) => {
           return {
@@ -81,8 +113,9 @@ const PlanYourCourse = () => {
 
   const requestEditCourse = useEditCourse({
     onSuccess: (res: any) => {
-      getDetailCourse(router.query.id as string)
+      getDetailCourse(router.query.id as string);
       toast.success(res?.message);
+      setIsSubmit(true);
     },
     onError: (error: any) => {
       toast.error(error.message);
@@ -125,6 +158,7 @@ const PlanYourCourse = () => {
     );
     requestEditCourse.run(filteredBody, router.query.id as string);
   };
+
   return (
     <LoadingScreen isLoading={loading}>
       <form>

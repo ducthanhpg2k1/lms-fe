@@ -3,6 +3,7 @@ import IntendedLearners from './IntendedLearners';
 import Curriculum from './Curriculum';
 import dynamic from 'next/dynamic';
 import Referral from './Referral';
+import SetPrice from './SetPrice';
 const CourseLandingPage = dynamic(() => import('./CourseLandingPage'), {
   ssr: false,
 });
@@ -33,7 +34,10 @@ const PlanYourCourseRight = ({
       {activePlan === 3 && (
         <CourseLandingPage watch={watch} control={control} />
       )}
-      {activePlan === 4 && <Referral control={control} />}
+      {/* {activePlan === 4 && <Referral control={control} />}
+       */}
+
+      {activePlan === 4 && <SetPrice control={control} />}
     </div>
   );
 };

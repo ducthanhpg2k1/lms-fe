@@ -72,7 +72,7 @@ const InputText = (props: InputTextProps) => {
         startContent={startContent}
         endContent={
           <>
-            {maxLength && (
+            {maxLength ? (
               <div className="absolute right-3">
                 <Text type="font-16-400" className="text-white/20">
                   {value && value?.length > 0
@@ -80,6 +80,8 @@ const InputText = (props: InputTextProps) => {
                     : maxLength}
                 </Text>
               </div>
+            ) : (
+              <>{endContent}</>
             )}
           </>
         }
