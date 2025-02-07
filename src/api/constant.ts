@@ -15,13 +15,16 @@ export const API_PATH = {
   CREATE_COURSE: '/api/courses',
   REMOVE_LIKE_COMMENT: (id: string) => `/api/courses/comments/reactions/${id}`,
   LIKE_COMMENT: (id: string) => `/api/courses/comments/${id}/reaction`,
-
+  LIKE_REVIEW: `/api/courses/reactions`,
   EDIT_COURSE: (id: string) => `/api/courses/${id}`,
 
   LIKE_COURSE: (id: string) => `/api/courses/${id}/like`,
   COMMENT_COURSE: (id: string) => `/api/courses/${id}/comment`,
+  REVIEW_COURSE: (id: string) => `/api/courses/${id}/review`,
 
   LIST_COMMENT: (id: string) => `/api/courses/${id}/comments`,
+
+  LIST_REVIEW: (id: string) => `/api/courses/${id}/reviews`,
 
   LIST_COURSE: '/api/courses',
 

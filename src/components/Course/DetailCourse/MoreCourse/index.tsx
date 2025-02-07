@@ -8,7 +8,9 @@ import {
   useCommentCours,
   useGetListComment,
   useGetListCourse,
+  useGetListReview,
   useLikeComment,
+  useLikeReview,
   useRemoveLikeComment,
 } from '../../ListCourse/service';
 import { useEffect } from 'react';
@@ -25,69 +27,77 @@ const MoreCourse = (props: any) => {
     authors: author?.id,
     externalIds: courseId,
   });
-  const {
-    dataListComment,
-    run: runGetListComment,
-    mutate,
-  } = useGetListComment();
+  const { dataListReview, run: runGetListReview, mutate } = useGetListReview();
 
-  const { run: runRemoveLikeComment } = useRemoveLikeComment({
+  // const { run: runRemoveLikeComment } = useRemoveLikeComment({
+  //   onSuccess(res) {
+  //     console.log(res, 'res');
+
+  //     const newData = dataListComment.data.map((item: any) => {
+  //       if (item.id === res?.data?.courseCommentId) {
+  //         const newReaction = item?.reactions?.filter(
+  //           (reaction: any) => reaction?.id !== res?.data?.id
+  //         );
+  //         return {
+  //           ...item,
+  //           reactions: newReaction,
+  //         };
+  //       } else {
+  //         return item;
+  //       }
+  //     });
+
+  //     mutate({
+  //       ...dataListComment,
+  //       data: newData,
+  //     });
+  //   },
+  // });
+  const { run: runLikeReview } = useLikeReview({
     onSuccess(res) {
       console.log(res, 'res');
-
-      const newData = dataListComment.data.map((item: any) => {
-        if (item.id === res?.data?.courseCommentId) {
-          const newReaction = item?.reactions?.filter(
-            (reaction: any) => reaction?.id !== res?.data?.id
-          );
-          return {
-            ...item,
-            reactions: newReaction,
-          };
-        } else {
-          return item;
-        }
-      });
-
-      mutate({
-        ...dataListComment,
-        data: newData,
-      });
-    },
-  });
-  const { run: runLikeComment } = useLikeComment({
-    onSuccess(res) {
-      const newData = dataListComment.data.map((item: any) =>
-        item.id === res?.data?.courseCommentId
+      const newData = dataListReview.data.map((item: any) =>
+        item.id === res?.data?.courseReviewId
           ? { ...item, reactions: [...item.reactions, res?.data] }
           : item
       );
       mutate({
-        ...dataListComment,
+        ...dataListReview,
         data: newData,
       });
     },
   });
-  const handleLikeComment = (id: string) => {
-    const body = {
-      name: 'like',
-      code: '1',
-    };
-    runLikeComment(body, id);
-  };
-  const handleUnLikeComment = (id: string) => {
-    runRemoveLikeComment(id);
-  };
+  // const handleLikeComment = (id: string) => {
+  //   const body = {
+  //     name: 'like',
+  //     code: '1',
+  //   };
+  //   runLikeComment(body, id);
+  // };
+  // const handleUnLikeComment = (id: string) => {
+  //   runRemoveLikeComment(id);
+  // };
 
   useEffect(() => {
     if (author?.id && courseId) {
       reload();
-      runGetListComment(courseId);
+      runGetListReview(courseId);
     }
   }, [author, courseId]);
 
-  const reloadListComment = () => {
-    runGetListComment(courseId);
+  const reloadListReview = () => {
+    runGetListReview(courseId);
+  };
+
+  const handleLikeReview = (id: string) => {
+    const body = {
+      commentId: '',
+      reviewId: id,
+      name: 'like',
+      code: '1',
+      keyword: '',
+    };
+    runLikeReview(body);
   };
 
   if (!author) return null;
@@ -112,25 +122,26 @@ const MoreCourse = (props: any) => {
           <CustomButtonComment />
         ) : (
           <CardComment
-            reloadListComment={reloadListComment}
+            reloadListReview={reloadListReview}
             courseId={courseId}
           />
         )}
 
         <div className="flex flex-col gap-6">
-          {dataListComment?.data?.length > 0 &&
-            dataListComment?.data.map((item: any, index: number) => {
+          {dataListReview?.data?.length > 0 &&
+            dataListReview?.data.map((item: any, index: number) => {
               return (
                 <Comment
-                  handleUnLikeComment={handleUnLikeComment}
-                  handleLikeComment={handleLikeComment}
+                  handleLikeReview={handleLikeReview}
+                  // handleUnLikeComment={handleUnLikeComment}
+                  // handleLikeComment={handleLikeComment}
                   item={item}
                   key={index}
                 />
               );
             })}
 
-          {dataListComment?.data?.length === 0 && <NoData />}
+          {dataListReview?.data?.length === 0 && <NoData />}
           {/* {dataListComment?.meta?.totalRecord > 4 && (
             <Button
               variant="light"

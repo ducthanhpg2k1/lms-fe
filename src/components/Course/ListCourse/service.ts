@@ -113,6 +113,16 @@ export const useCommentCours = (options?: IOptions) => {
   return useRequest(serviceCommentCours, { manual: true, ...options });
 };
 
+const serviceReviewCours = async (body: any, id: string) => {
+  return privateRequest(request.post, API_PATH.REVIEW_COURSE(id), {
+    data: body,
+  });
+};
+
+export const useReviewCours = (options?: IOptions) => {
+  return useRequest(serviceReviewCours, { manual: true, ...options });
+};
+
 const serviceRemoveLikeComment = async (id: string) => {
   return privateRequest(request.delete, API_PATH.REMOVE_LIKE_COMMENT(id));
 };
@@ -131,6 +141,15 @@ export const useLikeComment = (options?: IOptions) => {
   return useRequest(serviceLikeComment, { manual: true, ...options });
 };
 
+const serviceLikeReview = async (body: any) => {
+  return privateRequest(request.post, API_PATH.LIKE_REVIEW, {
+    data: body,
+  });
+};
+
+export const useLikeReview = (options?: IOptions) => {
+  return useRequest(serviceLikeReview, { manual: true, ...options });
+};
 const serviceGetListComment = async (id: string) => {
   const params = {
     order: 'createdAt desc',
@@ -155,6 +174,35 @@ export const useGetListComment = (options?: IOptions) => {
   return {
     mutate,
     dataListComment: data,
+    run,
+    loading,
+  };
+};
+
+const serviceGetListReview = async (id: string) => {
+  const params = {
+    order: 'createdAt desc',
+    page: 1,
+    pageSize: 30,
+  };
+  return await privateRequest(request.get, `${API_PATH.LIST_REVIEW(id)}`, {
+    params,
+  });
+};
+
+export const useGetListReview = (options?: IOptions) => {
+  const { data, loading, run, mutate } = useRequest(
+    async (id: string) => {
+      return serviceGetListReview(id);
+    },
+    {
+      ...options,
+    }
+  );
+
+  return {
+    mutate,
+    dataListReview: data,
     run,
     loading,
   };
