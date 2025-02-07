@@ -21,6 +21,10 @@ const PlanYourCourse = () => {
     data: dataDetail,
   } = useGetDetailCourse({
     onSuccess: (res) => {
+      const isEnoughtSetPrice =
+        res?.data?.price &&
+        res?.data?.originPrice &&
+        res?.data?.promotionPeriod;
       const isEnoughIntendedLearners =
         res?.data?.objectives?.length > 0 &&
         res?.data?.intenedLeaners?.length > 0 &&
@@ -46,6 +50,7 @@ const PlanYourCourse = () => {
       if (
         isEnoughIntendedLearners &&
         isEnoughCurruclum &&
+        isEnoughtSetPrice &&
         isEnoughCourseLangdingePage &&
         isSubmit
       ) {
@@ -76,6 +81,9 @@ const PlanYourCourse = () => {
         image: res?.data?.image,
         video: res?.data?.video,
         subCategoryId: res?.data?.subCategoryId,
+        price: res?.data?.price,
+        originPrice: res?.data?.originPrice,
+        promotionPeriod: res?.data?.promotionPeriod,
         categoryId: res?.data?.categoryId,
         sections: [
           {
@@ -123,6 +131,8 @@ const PlanYourCourse = () => {
   });
 
   const onSubmit = (values: any) => {
+    console.log(values, 'values');
+
     const body: any = {
       objectives: values?.objectives
         ?.filter((v: any) => !!v?.name)
@@ -143,6 +153,10 @@ const PlanYourCourse = () => {
       topics: [values.topics],
       lang: values.lang,
       level: values.level,
+
+      price: values?.price,
+      originPrice: values?.originPrice,
+      promotionPeriod: values?.promotionPeriod,
     };
     if (!values.topics) {
       delete body.topics;

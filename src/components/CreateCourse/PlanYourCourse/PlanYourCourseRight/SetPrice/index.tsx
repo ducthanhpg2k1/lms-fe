@@ -17,7 +17,7 @@ const SetPrice = ({ control }: { control: Control }) => {
           </div>
           <div className="col-span-4">
             <Controller
-              name="origin_price"
+              name="originPrice"
               control={control}
               render={({ field }) => (
                 <InputText
@@ -45,7 +45,7 @@ const SetPrice = ({ control }: { control: Control }) => {
           </div>
           <div className="col-span-4">
             <Controller
-              name="final_price"
+              name="price"
               control={control}
               render={({ field }) => (
                 <InputText
@@ -73,7 +73,7 @@ const SetPrice = ({ control }: { control: Control }) => {
           </div>
           <div className="col-span-4">
             <Controller
-              name="promotion_period"
+              name="promotionPeriod"
               control={control}
               render={({ field }) => (
                 <InputText

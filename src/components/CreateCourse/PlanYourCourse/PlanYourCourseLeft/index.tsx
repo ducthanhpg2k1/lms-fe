@@ -37,6 +37,10 @@ const PlanYourCourseLeft = ({
   activePlan: number;
   dataDetail: any;
 }) => {
+  const isEnoughtSetPrice =
+    dataDetail?.data?.price &&
+    dataDetail?.data?.originPrice &&
+    dataDetail?.data?.promotionPeriod;
   const isEnoughIntendedLearners =
     dataDetail?.data?.objectives?.length > 0 &&
     dataDetail?.data?.intenedLeaners?.length > 0 &&
@@ -90,6 +94,9 @@ const PlanYourCourseLeft = ({
               )}
 
               {item?.id === 3 && isEnoughCourseLangdingePage && (
+                <Check className="text-main" size={14} weight="bold" />
+              )}
+              {item?.id === 4 && isEnoughtSetPrice && (
                 <Check className="text-main" size={14} weight="bold" />
               )}
             </div>
