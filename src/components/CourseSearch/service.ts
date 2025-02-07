@@ -11,3 +11,11 @@ const serviceLikeCourse = async (id: string) => {
 export const useLikeCourse = (options?: IOptions) => {
   return useRequest(serviceLikeCourse, { manual: true, ...options });
 };
+
+const serviceUnLikeCourse = async (id: string) => {
+  return privateRequest(request.delete, API_PATH.LIKE_COURSE(id));
+};
+
+export const useUnLikeCourse = (options?: IOptions) => {
+  return useRequest(serviceUnLikeCourse, { manual: true, ...options });
+};

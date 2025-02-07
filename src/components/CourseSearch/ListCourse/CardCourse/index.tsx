@@ -13,8 +13,12 @@ const CardCourse = ({
   item,
   noLike,
   handleLike,
+  handleUnLike,
+  isWishList,
 }: {
   handleLike?: (id: string) => void;
+  handleUnLike?: (id: string) => void;
+  isWishList?: boolean;
   item: any;
   noLike?: boolean;
 }) => {
@@ -40,11 +44,21 @@ const CardCourse = ({
         <div className="absolute right-2 top-2">
           <Button
             isIconOnly
-            onClick={() => handleLike && handleLike(item?.id)}
+            onClick={() => {
+              if (item?.liked) {
+                handleUnLike && handleUnLike(item?.id);
+              } else {
+                handleLike && handleLike(item?.id);
+              }
+            }}
             variant="light"
             className="hover:!bg-white/25 rounded-full"
           >
-            {item?.liked ? <IconLikedCourse /> : <IconLikeCourse />}
+            {item?.liked || isWishList ? (
+              <IconLikedCourse />
+            ) : (
+              <IconLikeCourse />
+            )}
           </Button>
         </div>
       )}

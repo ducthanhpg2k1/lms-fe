@@ -64,5 +64,7 @@ export const API_PATH = {
   USER_ME: '/api/users/me',
   USER_UPDATE: '/api/users',
 
-  REFERRAL_SUMMARY: '/referral/summary'
+  REFERRAL_SUMMARY: '/referral/summary',
+
+  WISH_LISH: '/api/courses/wishlist',
 };

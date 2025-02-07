@@ -1,7 +1,9 @@
+import { TabMyLearning } from '@/components/MyLearning';
 import Text from '@/components/UI/Text';
 import { ROUTE_PATH } from '@/utils/const';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
+import { otimDevnet } from 'viem/chains';
 
 const MENUS = [
   {
@@ -12,7 +14,7 @@ const MENUS = [
   {
     key: 2,
     label: 'Wish list',
-    href: '',
+    href: `${ROUTE_PATH.MY_LEARNING}?type=${TabMyLearning.WISHLIST}`,
   },
   {
     key: 3,
@@ -39,7 +41,10 @@ const Menubar = () => {
             className={clsx(
               'cursor-pointer transition-all hover:text-main text-black-5 ',
               {
-                'text-main font-bold': item.href === router.pathname,
+                'text-main font-bold': router.query.type
+                  ? router.query.type === TabMyLearning.WISHLIST &&
+                    item?.key === 2
+                  : item.href === router.pathname,
               }
             )}
             type="font-16-600"

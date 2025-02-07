@@ -2,6 +2,8 @@
 import { API_PATH } from '@/api/constant';
 import { IOptions } from '@/api/interface';
 import { privateRequest, request } from '@/api/request';
+import { getAccessToken } from '@/store/auth';
+import { useProfile } from '@/store/profile/useProfile';
 import { useInfiniteScroll, useRequest } from 'ahooks';
 import { useMemo } from 'react';
 
@@ -10,7 +12,10 @@ const getListCourse = async (params: any) => {
 };
 
 export const useGetListCourse = (initialParams: any) => {
+  const { profile } = useProfile();
+  const accessToken = getAccessToken();
   const memoizedParams = useMemo(() => initialParams, [initialParams]);
+
   const { data, loading, loadMore, loadingMore, noMore, reload, mutate } =
     useInfiniteScroll(
       async (lastData) => {
@@ -20,6 +25,7 @@ export const useGetListCourse = (initialParams: any) => {
 
         const response = await getListCourse({
           ...memoizedParams,
+          userId: accessToken ? profile?.id : '',
           page: nextPage,
         });
         // console.log('lastData', lastData, response);
@@ -55,6 +61,7 @@ const getListMyCourse = async (params: any) => {
 
 export const useGetListMyCourse = (initialParams: any) => {
   const memoizedParams = useMemo(() => initialParams, [initialParams]);
+
   const { data, loading, loadMore, loadingMore, noMore, reload } =
     useInfiniteScroll(
       async (lastData) => {

@@ -13,7 +13,8 @@ import {
 } from '../../ListCourse/service';
 import { useEffect } from 'react';
 import CardComment from './CardComment';
-import CustomButtonComment from '@/components/UI/CustomButtonEnroll';
+import CustomButtonComment from '@/components/UI/CustomButtonComment';
+import NoData from '@/components/ListCourse/NoData';
 
 const MoreCourse = (props: any) => {
   const { author, courseId } = props;
@@ -117,16 +118,19 @@ const MoreCourse = (props: any) => {
         )}
 
         <div className="flex flex-col gap-6">
-          {dataListComment?.data.map((item: any, index: number) => {
-            return (
-              <Comment
-                handleUnLikeComment={handleUnLikeComment}
-                handleLikeComment={handleLikeComment}
-                item={item}
-                key={index}
-              />
-            );
-          })}
+          {dataListComment?.data?.length > 0 &&
+            dataListComment?.data.map((item: any, index: number) => {
+              return (
+                <Comment
+                  handleUnLikeComment={handleUnLikeComment}
+                  handleLikeComment={handleLikeComment}
+                  item={item}
+                  key={index}
+                />
+              );
+            })}
+
+          {dataListComment?.data?.length === 0 && <NoData />}
           {/* {dataListComment?.meta?.totalRecord > 4 && (
             <Button
               variant="light"

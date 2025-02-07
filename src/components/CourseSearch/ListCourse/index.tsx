@@ -14,7 +14,9 @@ import { useEffect, useRef, useState } from 'react';
 import { useGetListCourse } from '@/components/Course/ListCourse/service';
 import { useGetCategories, useGetPrices } from '@/services/filter.service';
 import { useSearchParams } from 'next/navigation';
-import { useLikeCourse } from '../service';
+import { useLikeCourse, useUnLikeCourse } from '../service';
+import { getAccessToken } from '@/store/auth';
+import { useProfile } from '@/store/profile/useProfile';
 
 enum TAB_VIEW {
   GRID = 'grid',
@@ -34,13 +36,13 @@ const initParams = {
   levels: [],
   prices: [],
 };
-
 const ListCourse = () => {
   const router = useRouter();
   const [tab, setTab] = useState(TAB_VIEW?.GRID);
   const [pageSize, setPageSize] = useState(3);
   const [sort, setSort] = useState<any>();
   const searchParams = useSearchParams();
+
   const [params, setParams] = useState(initParams);
 
   const search = searchParams.get('keySearch');
@@ -56,12 +58,6 @@ const ListCourse = () => {
     search,
   });
 
-  console.log('dataCourses', dataCourses);
-
-  // const loadMore = () => {
-  //   setLengthCourse(() => lengthCourse + 8);
-  // };
-
   const { run: runLikeCourse } = useLikeCourse({
     onSuccess(res) {
       const index = dataCourses.findIndex(
@@ -74,14 +70,23 @@ const ListCourse = () => {
     },
   });
 
-  // 2eb7467b-92fd-4338-b576-cbcbed6eba25
+  const { run: runUnLikeCourse } = useUnLikeCourse({
+    onSuccess(res) {
+      const index = dataCourses.findIndex(
+        (item: any) => item.id === res?.data?.courseId
+      );
+      dataCourses[index] = {
+        ...dataCourses[index],
+        liked: false,
+      };
+    },
+  });
 
   const handleLike = (id: string) => {
     runLikeCourse(id);
   };
-
-  const onChangeTab = (tab: any) => {
-    setTab(tab);
+  const handleUnLike = (id: string) => {
+    runUnLikeCourse(id);
   };
 
   useEffect(() => {
@@ -169,7 +174,12 @@ const ListCourse = () => {
             <div className={clsx('grid grid-cols-3 gap-6', {})}>
               {dataCourses.map((item: any, key: number) => {
                 return (
-                  <CardCourse handleLike={handleLike} item={item} key={key} />
+                  <CardCourse
+                    handleUnLike={handleUnLike}
+                    handleLike={handleLike}
+                    item={item}
+                    key={key}
+                  />
                 );
               })}
             </div>
